@@ -17,7 +17,7 @@ namespace ITHS_DB_Labb03.Model
         // Avklarad - Bool
         // Taggar - Lista<Tags>
         // Stjärnmärkning - Bool
-
+      
         public string Id { get; set; }
         public DateTime TodoCreated { get; set; }
         public string Title { get; set; }
