@@ -19,13 +19,13 @@ namespace ITHS_DB_Labb03.Model
         // Stjärnmärkning - Bool
 
         public string Id { get; set; }
-        public DateTime StartTodo { get; set; }
+        public DateTime TodoCreated { get; set; }
         public string Title { get; set; }
         public string Discription { get; set; }
         public List<string> SharedTodos { get; set; }
-        public DateTime EndTodo { get; set; }
-        public bool IsDone { get; set; }
+        public DateTime TodoCompleted { get; set; }
+        public bool IsCompleted { get; set; }
         public List<Tag> Tags { get; set; }
-        public bool IsStared { get; set; }
+        public bool IsStarred { get; set; }
     }
 }
