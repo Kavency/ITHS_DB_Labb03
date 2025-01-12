@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿
+using ITHS_DB_Labb03.Core;
+using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,8 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ITHS_DB_Labb03
-{
+namespace ITHS_DB_Labb03;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -19,6 +22,14 @@ namespace ITHS_DB_Labb03
         public MainWindow()
         {
             InitializeComponent();
+
+
+            using (var db = new TodoDbContext())
+            {
+                db.Database.EnsureCreated();
+
+                Debug.WriteLine($"Database connection: {db.Database.CanConnect()}");
+
+            }
         }
     }
-}
