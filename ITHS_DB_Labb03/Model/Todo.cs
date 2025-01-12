@@ -17,5 +17,16 @@ namespace ITHS_DB_Labb03.Model
         // Avklarad - Bool
         // Taggar - Lista<Tags>
         // Stjärnmärkning - Bool
+      
+        public string Id { get; set; }
+        public DateTime StartTodo { get; set; }
+        public string Title { get; set; }
+        public string Discription { get; set; }
+        public List<string> SharedTodos { get; set; }
+        public DateTime EndTodo { get; set; }
+        public bool IsDone { get; set; }
+        public List<Tag> Tags { get; set; }
+        public bool IsStared { get; set; }
+
     }
 }
