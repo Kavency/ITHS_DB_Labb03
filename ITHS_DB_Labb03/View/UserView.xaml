@@ -9,40 +9,51 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              d:Background="White">
-    <Grid Margin="5">
-        <WrapPanel VerticalAlignment="Center"
-                   HorizontalAlignment="Center">
+    <WrapPanel Margin="5"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding Users}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Margin="5"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Command="{Binding DataContext.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <StackPanel Margin="5">
+                                <Border BorderThickness="3"
+                                        BorderBrush="Black"
+                                        Width="60"
+                                        Height="60"
+                                        CornerRadius="30">
+                                    <fa:IconBlock Icon="User"
+                                                  FontSize="40" />
+                                </Border>
+                                <TextBlock Text="{Binding FirstName}"
+                                           TextAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+        </ScrollViewer>
+        <Button VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="5"
+                BorderThickness="0"
+                Background="Transparent">
             <StackPanel VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Margin="5">
-                <Border BorderThickness="3"
-                        BorderBrush="Black"
-                        Width="60"
-                        Height="60"
-                        CornerRadius="30">
-                    <fa:IconBlock Icon="User"
-                                  FontSize="40" />
-                </Border>
-                <TextBlock Text="Magnus"
-                           TextAlignment="Center"/>
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Margin="5">
-                <Border BorderThickness="3"
-                        BorderBrush="Black"
-                        Width="60"
-                        Height="60"
-                        CornerRadius="30">
-                    <fa:IconBlock Icon="User"
-                                  FontSize="40" />
-                </Border>
-                <TextBlock Text="Marcus"
-                           TextAlignment="Center" />
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Margin="5">
+                        HorizontalAlignment="Center">
                 <Border BorderThickness="3"
                         BorderBrush="Black"
                         Width="60"
@@ -54,6 +65,6 @@
                 <TextBlock Text=""
                            TextAlignment="Center" />
             </StackPanel>
-        </WrapPanel>
-    </Grid>
+        </Button>
+    </WrapPanel>
 </UserControl>
