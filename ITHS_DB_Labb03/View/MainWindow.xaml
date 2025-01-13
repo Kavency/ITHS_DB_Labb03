@@ -14,8 +14,9 @@
         MinHeight="400">
 
     <Grid>
-        <views:ListView Visibility="Hidden" />
-        <views:UserView Visibility="Visible" />
+        <views:ListView Visibility="{Binding ListViewVisibility}" />
+        <views:UserView Visibility="{Binding UserViewVisibility}" />
+        <views:UserDetailsView Visibility="{Binding UserDetailsVisibility}" />
     </Grid>
 
 </Window>
