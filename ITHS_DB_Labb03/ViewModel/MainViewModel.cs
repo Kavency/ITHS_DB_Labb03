@@ -16,7 +16,7 @@ namespace ITHS_DB_Labb03.ViewModel
         private Visibility _userViewVisibility;
         private Visibility _userDetailsVisibility;
 
-        public User NewUser { get; set; }
+        public User NewUser { get; set; } = new User();
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
