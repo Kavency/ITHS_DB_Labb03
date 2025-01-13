@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace ITHS_DB_Labb03.ViewModel
 {
-    internal class MainViewModel
+    internal class MainViewModel : VMBase
+    {
+        private User _currentUser;
+
+        public User NewUser { get; set; }
+        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
+        public ObservableCollection<User> Users { get; set; }
+
         public MainViewModel()
         {
             GetUsers();
