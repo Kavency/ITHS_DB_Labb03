@@ -12,9 +12,15 @@ namespace ITHS_DB_Labb03.ViewModel
     internal class MainViewModel : VMBase
     {
         private User _currentUser;
+        private Visibility _listViewVisibility;
+        private Visibility _userViewVisibility;
+        private Visibility _userDetailsVisibility;
 
         public User NewUser { get; set; }
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
+        public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
+        public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
+        public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
         public ObservableCollection<User> Users { get; set; }
         public RelayCommand SetCurrentUserCMD { get; }
         public RelayCommand AddNewUserCMD { get; }
