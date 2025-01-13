@@ -29,4 +29,10 @@ namespace ITHS_DB_Labb03.ViewModel
             var result = db.Users.ToList();
             Users = new ObservableCollection<User>(result);
     }
+
+        private void AddUser()
+        {
+
+        }
+    }
 }
