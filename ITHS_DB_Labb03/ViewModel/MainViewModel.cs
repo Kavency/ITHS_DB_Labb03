@@ -64,5 +64,9 @@ namespace ITHS_DB_Labb03.ViewModel
 
             NewUser = new();
         }
+        private void ChangeView()
+        {
+
     }
+}
 }
