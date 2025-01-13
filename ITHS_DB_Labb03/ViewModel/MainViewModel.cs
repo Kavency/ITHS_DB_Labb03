@@ -16,9 +16,14 @@ namespace ITHS_DB_Labb03.ViewModel
         public User NewUser { get; set; }
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
         public ObservableCollection<User> Users { get; set; }
+        public RelayCommand SetCurrentUserCMD { get; }
+        public RelayCommand AddNewUserCMD { get; }
 
         public MainViewModel()
         {
+            SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
+            AddNewUserCMD = new RelayCommand(AddUser);
+
             GetUsers();
         }
 
@@ -30,7 +35,15 @@ namespace ITHS_DB_Labb03.ViewModel
             Users = new ObservableCollection<User>(result);
         }
 
-        private void AddUser()
+        private void SetCurrentUser(object obj)
+        {
+            if(obj is not null)
+            {
+                CurrentUser = new User();
+                CurrentUser = obj as User;
+            }
+        }
+        private void AddUser(object obj)
         {
 
         }
