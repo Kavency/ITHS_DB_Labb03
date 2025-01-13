@@ -21,7 +21,7 @@ Uppgiften är ett samarbete på [IT Högskolans](https://www.iths.se/) mellan [M
 ## Installation
 1. Installera [MongoDB Community Server](https://www.mongodb.com/try/download/community) 
 
-2. Klona repot via [Git Bash](https://git-scm.com/downloads) eller via [Github](https://github.com/):
+2. Klona repot via [Git Bash](https://git-scm.com/downloads) eller kopiera url till repot här ovan eller denna [länk](https://github.com/Kavency/ITHS_DB_Labb03.git).
 ```
 Git Bash:
 
@@ -29,6 +29,7 @@ bash git clone https://github.com/Kavency/ITHS_DB_Labb03.git
 
 Github: 
 ```
+![githubclonesmall](https://github.com/user-attachments/assets/578a3ad0-484a-4010-b722-f52f25f102fd)
 
 
 
