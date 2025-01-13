@@ -1,11 +1,8 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MongoDB.Bson;
+using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel
 {
@@ -86,6 +83,6 @@ namespace ITHS_DB_Labb03.ViewModel
         private void ChangeView()
         {
 
+        }
     }
-}
 }
