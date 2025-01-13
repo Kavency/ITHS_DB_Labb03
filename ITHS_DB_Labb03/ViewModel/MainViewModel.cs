@@ -64,6 +64,25 @@ namespace ITHS_DB_Labb03.ViewModel
 
             NewUser = new();
         }
+
+
+        private void CheckUserCollection()
+        {
+            if(Users is null || Users.Count == 0)
+            {
+                UserViewVisibility = Visibility.Visible;
+                UserDetailsVisibility = Visibility.Hidden;
+                ListViewVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Hidden;
+                ListViewVisibility = Visibility.Visible;
+            }
+        }
+
+
         private void ChangeView()
         {
 
