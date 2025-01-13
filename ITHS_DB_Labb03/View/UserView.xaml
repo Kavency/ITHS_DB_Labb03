@@ -51,7 +51,8 @@
                 HorizontalAlignment="Center"
                 Margin="5"
                 BorderThickness="0"
-                Background="Transparent">
+                Background="Transparent"
+                Command="{Binding AddNewUserCMD}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Border BorderThickness="3"
