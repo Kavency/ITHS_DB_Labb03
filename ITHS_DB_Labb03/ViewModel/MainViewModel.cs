@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 namespace ITHS_DB_Labb03.ViewModel
 {
     internal class MainViewModel
+        public MainViewModel()
+        {
+            GetUsers();
+        }
+
+
         private void GetUsers()
     {
             using var db = new TodoDbContext();
