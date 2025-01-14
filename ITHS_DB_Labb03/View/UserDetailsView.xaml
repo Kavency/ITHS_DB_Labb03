@@ -42,7 +42,8 @@
                 <Button Content="Cancel"
                         Margin="15"
                         Padding="15 5"
-                        Command="{Binding AddNewUserCMD}"/>
+                        Command="{Binding CancelNewUserCMD}"
+                        CommandParameter="{Binding}"/>
             </StackPanel>
         </StackPanel>
 
