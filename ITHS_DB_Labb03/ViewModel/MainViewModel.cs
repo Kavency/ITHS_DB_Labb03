@@ -32,6 +32,12 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
+        private void ShowUserDetails(object obj)
+        {
+            ChangeView("userdetails");
+        }
+
+
         private void GetUsers()
         {
             using var db = new TodoDbContext();
