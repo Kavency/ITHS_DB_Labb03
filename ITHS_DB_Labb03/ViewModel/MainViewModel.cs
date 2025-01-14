@@ -20,12 +20,16 @@ namespace ITHS_DB_Labb03.ViewModel
         public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
         public ObservableCollection<User> Users { get; set; }
         public RelayCommand SetCurrentUserCMD { get; }
+        public RelayCommand ShowUserDetailsCMD { get; }
         public RelayCommand AddNewUserCMD { get; }
+        public RelayCommand CancelNewUserCMD { get; }
 
         public MainViewModel()
         {
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
+            ShowUserDetailsCMD = new RelayCommand(ShowUserDetails);
             AddNewUserCMD = new RelayCommand(AddUser);
+            CancelNewUserCMD = new RelayCommand(CancelButtonPressed);
 
             GetUsers();
             CheckUserCollection();
@@ -89,7 +93,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
 
         private void ChangeView(string view)
-            {
+        {
             if (view.ToLower() == "userview")
             {
                 UserViewVisibility = Visibility.Visible;
@@ -108,12 +112,6 @@ namespace ITHS_DB_Labb03.ViewModel
                 UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Visible;
             }
-        }
-
-
-        private void ChangeView()
-        {
-
         }
     }
 }
