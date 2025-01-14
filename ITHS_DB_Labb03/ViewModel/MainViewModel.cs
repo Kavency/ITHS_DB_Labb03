@@ -39,6 +39,7 @@ namespace ITHS_DB_Labb03.ViewModel
             Users = new ObservableCollection<User>(result);
         }
 
+
         private void SetCurrentUser(object obj)
         {
             if(obj is not null)
@@ -47,6 +48,8 @@ namespace ITHS_DB_Labb03.ViewModel
                 CurrentUser = obj as User;
             }
         }
+
+
         private void AddUser(object obj)
         {
             NewUser.Id = ObjectId.GenerateNewId();
@@ -60,6 +63,8 @@ namespace ITHS_DB_Labb03.ViewModel
             db.SaveChanges();
 
             NewUser = new();
+            OnPropertyChanged(nameof(NewUser));
+            ChangeView("userview");
         }
 
 
