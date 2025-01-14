@@ -38,7 +38,13 @@
                 <Button Content="Save"
                         Margin="15"
                         Padding="15 5"
+                        Visibility="{Binding SaveUserCMD}"
                         Command="{Binding AddNewUserCMD}"/>
+                <Button Content="Update"
+                        Margin="15"
+                        Padding="15 5"
+                        Visibility="{Binding EditUserCMD}"
+                        Command="{Binding AddNewUserCMD}" />
                 <Button Content="Cancel"
                         Margin="15"
                         Padding="15 5"
