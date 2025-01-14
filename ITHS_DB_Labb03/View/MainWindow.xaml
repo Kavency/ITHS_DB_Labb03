@@ -15,8 +15,8 @@
 
     <Grid>
         <views:ListView Visibility="{Binding ListViewVisibility}" />
-        <views:UserView Visibility="{Binding UserViewVisibility}" />
-        <views:UserDetailsView Visibility="{Binding UserDetailsVisibility}" />
+        <views:UserView Visibility="{Binding UserViewModel.UserViewVisibility}" />
+        <views:UserDetailsView Visibility="{Binding UserViewModel.UserDetailsVisibility}" />
     </Grid>
 
 </Window>

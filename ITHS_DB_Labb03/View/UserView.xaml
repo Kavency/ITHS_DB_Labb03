@@ -14,7 +14,7 @@
                HorizontalAlignment="Center">
         <ScrollViewer VerticalScrollBarVisibility="Hidden"
                       HorizontalScrollBarVisibility="Hidden">
-            <ItemsControl ItemsSource="{Binding Users}">
+            <ItemsControl ItemsSource="{Binding UserViewModel.Users}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -30,7 +30,7 @@
                                     Padding="0"
                                     Panel.ZIndex="1"
                                     ToolTip="Edit user"
-                                    Command="{Binding DataContext.ShowUserDetailsCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Command="{Binding DataContext.UserViewModel.ShowUserDetailsCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}">
                                 <fa:IconBlock Icon="Edit"
                                               VerticalAlignment="Center"
@@ -44,7 +44,7 @@
                                     Background="Transparent"
                                     ToolTip="User profile"
                                     Cursor="Hand"
-                                    Command="{Binding DataContext.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Command="{Binding DataContext.UserViewModel.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}">
                                 <StackPanel Margin="5">
                                     <Border BorderThickness="3"
@@ -72,7 +72,7 @@
                 Background="Transparent"
                 ToolTip="Add user"
                 Cursor="Hand"
-                Command="{Binding ShowUserDetailsCMD}">
+                Command="{Binding UserViewModel.ShowUserDetailsCMD}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Border BorderThickness="3"

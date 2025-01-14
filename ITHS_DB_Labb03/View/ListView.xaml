@@ -46,7 +46,7 @@
             <Button Padding="0"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    Command="{Binding ShowUsersCMD}">
+                    Command="{Binding UserViewModel.ShowUsersCMD}">
                 <fa:IconBlock Icon="Exchange"
                               FontSize="15" />
             </Button>
