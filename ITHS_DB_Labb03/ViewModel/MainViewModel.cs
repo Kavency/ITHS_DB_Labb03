@@ -41,7 +41,7 @@ namespace ITHS_DB_Labb03.ViewModel
             EditUserCMD = new RelayCommand(EditUser);
             CancelNewUserCMD = new RelayCommand(CancelButtonPressed);
 
-            GetUsers();
+            GetUsersFromDb();
             CheckUserCollection();
         }
 
@@ -67,7 +67,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
         }
 
-        private void GetUsers()
+
+        private void GetUsersFromDb()
         {
             using var db = new TodoDbContext();
             var result = db.Users.ToList();
