@@ -46,6 +46,12 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
+        private void ShowUsers(object obj)
+        {
+            ChangeView("userview");
+        }
+
+
         private void CancelButtonPressed(object obj)
         {
             UserDetails = new();
