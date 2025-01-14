@@ -56,7 +56,7 @@
                 Background="Transparent"
                 ToolTip="Add user"
                 Cursor="Hand"
-                Command="{Binding AddNewUserCMD}">
+                Command="{Binding ShowUserDetailsCMD}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Border BorderThickness="3"
