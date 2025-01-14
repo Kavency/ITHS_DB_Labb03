@@ -22,6 +22,8 @@ namespace ITHS_DB_Labb03.ViewModel
         public RelayCommand SetCurrentUserCMD { get; }
         public RelayCommand ShowUserDetailsCMD { get; }
         public RelayCommand AddNewUserCMD { get; }
+        public RelayCommand DeleteUserCMD { get; }
+        public RelayCommand UpdateUserCMD { get; }
         public RelayCommand CancelNewUserCMD { get; }
 
         public MainViewModel()
@@ -29,6 +31,8 @@ namespace ITHS_DB_Labb03.ViewModel
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
             ShowUserDetailsCMD = new RelayCommand(ShowUserDetails);
             AddNewUserCMD = new RelayCommand(AddUser);
+            DeleteUserCMD = new RelayCommand(DeleteUser);
+            UpdateUserCMD = new RelayCommand(EditUser);
             CancelNewUserCMD = new RelayCommand(CancelButtonPressed);
 
             GetUsers();
@@ -57,7 +61,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void SetCurrentUser(object obj)
         {
-            if(obj is not null)
+            if (obj is not null)
             {
                 CurrentUser = new User();
                 CurrentUser = obj as User;
@@ -80,6 +84,40 @@ namespace ITHS_DB_Labb03.ViewModel
             NewUser = new();
             OnPropertyChanged(nameof(NewUser));
             ChangeView("userview");
+        }
+
+        private void EditUser(object obj)
+        {
+            using var db = new TodoDbContext();
+
+            var userToUpdate = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
+
+            if(userToUpdate != null)
+            {
+                userToUpdate.FirstName = CurrentUser.FirstName;
+                userToUpdate.LastName = CurrentUser.LastName;
+                userToUpdate.UserName = CurrentUser.UserName;
+                userToUpdate.Email = CurrentUser.Email;
+                
+                db.Users.Update(userToUpdate);
+                db.SaveChanges();
+                OnPropertyChanged(nameof(Users));
+            }
+        }
+
+        private void DeleteUser(object obj)
+        {
+
+            using var db = new TodoDbContext();
+
+            var selectedUser = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
+
+            if (selectedUser != null)
+            {
+                Users.Remove(selectedUser);
+                db.Users.Remove(selectedUser);
+                db.SaveChanges();
+            }
         }
 
 
