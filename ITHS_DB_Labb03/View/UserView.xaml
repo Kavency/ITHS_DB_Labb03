@@ -22,28 +22,44 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Margin="5"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                ToolTip="User profile"
-                                Cursor="Hand"
-                                Command="{Binding DataContext.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}">
-                            <StackPanel Margin="5">
-                                <Border BorderThickness="3"
-                                        BorderBrush="Black"
-                                        Width="60"
-                                        Height="60"
-                                        CornerRadius="30">
-                                    <fa:IconBlock Icon="User"
-                                                  FontSize="40" />
-                                </Border>
-                                <TextBlock Text="{Binding UserName}"
-                                           TextAlignment="Center" />
-                            </StackPanel>
-                        </Button>
+                        <StackPanel>
+                            <Button HorizontalAlignment="Right"
+                                    Background="White"
+                                    BorderBrush="Transparent"
+                                    Margin="0 0 15 -20"
+                                    Padding="0"
+                                    Panel.ZIndex="1"
+                                    ToolTip="Edit user"
+                                    Command="{Binding DataContext.ShowUserDetailsCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}">
+                                <fa:IconBlock Icon="Edit"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15"/>
+                            </Button>
+                            <Button VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Margin="5"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    ToolTip="User profile"
+                                    Cursor="Hand"
+                                    Command="{Binding DataContext.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}">
+                                <StackPanel Margin="5">
+                                    <Border BorderThickness="3"
+                                            BorderBrush="Black"
+                                            Width="60"
+                                            Height="60"
+                                            CornerRadius="30">
+                                        <fa:IconBlock Icon="User"
+                                                      FontSize="40" />
+                                    </Border>
+                                    <TextBlock Text="{Binding UserName}"
+                                               TextAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
