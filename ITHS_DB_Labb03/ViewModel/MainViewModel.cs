@@ -22,12 +22,14 @@ namespace ITHS_DB_Labb03.ViewModel
         public RelayCommand SetCurrentUserCMD { get; }
         public RelayCommand AddNewUserCMD { get; }
         public RelayCommand DeleteUserCMD { get; }
+        public RelayCommand UpdateUserCMD { get; }
 
         public MainViewModel()
         {
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
             AddNewUserCMD = new RelayCommand(AddUser);
             DeleteUserCMD = new RelayCommand(DeleteUser);
+            UpdateUserCMD = new RelayCommand(EditUser);
 
             GetUsers();
             CheckUserCollection();
@@ -63,6 +65,25 @@ namespace ITHS_DB_Labb03.ViewModel
             db.SaveChanges();
 
             NewUser = new();
+        }
+
+        private void EditUser(object obj)
+        {
+            using var db = new TodoDbContext();
+
+            var userToUpdate = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
+
+            if(userToUpdate != null)
+            {
+                userToUpdate.FirstName = CurrentUser.FirstName;
+                userToUpdate.LastName = CurrentUser.LastName;
+                userToUpdate.UserName = CurrentUser.UserName;
+                userToUpdate.Email = CurrentUser.Email;
+                
+                db.Users.Update(userToUpdate);
+                db.SaveChanges();
+                OnPropertyChanged(nameof(Users));
+            }
         }
 
         private void DeleteUser(object obj)
