@@ -14,7 +14,7 @@ namespace ITHS_DB_Labb03.ViewModel
         private Visibility _userDetailsVisibility;
         public UserViewModel userViewModel;
 
-        public User NewUser { get; set; } = new User();
+        public User UserDetails { get; set; } = new User();
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
@@ -26,6 +26,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public RelayCommand DeleteUserCMD { get; }
         public RelayCommand UpdateUserCMD { get; }
         public RelayCommand CancelNewUserCMD { get; }
+
 
         public MainViewModel()
         {
@@ -45,14 +46,24 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void CancelButtonPressed(object obj)
         {
+            UserDetails = new();
+            OnPropertyChanged(nameof(UserDetails));
             ChangeView("userview");
         }
+
 
         private void ShowUserDetails(object obj)
         {
             ChangeView("userdetails");
+
+            if(obj is User)
+            {
+                UserDetails = obj as User;
+                OnPropertyChanged(nameof(UserDetails));
+                // Update button visibility
         }
 
+        }
 
         private void GetUsers()
         {
@@ -74,20 +85,21 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void AddUser(object obj)
         {
-            NewUser.Id = ObjectId.GenerateNewId();
-            NewUser.UserCreated = DateTime.Now;
-            NewUser.TodoCollections = new ObservableCollection<TodoCollection>();
+            UserDetails.Id = ObjectId.GenerateNewId();
+            UserDetails.UserCreated = DateTime.Now;
+            UserDetails.TodoCollections = new ObservableCollection<TodoCollection>();
 
             using var db = new TodoDbContext();
 
-            Users.Add(NewUser);
-            db.Users.Add(NewUser);
+            Users.Add(UserDetails);
+            db.Users.Add(UserDetails);
             db.SaveChanges();
 
             NewUser = new();
             OnPropertyChanged(nameof(NewUser));
             ChangeView("userview");
         }
+
 
         private void EditUser(object obj)
         {
@@ -107,6 +119,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 OnPropertyChanged(nameof(Users));
             }
         }
+
 
         private void DeleteUser(object obj)
         {
