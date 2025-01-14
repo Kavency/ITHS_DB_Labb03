@@ -12,6 +12,7 @@ namespace ITHS_DB_Labb03.ViewModel
         private Visibility _listViewVisibility;
         private Visibility _userViewVisibility;
         private Visibility _userDetailsVisibility;
+        public UserViewModel userViewModel;
 
         public User NewUser { get; set; } = new User();
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
@@ -28,6 +29,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
         public MainViewModel()
         {
+            userViewModel = new UserViewModel(this);
+
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
             ShowUserDetailsCMD = new RelayCommand(ShowUserDetails);
             AddNewUserCMD = new RelayCommand(AddUser);
