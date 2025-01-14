@@ -26,23 +26,29 @@
                        BorderBrush="Black"
                        Margin="0 0 0 30"/>
             <Label Content="Firstname:" />
-            <TextBox Text="{Binding NewUser.FirstName}" />
+            <TextBox Text="{Binding UserViewModel.UserDetails.FirstName}" />
             <Label Content="Lastname:" />
-            <TextBox Text="{Binding NewUser.LastName}" />
+            <TextBox Text="{Binding UserViewModel.UserDetails.LastName}" />
             <Label Content="Username:" />
-            <TextBox Text="{Binding NewUser.UserName}" />
+            <TextBox Text="{Binding UserViewModel.UserDetails.UserName}" />
             <Label Content="Email" />
-            <TextBox Text="{Binding NewUser.Email}"/>
+            <TextBox Text="{Binding UserViewModel.UserDetails.Email}"/>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button Content="Save"
                         Margin="15"
                         Padding="15 5"
-                        Command="{Binding AddNewUserCMD}"/>
+                        Visibility="{Binding UserViewModel.SaveUserCMD}"
+                        Command="{Binding UserViewModel.AddNewUserCMD}"/>
+                <Button Content="Update"
+                        Margin="15"
+                        Padding="15 5"
+                        Visibility="{Binding UserViewModel.EditUserCMD}"
+                        Command="{Binding UserViewModel.AddNewUserCMD}" />
                 <Button Content="Cancel"
                         Margin="15"
                         Padding="15 5"
-                        Command="{Binding CancelNewUserCMD}"
+                        Command="{Binding UserViewModel.CancelNewUserCMD}"
                         CommandParameter="{Binding}"/>
             </StackPanel>
         </StackPanel>
