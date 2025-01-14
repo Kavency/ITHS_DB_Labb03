@@ -66,12 +66,21 @@ namespace ITHS_DB_Labb03.ViewModel
         private void CheckUserCollection()
         {
             if(Users is null || Users.Count == 0)
+        private void ChangeView(string view)
+            {
+            if (view.ToLower() == "userview")
             {
                 UserViewVisibility = Visibility.Visible;
                 UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Hidden;
             }
-            else
+            else if(view.ToLower() == "userdetails")
+            {
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Visible;
+                ListViewVisibility = Visibility.Hidden;
+            }
+            else if(view.ToLower() == "listview")
             {
                 UserViewVisibility = Visibility.Hidden;
                 UserDetailsVisibility = Visibility.Hidden;
