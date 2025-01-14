@@ -66,6 +66,12 @@ namespace ITHS_DB_Labb03.ViewModel
         private void CheckUserCollection()
         {
             if(Users is null || Users.Count == 0)
+                ChangeView("userview");
+            else
+                ChangeView("listview");
+        }
+
+
         private void ChangeView(string view)
             {
             if (view.ToLower() == "userview")
