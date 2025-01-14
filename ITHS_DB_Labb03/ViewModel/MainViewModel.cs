@@ -70,6 +70,10 @@ namespace ITHS_DB_Labb03.ViewModel
                 OnPropertyChanged(nameof(UserDetails));
                 // Update button visibility
         }
+            else if(obj is null)
+            {
+                // Save button vivibility
+            }
 
         }
 
