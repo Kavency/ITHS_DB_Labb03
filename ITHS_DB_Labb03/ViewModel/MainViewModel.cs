@@ -69,7 +69,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 UserDetails = obj as User;
                 OnPropertyChanged(nameof(UserDetails));
                 // Update button visibility
-        }
+            }
             else if(obj is null)
             {
                 // Save button vivibility
@@ -108,9 +108,7 @@ namespace ITHS_DB_Labb03.ViewModel
             db.Users.Add(UserDetails);
             db.SaveChanges();
 
-            NewUser = new();
-            OnPropertyChanged(nameof(NewUser));
-            ChangeView("userview");
+            CancelButtonPressed(obj);
         }
 
 
@@ -136,7 +134,6 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void DeleteUser(object obj)
         {
-
             using var db = new TodoDbContext();
 
             var selectedUser = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
