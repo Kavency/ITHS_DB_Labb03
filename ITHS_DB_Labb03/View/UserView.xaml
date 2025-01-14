@@ -27,6 +27,8 @@
                                 Margin="5"
                                 BorderThickness="0"
                                 Background="Transparent"
+                                ToolTip="User profile"
+                                Cursor="Hand"
                                 Command="{Binding DataContext.SetCurrentUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}">
                             <StackPanel Margin="5">
@@ -38,7 +40,7 @@
                                     <fa:IconBlock Icon="User"
                                                   FontSize="40" />
                                 </Border>
-                                <TextBlock Text="{Binding FirstName}"
+                                <TextBlock Text="{Binding UserName}"
                                            TextAlignment="Center" />
                             </StackPanel>
                         </Button>
@@ -52,6 +54,8 @@
                 Margin="5"
                 BorderThickness="0"
                 Background="Transparent"
+                ToolTip="Add user"
+                Cursor="Hand"
                 Command="{Binding AddNewUserCMD}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
@@ -63,7 +67,7 @@
                     <fa:IconBlock Icon="Plus"
                                   FontSize="40" />
                 </Border>
-                <TextBlock Text=""
+                <TextBlock Text="Add User"
                            TextAlignment="Center" />
             </StackPanel>
         </Button>
