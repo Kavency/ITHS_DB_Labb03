@@ -26,13 +26,13 @@
                        BorderBrush="Black"
                        Margin="0 0 0 30"/>
             <Label Content="Firstname:" />
-            <TextBox Text="{Binding NewUser.FirstName}" />
+            <TextBox Text="{Binding UserDetails.FirstName}" />
             <Label Content="Lastname:" />
-            <TextBox Text="{Binding NewUser.LastName}" />
+            <TextBox Text="{Binding UserDetails.LastName}" />
             <Label Content="Username:" />
-            <TextBox Text="{Binding NewUser.UserName}" />
+            <TextBox Text="{Binding UserDetails.UserName}" />
             <Label Content="Email" />
-            <TextBox Text="{Binding NewUser.Email}"/>
+            <TextBox Text="{Binding UserDetails.Email}"/>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button Content="Save"
