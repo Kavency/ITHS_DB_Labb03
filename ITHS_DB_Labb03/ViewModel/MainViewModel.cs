@@ -22,9 +22,10 @@ namespace ITHS_DB_Labb03.ViewModel
         public ObservableCollection<User> Users { get; set; }
         public RelayCommand SetCurrentUserCMD { get; }
         public RelayCommand ShowUserDetailsCMD { get; }
+        public RelayCommand ShowUsersCMD { get; }
         public RelayCommand AddNewUserCMD { get; }
         public RelayCommand DeleteUserCMD { get; }
-        public RelayCommand UpdateUserCMD { get; }
+        public RelayCommand EditUserCMD { get; }
         public RelayCommand CancelNewUserCMD { get; }
 
 
@@ -34,9 +35,10 @@ namespace ITHS_DB_Labb03.ViewModel
 
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
             ShowUserDetailsCMD = new RelayCommand(ShowUserDetails);
+            ShowUsersCMD = new RelayCommand(ShowUsers);
             AddNewUserCMD = new RelayCommand(AddUser);
             DeleteUserCMD = new RelayCommand(DeleteUser);
-            UpdateUserCMD = new RelayCommand(EditUser);
+            EditUserCMD = new RelayCommand(EditUser);
             CancelNewUserCMD = new RelayCommand(CancelButtonPressed);
 
             GetUsers();
