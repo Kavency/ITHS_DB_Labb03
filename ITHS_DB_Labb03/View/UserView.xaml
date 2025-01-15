@@ -89,7 +89,8 @@
                 Background="Transparent"
                 ToolTip="Add user"
                 Cursor="Hand"
-                Command="{Binding UserViewModel.ShowUserDetailsCMD}">
+                Command="{Binding UserViewModel.ShowUserDetailsCMD}"
+                CommandParameter="newuser">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Border BorderThickness="3"
