@@ -13,6 +13,8 @@ namespace ITHS_DB_Labb03.ViewModel
         private User _currentUser;
         private Visibility _userViewVisibility;
         private Visibility _userDetailsVisibility;
+        private Visibility _saveButtonVisibility;
+        private Visibility _updateButtonVisibility;
 
         public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
         public User UserDetails { get => _userDetails; set { _userDetails = value; OnPropertyChanged(); } }
@@ -20,6 +22,8 @@ namespace ITHS_DB_Labb03.ViewModel
         public ObservableCollection<User> Users { get; set; }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
+        public Visibility SaveButtonVisibility { get => _saveButtonVisibility; set { _saveButtonVisibility = value; OnPropertyChanged(); } }
+        public Visibility UpdateButtonVisibility { get => _updateButtonVisibility; set { _updateButtonVisibility = value; OnPropertyChanged(); } }
 
 
         public RelayCommand ShowUsersCMD { get; }
@@ -60,11 +64,13 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 UserDetails = obj as User;
                 OnPropertyChanged(nameof(UserDetails));
-                // Update button visibility
+                UpdateButtonVisibility = Visibility.Visible;
+                SaveButtonVisibility = Visibility.Collapsed;
             }
-            else if (obj is null)
+            else if ("newuser" == obj as string || obj is null)
             {
-                // Save button vivibility
+                UpdateButtonVisibility = Visibility.Collapsed;
+                SaveButtonVisibility = Visibility.Visible;
             }
 
         }
@@ -109,21 +115,21 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             // Refactor.... maybe use a TryCatch instead of nested ifs.
 
-            User userToDelete = obj as User;
+            User selectedUser = obj as User;
             
-            if(userToDelete is not null)
+            if(selectedUser is not null)
             {
-                var confirmDeletion = MessageBox.Show($"Do you want to delete {userToDelete.UserName}?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var confirmDeletion = MessageBox.Show($"Do you want to delete {selectedUser.UserName}?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
                 if(confirmDeletion == MessageBoxResult.Yes)
                 {
                     using var db = new TodoDbContext();
-                    var selectedUser = db.Users.FirstOrDefault(u => u.Id == userToDelete.Id);
+                    var userToDelete = db.Users.FirstOrDefault(u => u.Id == selectedUser.Id);
 
-                    if (selectedUser != null)
+                    if (userToDelete != null)
                     {
-                        Users.Remove(userToDelete);
-                        db.Users.Remove(selectedUser);
+                        Users.Remove(selectedUser);
+                        db.Users.Remove(userToDelete);
                         db.SaveChanges();
                     }
                 }
