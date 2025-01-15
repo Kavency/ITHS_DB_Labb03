@@ -23,20 +23,37 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <Button HorizontalAlignment="Right"
-                                    Background="White"
-                                    BorderBrush="Transparent"
-                                    Margin="0 0 15 -20"
-                                    Padding="0"
-                                    Panel.ZIndex="1"
-                                    ToolTip="Edit user"
-                                    Command="{Binding DataContext.UserViewModel.ShowUserDetailsCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}">
-                                <fa:IconBlock Icon="Edit"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              FontSize="15"/>
-                            </Button>
+                            <DockPanel Panel.ZIndex="1">
+                                <Button HorizontalAlignment="Right"
+                                        Background="White"
+                                        BorderBrush="Transparent"
+                                        Margin="0 0 12 -20"
+                                        Padding="0"
+                                        DockPanel.Dock="Right"
+                                        ToolTip="Delete user"
+                                        Command="{Binding DataContext.UserViewModel.DeleteUserCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}">
+                                    <fa:IconBlock Icon="XmarkCircle"
+                                                  Foreground="Red"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  FontSize="15" />
+                                </Button>
+                                <Button HorizontalAlignment="Right"
+                                        Background="White"
+                                        BorderBrush="Transparent"
+                                        Margin="0 0 0 -20"
+                                        Padding="0"
+                                        DockPanel.Dock="Right"
+                                        ToolTip="Edit user"
+                                        Command="{Binding DataContext.UserViewModel.ShowUserDetailsCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}">
+                                    <fa:IconBlock Icon="Edit"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  FontSize="15" />
+                                </Button>
+                            </DockPanel>
                             <Button VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     Margin="5"
