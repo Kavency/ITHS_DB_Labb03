@@ -107,15 +107,26 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void DeleteUser(object obj)
         {
-            using var db = new TodoDbContext();
+            // Refactor.... maybe use a TryCatch instead of nested ifs.
 
-            var selectedUser = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
-
-            if (selectedUser != null)
+            User userToDelete = obj as User;
+            
+            if(userToDelete is not null)
             {
-                Users.Remove(selectedUser);
-                db.Users.Remove(selectedUser);
-                db.SaveChanges();
+                var confirmDeletion = MessageBox.Show($"Do you want to delete {userToDelete.UserName}?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if(confirmDeletion == MessageBoxResult.Yes)
+                {
+                    using var db = new TodoDbContext();
+                    var selectedUser = db.Users.FirstOrDefault(u => u.Id == userToDelete.Id);
+
+                    if (selectedUser != null)
+                    {
+                        Users.Remove(userToDelete);
+                        db.Users.Remove(selectedUser);
+                        db.SaveChanges();
+                    }
+                }
             }
         }
 
