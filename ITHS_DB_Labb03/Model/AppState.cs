@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ITHS_DB_Labb03.Model
 {
-    internal class AppSettings
+    internal class AppState
     {
         public User CurrentUser { get; set; }
         public TodoCollection SelectedCollection { get; set; }
