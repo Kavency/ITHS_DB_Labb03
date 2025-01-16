@@ -11,8 +11,10 @@ namespace ITHS_DB_Labb03.ViewModel
     {
         private UserViewModel _userViewModel;
         private Visibility _listViewVisibility;
+        private AppState _appState;
 
         public UserViewModel UserViewModel { get =>_userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
+        public AppState AppState { get => _appState; set { _appState = value; OnPropertyChanged(); } }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
 
 
