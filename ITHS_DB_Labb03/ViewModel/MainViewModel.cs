@@ -3,6 +3,7 @@ using ITHS_DB_Labb03.Model;
 using System.Collections.ObjectModel;
 using MongoDB.Bson;
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITHS_DB_Labb03.ViewModel
 {
@@ -20,15 +21,20 @@ namespace ITHS_DB_Labb03.ViewModel
             UserViewModel = new UserViewModel(this);
 
             GetUsersFromDb();
+
             CheckUserCollection();
         }
 
+        private async void GetUsersFromDb()
+        {
+            UserViewModel.Users = await GetUsersAsync();
+        }
 
-        private void GetUsersFromDb()
+        private async Task<ObservableCollection<User>> GetUsersAsync()
         {
             using var db = new TodoDbContext();
-            var result = db.Users.ToList();
-            UserViewModel.Users = new ObservableCollection<User>(result);
+            var result = await db.Users.ToListAsync();
+            return new ObservableCollection<User>(result);
         }
 
 
