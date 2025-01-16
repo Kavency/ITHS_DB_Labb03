@@ -49,6 +49,11 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
+        /// <summary>
+        /// Sets the current view. UserView show all users. UserDetails shows
+        /// details on a choosen user and ListView show the lists and tasks for choosen user.
+        /// </summary>
+        /// <param name="view">Valid params: userview, userdetails, listview</param>
         internal void ChangeView(string view)
         {
             if (view.ToLower() == "userview")
