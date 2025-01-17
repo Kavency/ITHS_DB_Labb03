@@ -69,7 +69,31 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
+        private async Task SaveAppState()
+        {
+            AppState.WindowState = AppWindow.WindowState;
+            AppState.WindowTop = AppWindow.Top;
+            AppState.WindowLeft = AppWindow.Left;
+            AppState.WindowWidth = AppWindow.Width;
+            AppState.WindowHeight = AppWindow.Height;
+
+            using var db = new TodoDbContext();
+
+            var documentCount = await db.AppState.CountAsync();
+
+            if (documentCount > 0)
+            {
+                var allDocuments = await db.AppState.ToListAsync();
+                db.AppState.RemoveRange(allDocuments);
+                await db.SaveChangesAsync();
+            }
+            await db.AppState.AddAsync(AppState);
+            await db.SaveChangesAsync();
+        }
+
+
         private void SaveAppState()
+
         {
 
         }
