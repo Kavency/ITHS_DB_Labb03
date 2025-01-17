@@ -17,6 +17,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public AppState AppState { get; set; }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
 
+        public RelayCommand WindowControlCMD { get; }
 
         public MainViewModel()
         {
@@ -26,8 +27,11 @@ namespace ITHS_DB_Labb03.ViewModel
             GetUsersFromDb();
             CheckUserCollection();
             LoadAppState();
-        }
 
+            WindowControlCMD = new RelayCommand(WindowControl);
+            
+        }
+        
 
         private async void GetUsersFromDb()
         {
@@ -92,11 +96,34 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
-        private void SaveAppState()
-
+        private async void WindowControl(object obj)
         {
+            var param = obj.ToString().ToLower();
+            if(param == "close")
+            {
+                var confirmDeletion = MessageBox.Show($"Do you want to quit?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
+                if (confirmDeletion == MessageBoxResult.Yes)
+                {
+                    await SaveAppState();
+                    Application.Current.Shutdown();
+                }
+            }
+            else if(param == "maximize")
+            {
+                if (AppWindow.WindowState == WindowState.Normal)
+                    AppWindow.WindowState = WindowState.Maximized;
+                else
+                    AppWindow.WindowState = WindowState.Normal;
+
+                await SaveAppState();
+            }
+            else if(param == "minimize")
+            {
+                AppWindow.WindowState = WindowState.Minimized;
+            }
         }
+
 
         /// <summary>
         /// Sets the current view. UserView show all users. UserDetails shows
