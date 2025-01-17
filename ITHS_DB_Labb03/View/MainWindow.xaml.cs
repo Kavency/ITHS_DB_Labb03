@@ -3,17 +3,16 @@ using ITHS_DB_Labb03.Model;
 using ITHS_DB_Labb03.ViewModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ITHS_DB_Labb03;
 
 public partial class MainWindow : Window
 {
-    internal AppState AppState { get; set; }
     public MainWindow()
     {
         InitializeComponent();
         DataContext = new MainViewModel();
-        AppState = new AppState();
         EnsureCreated();
     }
 
@@ -26,26 +25,11 @@ public partial class MainWindow : Window
         Debug.WriteLine($"Database connection: {db.Database.CanConnect()}");
     }
 
-
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    private void MoveMainWindow_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        AppState.WindowState = this.WindowState;
-        AppState.WindowTop = this.Top;
-        AppState.WindowLeft = this.Left;
-        AppState.WindowWidth = this.Width;
-        AppState.WindowHeight = this.Height;
-
-        using var db = new TodoDbContext();
-
-        var documentCount = db.AppState.Count();
-
-        if(documentCount > 0)
+        if (e.ChangedButton == MouseButton.Left)
         {
-            var allDocuments = db.AppState.ToList();
-            db.AppState.RemoveRange(allDocuments);
-            db.SaveChanges();
+            this.DragMove();
         }
-        db.AppState.Add(AppState);
-        db.SaveChanges();
     }
 }

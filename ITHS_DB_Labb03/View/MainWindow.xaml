@@ -12,12 +12,60 @@
         Height="800"
         MinWidth="650"
         MinHeight="400"
-        Closing="Window_Closing">
+        WindowStyle="None">
 
     <Grid>
-        <views:ListView Visibility="{Binding ListViewVisibility}" />
-        <views:UserView Visibility="{Binding UserViewModel.UserViewVisibility}" />
-        <views:UserDetailsView Visibility="{Binding UserViewModel.UserDetailsVisibility}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0"
+                   LastChildFill="true"
+                   MouseDown="MoveMainWindow_MouseDown"
+                   Cursor="Hand">
+            <Button DockPanel.Dock="Right"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Margin="3 0 5 0"
+                    Command="{Binding WindowControlCMD}"
+                    CommandParameter="close">
+                <fa:IconBlock Icon="CircleXmark"
+                              FontSize="25"
+                              Foreground="Red" />
+            </Button>
+            <Button DockPanel.Dock="Right"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Margin="3 0"
+                    Command="{Binding WindowControlCMD}"
+                    CommandParameter="maximize">
+                <fa:IconBlock Icon="WindowMaximize"
+                              FontSize="25" />
+            </Button>
+            <Button DockPanel.Dock="Right"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Margin="3 0"
+                    Command="{Binding WindowControlCMD}"
+                    CommandParameter="minimize">
+                <fa:IconBlock Icon="WindowMinimize"
+                              FontSize="25" />
+            </Button>
+            <TextBlock Padding="10 0 0 0"
+                       VerticalAlignment="Center"
+                       FontSize="20"
+                       Text="Just Do It">
+                <fa:IconBlock Icon="ThumbsUp"
+                              Margin="5 0" />
+            </TextBlock>
+        </DockPanel>
+
+        <views:ListView Grid.Row="1"
+                        Visibility="{Binding ListViewVisibility}" />
+        <views:UserView Grid.Row="1"
+                        Visibility="{Binding UserViewModel.UserViewVisibility}" />
+        <views:UserDetailsView Grid.Row="1"
+                               Visibility="{Binding UserViewModel.UserDetailsVisibility}" />
     </Grid>
 
 </Window>
