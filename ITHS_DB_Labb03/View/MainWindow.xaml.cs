@@ -1,5 +1,4 @@
 ﻿using ITHS_DB_Labb03.Core;
-using ITHS_DB_Labb03.Model;
 using ITHS_DB_Labb03.ViewModel;
 using System.Diagnostics;
 using System.Windows;
