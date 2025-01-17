@@ -15,7 +15,6 @@ public partial class MainWindow : Window
         DataContext = new MainViewModel();
         AppState = new AppState();
         EnsureCreated();
-        LoadAppState();
     }
 
 
@@ -25,23 +24,6 @@ public partial class MainWindow : Window
 
         db.Database.EnsureCreated();
         Debug.WriteLine($"Database connection: {db.Database.CanConnect()}");
-    }
-
-
-    private void LoadAppState()
-    {
-        using var db = new TodoDbContext();
-        var state = db.AppState.FirstOrDefault();
-        AppState = state;
-
-        if (state is not null)
-        {
-            this.WindowState = state.WindowState;
-            this.Top = state.WindowTop;
-            this.Left = state.WindowLeft;
-            this.Width = state.WindowWidth;
-            this.Height = state.WindowHeight;
-        }
     }
 
 

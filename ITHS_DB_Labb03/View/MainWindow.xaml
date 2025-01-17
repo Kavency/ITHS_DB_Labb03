@@ -12,7 +12,6 @@
         Height="800"
         MinWidth="650"
         MinHeight="400"
-        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing">
 
     <Grid>

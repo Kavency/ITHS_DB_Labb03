@@ -11,26 +11,29 @@ namespace ITHS_DB_Labb03.ViewModel
     {
         private UserViewModel _userViewModel;
         private Visibility _listViewVisibility;
-        private AppState _appState;
 
         public UserViewModel UserViewModel { get =>_userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
-        public AppState AppState { get => _appState; set { _appState = value; OnPropertyChanged(); } }
+        public Window AppWindow { get; set; }
+        public AppState AppState { get; set; }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
 
 
         public MainViewModel()
         {
             UserViewModel = new UserViewModel(this);
-
+            AppWindow = Application.Current.MainWindow;
+            AppState = new AppState();
             GetUsersFromDb();
-
             CheckUserCollection();
+            LoadAppState();
         }
+
 
         private async void GetUsersFromDb()
         {
             UserViewModel.Users = await GetUsersAsync();
         }
+
 
         private async Task<ObservableCollection<User>> GetUsersAsync()
         {
@@ -48,6 +51,28 @@ namespace ITHS_DB_Labb03.ViewModel
                 ChangeView("listview");
         }
 
+
+        private void LoadAppState()
+        {
+            using var db = new TodoDbContext();
+            var state = db.AppState.FirstOrDefault();
+            AppState = state;
+
+            if (state is not null)
+            {
+                AppWindow.WindowState = state.WindowState;
+                AppWindow.Top = state.WindowTop;
+                AppWindow.Left = state.WindowLeft;
+                AppWindow.Width = state.WindowWidth;
+                AppWindow.Height = state.WindowHeight;
+            }
+        }
+
+
+        private void SaveAppState()
+        {
+
+        }
 
         /// <summary>
         /// Sets the current view. UserView show all users. UserDetails shows
