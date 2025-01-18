@@ -60,8 +60,7 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             using var db = new TodoDbContext();
             var state = db.AppState.FirstOrDefault();
-            AppState = state;
-
+            
             if (state is not null)
             {
                 AppState = state;
@@ -109,7 +108,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
                 if (confirmDeletion == MessageBoxResult.Yes)
                 {
-                    await SaveAppState();
+                    SaveAppState();
                     Application.Current.Shutdown();
                 }
             }
