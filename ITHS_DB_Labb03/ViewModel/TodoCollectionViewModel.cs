@@ -39,6 +39,17 @@ namespace ITHS_DB_Labb03.ViewModel;
         AddNewTaskCMD = new RelayCommand(AddNewTask); //Lägger till task
         AddNewListCMD = new RelayCommand(AddNewList); //Lägger till en lista
 
+        CreateTodoCMD = new RelayCommand(CreateTodo); // Enter eller "Save"
+        ReadTodoCMD = new RelayCommand(ReadTodo);
+        UpdateTodoCMD = new RelayCommand(UpdateTodo);
+        DeleteTodoCMD = new RelayCommand(DeleteTodo);
+
+        CreateListCMD = new RelayCommand(CreateList); // Enter eller "Save"
+        ReadListCMD = new RelayCommand(ReadList);
+        UpdateListCMD = new RelayCommand(UpdateList);
+        DeleteListCMD = new RelayCommand(DeleteList);
+
+    }
         }
 
     }
