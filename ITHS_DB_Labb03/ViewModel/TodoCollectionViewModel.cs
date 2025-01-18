@@ -12,12 +12,22 @@ namespace ITHS_DB_Labb03.ViewModel;
     internal class TodoCollectionViewModel : VMBase
     {
 		private MainViewModel _mainViewModel;
+    private Visibility _isListTextVisible;
+    private Visibility _isListButtonVisible;
+    private string _newListName;
+
     public ObservableCollection<Todo> Todos { get; set; }
     public ObservableCollection<TodoCollection> TodoCollection { get; set; }
 
     //public ObservableCollection<User> Users { get; set; } ?
 		public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
 
+    public Visibility IsListTextVisible { get => _isListTextVisible; set { _isListTextVisible = value; OnPropertyChanged(); } }
+    public Visibility IsListButtonVisible { get => _isListButtonVisible; set { _isListButtonVisible = value; OnPropertyChanged(); } }
+    public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+
+
+    public RelayCommand ShowListTextCMD { get; set; }
     public RelayCommand AddNewTaskCMD { get; }
     public RelayCommand AddNewListCMD { get; }
     public RelayCommand CreateTodoCMD { get; }
