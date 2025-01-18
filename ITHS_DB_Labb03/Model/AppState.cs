@@ -11,7 +11,7 @@ namespace ITHS_DB_Labb03.Model
         public double WindowLeft { get; set; }
         public double WindowHeight { get; set; }
         public double WindowWidth { get; set; }
-        //public User CurrentUser { get; set; }
+        public User CurrentUser { get; set; }
         //public TodoCollection SelectedCollection { get; set; }
     }
 }
