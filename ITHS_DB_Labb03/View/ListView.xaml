@@ -26,47 +26,49 @@
         </Grid.RowDefinitions>
 
         <!-- Left side -->
-        <StackPanel Grid.Column="0"
-                    Grid.Row="0"
-                    Orientation="Horizontal"
-                    Margin=" 20 5"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-            <Border BorderThickness="3"
-                    BorderBrush="Black"
-                    Width="60"
-                    Height="60"
-                    CornerRadius="30">
-                <fa:IconBlock Icon="User"
-                              FontSize="40" />
-            </Border>
+        <DockPanel Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="0 "
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   LastChildFill="True"
+                   MinWidth="285">
 
-            <TextBlock Text="{Binding UserViewModel.CurrentUser.UserName}"
-                       VerticalAlignment="Center"
-                       Margin="15 0"
-                       FontSize="20" />
+            <fa:IconBlock Icon="UserCircle"
+                          FontSize="50"
+                          DockPanel.Dock="Left"/>
+
             <Button Padding="0"
                     Background="Transparent"
                     BorderBrush="Transparent"
+                    DockPanel.Dock="Right"
+                    Width="20"
+                    Height="20"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
                 <fa:IconBlock Icon="Exchange"
-                              FontSize="15" />
+                              FontSize="20" />
             </Button>
-        </StackPanel>
+            <TextBlock Text="{Binding UserViewModel.CurrentUser.UserName}"
+                       VerticalAlignment="Center"
+                       Margin="5 0"
+                       FontSize="15"
+                       d:Text="John Doe"/>
+        </DockPanel>
 
-        <StackPanel Grid.Column="0"
-                    Grid.Row="1"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-            <TextBox MinWidth="250"
+        <DockPanel Grid.Column="0"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center">
+            <fa:IconBlock Icon="MagnifyingGlass"
+                          FontSize="20"
+                          Margin="-25 5 5 5"
+                          DockPanel.Dock="Right"
+                          Panel.ZIndex="1" />
+            <TextBox MinWidth="285"
                      VerticalAlignment="Center"
                      VerticalContentAlignment="Center"
                      MinHeight="25" />
-            <fa:IconBlock Icon="MagnifyingGlass"
-                          FontSize="20"
-                          Margin="5" />
-        </StackPanel>
+        </DockPanel>
 
         <ListView Grid.Column="0"
                   Grid.Row="2"
@@ -104,16 +106,17 @@
 
         </StackPanel>
 
+        <!-- Listview for todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
                   Grid.RowSpan="2"
-                  Margin="15 0">
-
+                  Margin="10 0">
         </ListView>
+        <!-- Below is a second listview, for completed todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
                   Grid.RowSpan="2"
-                  Margin="15 0">
+                  Margin="10 0">
         </ListView>
 
         <Button Grid.Column="1"
