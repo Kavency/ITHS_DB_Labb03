@@ -105,7 +105,7 @@ namespace ITHS_DB_Labb03.ViewModel
             var param = obj.ToString().ToLower();
             if(param == "close")
             {
-                var confirmDeletion = MessageBox.Show($"Do you want to quit?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var confirmDeletion = MessageBox.Show($"Do you want to quit?", "Quit application", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
                 if (confirmDeletion == MessageBoxResult.Yes)
                 {
