@@ -31,7 +31,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public RelayCommand AddNewUserCMD { get; }
         public RelayCommand DeleteUserCMD { get; }
         public RelayCommand EditUserCMD { get; }
-        public RelayCommand CancelNewUserCMD { get; }
+        public RelayCommand CloseUserDetailsCMD { get; }
         public RelayCommand SetCurrentUserCMD { get; }
 
 
@@ -44,7 +44,7 @@ namespace ITHS_DB_Labb03.ViewModel
             AddNewUserCMD = new RelayCommand(AddUser);
             DeleteUserCMD = new RelayCommand(DeleteUser);
             EditUserCMD = new RelayCommand(EditUser);
-            CancelNewUserCMD = new RelayCommand(CancelButtonPressed);
+            CloseUserDetailsCMD = new RelayCommand(CloseUserDetails);
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
 
         }
@@ -62,6 +62,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
             if (obj is User)
             {
+                CurrentUser = obj as User;
                 UserDetails = obj as User;
                 OnPropertyChanged(nameof(UserDetails));
                 UpdateButtonVisibility = Visibility.Visible;
@@ -87,7 +88,7 @@ namespace ITHS_DB_Labb03.ViewModel
             db.Users.Add(UserDetails);
             db.SaveChanges();
 
-            CancelButtonPressed(obj);
+            CloseUserDetails(obj);
         }
 
 
@@ -106,7 +107,10 @@ namespace ITHS_DB_Labb03.ViewModel
 
                 db.Users.Update(userToUpdate);
                 db.SaveChanges();
-                OnPropertyChanged(nameof(Users));
+
+                var user = Users.FirstOrDefault(x => x.Id == userToUpdate.Id);
+                user = CurrentUser;
+                CloseUserDetails(obj);
             }
         }
 
@@ -136,7 +140,7 @@ namespace ITHS_DB_Labb03.ViewModel
             }
         }
 
-        private void CancelButtonPressed(object obj)
+        private void CloseUserDetails(object obj)
         {
             UserDetails = new();
             OnPropertyChanged(nameof(UserDetails));
