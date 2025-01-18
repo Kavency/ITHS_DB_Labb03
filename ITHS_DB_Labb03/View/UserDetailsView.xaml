@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ITHS_DB_Labb03.View"
+             xmlns:core="clr-namespace:ITHS_DB_Labb03.Core"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -24,34 +25,91 @@
                        Text="Enter user details" />
             <Separator BorderThickness="4"
                        BorderBrush="Black"
-                       Margin="0 0 0 30"/>
+                       Margin="0 0 0 30" />
+
             <Label Content="Firstname:" />
-            <TextBox Text="{Binding UserViewModel.UserDetails.FirstName}" />
+            <TextBox Name="FirstName">
+                <TextBox.Text>
+                    <Binding Path="UserViewModel.UserDetails.FirstName"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <core:NotEmptyStringValidation ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <Label Content="Lastname:" />
-            <TextBox Text="{Binding UserViewModel.UserDetails.LastName}" />
+            <TextBox Name="LastName">
+                <TextBox.Text>
+                    <Binding Path="UserViewModel.UserDetails.LastName"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <core:NotEmptyStringValidation ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <Label Content="Username:" />
-            <TextBox Text="{Binding UserViewModel.UserDetails.UserName}" />
-            <Label Content="Email" />
-            <TextBox Text="{Binding UserViewModel.UserDetails.Email}"/>
+            <TextBox Name="UserName">
+                <TextBox.Text>
+                    <Binding Path="UserViewModel.UserDetails.UserName"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <core:UserNameValidation ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <Label Content="Email:" />
+            <TextBox Name="Email">
+                <TextBox.Text>
+                    <Binding Path="UserViewModel.UserDetails.Email"
+                             UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <core:EmailValidation ValidatesOnTargetUpdated="True" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button Content="Save"
                         Margin="15"
                         Padding="15 5"
                         Visibility="{Binding UserViewModel.SaveButtonVisibility}"
-                        Command="{Binding UserViewModel.AddNewUserCMD}"
-                        CommandParameter="save"/>
+                        Command="{Binding UserViewModel.AddNewUserCMD}">
+                    <Button.IsEnabled>
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <core:ValidationToBoolConverter />
+                            </MultiBinding.Converter>
+                            <Binding ElementName="FirstName"
+                                     Path="(Validation.HasError)" />
+                            <Binding ElementName="LastName"
+                                     Path="(Validation.HasError)" />
+                            <Binding ElementName="UserName"
+                                     Path="(Validation.HasError)" />
+                            <Binding ElementName="Email"
+                                     Path="(Validation.HasError)" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+
                 <Button Content="Update"
                         Margin="15"
                         Padding="15 5"
                         Visibility="{Binding UserViewModel.UpdateButtonVisibility}"
                         Command="{Binding UserViewModel.AddNewUserCMD}"
-                        CommandParameter="update"/>
+                        CommandParameter="update" />
                 <Button Content="Cancel"
                         Margin="15"
                         Padding="15 5"
                         Command="{Binding UserViewModel.CancelNewUserCMD}"
-                        CommandParameter="{Binding}"/>
+                        CommandParameter="{Binding}" />
             </StackPanel>
         </StackPanel>
 
