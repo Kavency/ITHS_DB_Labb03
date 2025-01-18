@@ -62,6 +62,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
             if (obj is User)
             {
+                CurrentUser = obj as User;
                 UserDetails = obj as User;
                 OnPropertyChanged(nameof(UserDetails));
                 UpdateButtonVisibility = Visibility.Visible;
@@ -106,7 +107,10 @@ namespace ITHS_DB_Labb03.ViewModel
 
                 db.Users.Update(userToUpdate);
                 db.SaveChanges();
-                OnPropertyChanged(nameof(Users));
+
+                var user = Users.FirstOrDefault(x => x.Id == userToUpdate.Id);
+                user = CurrentUser;
+                CloseUserDetails(obj);
             }
         }
 
