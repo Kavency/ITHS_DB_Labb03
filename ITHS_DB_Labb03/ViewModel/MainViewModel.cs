@@ -16,7 +16,6 @@ namespace ITHS_DB_Labb03.ViewModel
         public UserViewModel UserViewModel { get =>_userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
         public Window AppWindow { get; set; }
         public AppState AppState { get; set; }
-        public TodoCollectionViewModel TodoCollectionViewModel { get => _todoCollectionViewModel; set { _todoCollectionViewModel = value; OnPropertyChanged(); } }
         public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
 
         public RelayCommand WindowControlCMD { get; }
@@ -102,6 +101,77 @@ namespace ITHS_DB_Labb03.ViewModel
             await db.SaveChangesAsync();
         }
 
+
+        private async void WindowControl(object obj)
+        {
+            var param = obj.ToString().ToLower();
+            if(param == "close")
+            {
+                var confirmDeletion = MessageBox.Show($"Do you want to quit?", "Quit application", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (confirmDeletion == MessageBoxResult.Yes)
+                {
+                    SaveAppState();
+                    Application.Current.Shutdown();
+                }
+            }
+            else if(param == "maximize")
+            {
+                if (AppWindow.WindowState == WindowState.Normal)
+                    AppWindow.WindowState = WindowState.Maximized;
+                else
+                    AppWindow.WindowState = WindowState.Normal;
+
+
+        private void LoadAppState()
+        {
+            using var db = new TodoDbContext();
+            var state = db.AppState.FirstOrDefault();
+            
+            if (state is not null)
+            {
+                AppState = state;
+                UserViewModel.CurrentUser = state.CurrentUser;
+                AppWindow.WindowState = state.WindowState;
+                AppWindow.Top = state.WindowTop;
+                AppWindow.Left = state.WindowLeft;
+                AppWindow.Width = state.WindowWidth;
+                AppWindow.Height = state.WindowHeight;
+            }
+        }
+
+
+        private async Task SaveAppState()
+        {
+            AppState.CurrentUser = UserViewModel.CurrentUser;
+            AppState.WindowState = AppWindow.WindowState;
+            AppState.WindowTop = AppWindow.Top;
+            AppState.WindowLeft = AppWindow.Left;
+            AppState.WindowWidth = AppWindow.Width;
+            AppState.WindowHeight = AppWindow.Height;
+
+            using var db = new TodoDbContext();
+
+            var documentCount = await db.AppState.CountAsync();
+
+            if (documentCount > 0)
+            {
+                var allDocuments = await db.AppState.ToListAsync();
+                db.AppState.RemoveRange(allDocuments);
+                await db.SaveChangesAsync();
+            }
+            
+            await db.AppState.AddAsync(AppState);
+            await db.SaveChangesAsync();
+        }
+
+                await SaveAppState();
+            }
+            else if(param == "minimize")
+            {
+                AppWindow.WindowState = WindowState.Minimized;
+            }
+        }
 
         private async void WindowControl(object obj)
         {
