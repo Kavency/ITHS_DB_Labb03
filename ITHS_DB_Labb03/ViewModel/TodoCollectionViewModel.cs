@@ -33,6 +33,11 @@ namespace ITHS_DB_Labb03.ViewModel;
         {
 
             MainViewModel = mainViewModel;
+        Todos = new ObservableCollection<Todo>();
+        TodoCollection = new ObservableCollection<TodoCollection>();
+
+        AddNewTaskCMD = new RelayCommand(AddNewTask); //Lägger till task
+        AddNewListCMD = new RelayCommand(AddNewList); //Lägger till en lista
 
         }
 
