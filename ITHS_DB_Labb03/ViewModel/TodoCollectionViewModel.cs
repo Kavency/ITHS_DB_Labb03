@@ -77,7 +77,49 @@ namespace ITHS_DB_Labb03.ViewModel;
             IsListTextVisible = Visibility.Collapsed;
             IsListButtonVisible = Visibility.Visible;
     }
+    }
+
+    private void AddNewTask(object obj)
+    {
+        throw new NotImplementedException();
+    }
+
+
+
+    // Todo CRUD:
+    private void CreateTodo(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void ReadTodo(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void UpdateTodo(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void DeleteTodo(object obj)
+    {
+        throw new NotImplementedException();
         }
 
+     // List CRUD:
+
+    private void CreateList(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void ReadList(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void UpdateList(object obj)
+    {
+        throw new NotImplementedException();
+    }
+    private void DeleteList(object obj)
+    {
+        throw new NotImplementedException();
     }
 }
