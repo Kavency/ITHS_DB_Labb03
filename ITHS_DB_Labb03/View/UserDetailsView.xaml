@@ -57,7 +57,7 @@
                     <Binding Path="UserViewModel.UserDetails.UserName"
                              UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
-                            <core:NotEmptyStringValidation ValidatesOnTargetUpdated="True" />
+                            <core:UserNameValidation ValidatesOnTargetUpdated="True" />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
