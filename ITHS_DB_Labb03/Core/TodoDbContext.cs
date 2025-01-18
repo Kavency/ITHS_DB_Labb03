@@ -17,6 +17,7 @@ internal class TodoDbContext : DbContext
         var dbName = "todoapp";
 
         optionsBuilder.UseMongoDB(connectionString, dbName);
+        Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
