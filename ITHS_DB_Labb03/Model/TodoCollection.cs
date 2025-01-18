@@ -11,6 +11,7 @@ namespace ITHS_DB_Labb03.Model
     {
 
         public string Id { get; set; }
+        public string Title { get; set; }
         public List<User> Users { get; set; }
         public List<Todo> Todos { get; set; }
         public DateTime CollectionCreated { get; set; }
