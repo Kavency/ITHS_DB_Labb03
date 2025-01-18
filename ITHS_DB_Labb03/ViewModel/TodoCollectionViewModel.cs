@@ -46,6 +46,8 @@ namespace ITHS_DB_Labb03.ViewModel;
         Todos = new ObservableCollection<Todo>();
         TodoCollection = new ObservableCollection<TodoCollection>();
 
+        ShowListTextCMD = new RelayCommand(ShowListText);
+
         AddNewTaskCMD = new RelayCommand(AddNewTask); //Lägger till task
         AddNewListCMD = new RelayCommand(AddNewList); //Lägger till en lista
 
@@ -59,6 +61,12 @@ namespace ITHS_DB_Labb03.ViewModel;
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
 
+    }
+    private void ShowListText(object obj)
+    {
+        IsListTextVisible = Visibility.Visible;
+        IsListButtonVisible = Visibility.Collapsed;
+    }
     }
         }
 
