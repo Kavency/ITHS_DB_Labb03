@@ -74,9 +74,21 @@
 
         </ListView>
 
+
+        <!-- List Textbox -->
+        <TextBox Grid.Column="0"
+                 Grid.Row="3"
+                 Margin="15 5"
+                 Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
+                 Text=""/>
+        
+        <!-- List Button -->
         <Button Grid.Column="0"
                 Grid.Row="3"
-                Margin="15 5">
+                Margin="15 5"
+                Command="{Binding TodoCollectionViewModel.ShowListTextCMD}"
+                Visibility="{Binding TodoCollectionViewModel.IsListButtonVisible}">
+
             <Button.Content>
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
