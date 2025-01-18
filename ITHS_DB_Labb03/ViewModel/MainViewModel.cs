@@ -64,6 +64,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
             if (state is not null)
             {
+                AppState = state;
+                UserViewModel.CurrentUser = state.CurrentUser;
                 AppWindow.WindowState = state.WindowState;
                 AppWindow.Top = state.WindowTop;
                 AppWindow.Left = state.WindowLeft;
@@ -75,6 +77,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private async Task SaveAppState()
         {
+            AppState.CurrentUser = UserViewModel.CurrentUser;
             AppState.WindowState = AppWindow.WindowState;
             AppState.WindowTop = AppWindow.Top;
             AppState.WindowLeft = AppWindow.Left;
@@ -91,6 +94,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 db.AppState.RemoveRange(allDocuments);
                 await db.SaveChangesAsync();
             }
+            
             await db.AppState.AddAsync(AppState);
             await db.SaveChangesAsync();
         }
