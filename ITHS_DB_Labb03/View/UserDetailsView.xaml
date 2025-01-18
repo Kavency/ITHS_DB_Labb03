@@ -103,12 +103,12 @@
                         Margin="15"
                         Padding="15 5"
                         Visibility="{Binding UserViewModel.UpdateButtonVisibility}"
-                        Command="{Binding UserViewModel.AddNewUserCMD}"
-                        CommandParameter="update" />
+                        Command="{Binding UserViewModel.EditUserCMD}"
+                        CommandParameter="{Binding}" />
                 <Button Content="Cancel"
                         Margin="15"
                         Padding="15 5"
-                        Command="{Binding UserViewModel.CancelNewUserCMD}"
+                        Command="{Binding UserViewModel.CloseUserDetailsCMD}"
                         CommandParameter="{Binding}" />
             </StackPanel>
         </StackPanel>
