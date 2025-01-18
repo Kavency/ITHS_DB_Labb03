@@ -18,6 +18,16 @@ namespace ITHS_DB_Labb03.ViewModel;
     //public ObservableCollection<User> Users { get; set; } ?
 		public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
 
+    public RelayCommand AddNewTaskCMD { get; }
+    public RelayCommand AddNewListCMD { get; }
+    public RelayCommand CreateTodoCMD { get; }
+    public RelayCommand ReadTodoCMD { get; }
+    public RelayCommand UpdateTodoCMD { get; }
+    public RelayCommand DeleteTodoCMD { get; }
+    public RelayCommand CreateListCMD { get; }
+    public RelayCommand ReadListCMD { get; }
+    public RelayCommand UpdateListCMD { get; }
+    public RelayCommand DeleteListCMD { get; }
 
         public TodoCollectionViewModel(MainViewModel mainViewModel)
         {
