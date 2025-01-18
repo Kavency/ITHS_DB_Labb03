@@ -67,6 +67,15 @@ namespace ITHS_DB_Labb03.ViewModel;
         IsListTextVisible = Visibility.Visible;
         IsListButtonVisible = Visibility.Collapsed;
     }
+
+    private void AddNewList(object obj)
+    {
+        if (!string.IsNullOrWhiteSpace(NewListName))
+        {
+            TodoCollection.Add(new TodoCollection { Title = NewListName });
+            NewListName = string.Empty;
+            IsListTextVisible = Visibility.Collapsed;
+            IsListButtonVisible = Visibility.Visible;
     }
         }
 
