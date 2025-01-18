@@ -78,6 +78,7 @@
         <!-- List Textbox -->
         <TextBox Grid.Column="0"
                  Grid.Row="3"
+                 x:Name="ListTextBox"
                  Margin="15 5"
                  Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
                  Text=""/>
@@ -87,8 +88,10 @@
                 Grid.Row="3"
                 Margin="15 5"
                 Command="{Binding TodoCollectionViewModel.ShowListTextCMD}"
-                Visibility="{Binding TodoCollectionViewModel.IsListButtonVisible}">
+                Visibility="{Binding TodoCollectionViewModel.IsListButtonVisible}"
+                FocusManager.FocusedElement="{Binding ElementName=ListTextBox}">
 
+            
             <Button.Content>
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
