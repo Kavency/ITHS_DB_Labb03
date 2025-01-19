@@ -111,7 +111,27 @@ internal class TodoCollectionViewModel : VMBase
 
     private void CreateList(object obj)
     {
-        throw new NotImplementedException();
+        string? newListName = obj.ToString();
+        if (!string.IsNullOrWhiteSpace(newListName))
+        {
+            using var db = new TodoDbContext();
+
+            var newCollection = new TodoCollection { Id = ObjectId.GenerateNewId(), Title = newListName, Users = new List<User>(), Todos = new List<Todo>() };
+            db.TodoCollections.Add(newCollection);
+            db.SaveChanges();
+            newCollection.Users.Add(MainViewModel.UserViewModel.CurrentUser);
+            TodoCollections.Add(newCollection);
+            db.TodoCollections.Update(newCollection);
+            db.SaveChanges();
+
+            CurrentTodoCollection = newCollection;
+
+            OnPropertyChanged(nameof(CurrentTodoCollection));
+
+            newListName = string.Empty;
+            IsListTextVisible = Visibility.Collapsed;
+            IsListButtonVisible = Visibility.Visible;
+        }
     }
     private void ReadList(object obj)
     {
