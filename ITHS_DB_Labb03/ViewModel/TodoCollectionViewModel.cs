@@ -1,5 +1,6 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,8 +19,8 @@ internal class TodoCollectionViewModel : VMBase
     private Visibility _isTaskTextVisible;
     private Visibility _isTaskButtonVisible;
 
-    public ObservableCollection<Todo> Todos { get; set; }
-    public ObservableCollection<TodoCollection> TodoCollection { get; set; }
+    private TodoCollection _currentTodoCollection;
+    private Todo _currentTodo;
 
     //public ObservableCollection<User> Users { get; set; } ?
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
@@ -29,6 +30,10 @@ internal class TodoCollectionViewModel : VMBase
     public Visibility IsTaskTextVisible { get => _isTaskTextVisible; set { _isTaskTextVisible = value; OnPropertyChanged(); } }
     public Visibility IsTaskButtonVisible { get => _isTaskButtonVisible; set { _isTaskButtonVisible = value; OnPropertyChanged(); } }
 
+    public ObservableCollection<Todo> Todos { get; set; }
+    public ObservableCollection<TodoCollection> TodoCollections { get; set; }
+    public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
+    public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
 
     public RelayCommand ShowListTextCMD { get; set; }
     public RelayCommand AddNewTaskCMD { get; }
@@ -47,15 +52,15 @@ internal class TodoCollectionViewModel : VMBase
 
         MainViewModel = mainViewModel;
         Todos = new ObservableCollection<Todo>();
-        TodoCollection = new ObservableCollection<TodoCollection>();
+        TodoCollections = new ObservableCollection<TodoCollection>();
 
         ShowListTextCMD = new RelayCommand(ShowListText);
 
         AddNewTaskCMD = new RelayCommand(AddNewTask); //Byt namn till t ex Show..
         AddNewListCMD = new RelayCommand(AddNewList); //Byt namn till Show..
 
-        CreateTodoCMD = new RelayCommand(CreateTodo); // Enter eller "Save"
-        ReadTodoCMD = new RelayCommand(ReadTodo); //ta bort
+        CreateTaskCMD = new RelayCommand(CreateTask);
+        ReadTodoCMD = new RelayCommand(ReadTodo); //ta bort?
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
