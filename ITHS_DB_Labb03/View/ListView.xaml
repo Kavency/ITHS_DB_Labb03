@@ -73,7 +73,7 @@
                   Margin="15 0"
                   ItemsSource="{Binding TodoCollectionViewModel.TodoCollections}"
                   DisplayMemberPath="Title"
-                  SelectedItem="">
+                  SelectedItem="{Binding TodoCollectionViewModel.CurrentTodoCollection}">
 
         </ListView>
 
