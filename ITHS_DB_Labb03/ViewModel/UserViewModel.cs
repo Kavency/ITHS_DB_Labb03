@@ -18,7 +18,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
         public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
         public User UserDetails { get => _userDetails; set { _userDetails = value; OnPropertyChanged(); } }
-        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
+        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } } 
         public ObservableCollection<User> Users { get; set; }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
@@ -150,6 +150,10 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 CurrentUser = new User();
                 CurrentUser = obj as User;
+
+                //MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
+
+                MainViewModel.ChangeView("listview");
             }
         }
     }
