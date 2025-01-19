@@ -18,13 +18,10 @@ internal class TodoCollectionViewModel : VMBase
     private Visibility _isListButtonVisible;
     private Visibility _isTaskTextVisible;
     private Visibility _isTaskButtonVisible;
-
+    
     private TodoCollection _currentTodoCollection;
     private Todo _currentTodo;
-
-    //public ObservableCollection<User> Users { get; set; } ?
-    public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
-
+    
     public Visibility IsListTextVisible { get => _isListTextVisible; set { _isListTextVisible = value; OnPropertyChanged(); } }
     public Visibility IsListButtonVisible { get => _isListButtonVisible; set { _isListButtonVisible = value; OnPropertyChanged(); } }
     public Visibility IsTaskTextVisible { get => _isTaskTextVisible; set { _isTaskTextVisible = value; OnPropertyChanged(); } }
@@ -34,11 +31,12 @@ internal class TodoCollectionViewModel : VMBase
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
     public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
+    
 
-    public RelayCommand ShowListTextCMD { get; set; }
-    public RelayCommand AddNewTaskCMD { get; }
-    public RelayCommand AddNewListCMD { get; }
-    public RelayCommand CreateTodoCMD { get; }
+    public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
+    public RelayCommand ShowListTextCMD { get; }
+    public RelayCommand ShowTaskTextCMD { get; }
+    public RelayCommand CreateTaskCMD { get; }
     public RelayCommand ReadTodoCMD { get; }
     public RelayCommand UpdateTodoCMD { get; }
     public RelayCommand DeleteTodoCMD { get; }
@@ -53,27 +51,21 @@ internal class TodoCollectionViewModel : VMBase
         MainViewModel = mainViewModel;
         Todos = new ObservableCollection<Todo>();
         TodoCollections = new ObservableCollection<TodoCollection>();
-
+        
         ShowListTextCMD = new RelayCommand(ShowListText);
+        ShowTaskTextCMD = new RelayCommand(ShowTaskText);
 
-        AddNewTaskCMD = new RelayCommand(AddNewTask); //Byt namn till t ex Show..
-        AddNewListCMD = new RelayCommand(AddNewList); //Byt namn till Show..
 
         CreateTaskCMD = new RelayCommand(CreateTask);
         ReadTodoCMD = new RelayCommand(ReadTodo); //ta bort?
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
-        CreateListCMD = new RelayCommand(CreateList); // Enter eller "Save"
-        ReadListCMD = new RelayCommand(ReadList); //ta bort
+        CreateListCMD = new RelayCommand(CreateList);
+        ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
 
-    }
-    private void ShowListText(object obj)
-    {
-        IsListTextVisible = Visibility.Visible;
-        IsListButtonVisible = Visibility.Collapsed;
     }
 
     private void ShowTaskText(object obj)
@@ -82,15 +74,15 @@ internal class TodoCollectionViewModel : VMBase
         IsTaskButtonVisible = Visibility.Collapsed;
     }
 
-    private void AddNewTask(object obj)
+    private void ShowListText(object obj)
     {
-        throw new NotImplementedException();
+        IsListTextVisible = Visibility.Visible;
+        IsListButtonVisible = Visibility.Collapsed;
     }
 
-
-
-    // Todo CRUD:
-    private void CreateTodo(object obj)
+    
+    // Task CRUD:
+    private void CreateTask(object obj)
     {
         throw new NotImplementedException();
     }
