@@ -18,7 +18,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
         public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
         public User UserDetails { get => _userDetails; set { _userDetails = value; OnPropertyChanged(); } }
-        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
+        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } } 
         public ObservableCollection<User> Users { get; set; }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
@@ -82,6 +82,7 @@ namespace ITHS_DB_Labb03.ViewModel
             UserDetails.UserCreated = DateTime.Now;
             UserDetails.TodoCollections = new ObservableCollection<TodoCollection>();
 
+            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId() ,Title = "Default Title", Users = new List<User>(), Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
             using var db = new TodoDbContext();
 
             Users.Add(UserDetails);
@@ -153,6 +154,10 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 CurrentUser = new User();
                 CurrentUser = obj as User;
+
+                //MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
+
+                MainViewModel.ChangeView("listview");
             }
         }
     }

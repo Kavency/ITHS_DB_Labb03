@@ -10,7 +10,7 @@ namespace ITHS_DB_Labb03.Model
     internal class TodoCollection
     {
 
-        public string Id { get; set; }
+        public ObjectId Id { get; set; }
         public string Title { get; set; }
         public List<User> Users { get; set; }
         public List<Todo> Todos { get; set; }
