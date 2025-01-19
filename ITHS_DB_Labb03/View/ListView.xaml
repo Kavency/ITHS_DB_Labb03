@@ -83,7 +83,6 @@
                    Grid.Column="0"
                  Grid.Row="3"
                  x:Name="ListTextBox"
-                 Margin="15 5"
                  Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
                    Margin="15 5">
             <!-- Add New List Button-->
