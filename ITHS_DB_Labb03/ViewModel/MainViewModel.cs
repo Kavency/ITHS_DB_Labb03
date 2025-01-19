@@ -11,8 +11,8 @@ namespace ITHS_DB_Labb03.ViewModel
     {
         private UserViewModel _userViewModel;
         private Visibility _listViewVisibility;
-        //private TodoCollectionViewModel _todoCollectionViewModel;
-
+        private TodoCollectionViewModel _todoCollectionViewModel;
+        public TodoCollectionViewModel TodoCollectionViewModel { get => _todoCollectionViewModel; set { _todoCollectionViewModel = value; OnPropertyChanged(); } }
         public UserViewModel UserViewModel { get => _userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
         public Window AppWindow { get; set; }
         public AppState AppState { get; set; }
@@ -23,6 +23,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public MainViewModel()
         {
             UserViewModel = new UserViewModel(this);
+            TodoCollectionViewModel = new TodoCollectionViewModel(this);
             AppWindow = Application.Current.MainWindow;
             AppState = new AppState();
             //TodoCollectionViewModel = new TodoCollectionViewModel(this);
