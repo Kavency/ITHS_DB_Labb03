@@ -70,26 +70,57 @@
 
         <ListView Grid.Column="0"
                   Grid.Row="2"
-                  Margin="15 0">
+                  Margin="15 0"
+                  ItemsSource="{Binding TodoCollectionViewModel.TodoCollections}"
+                  DisplayMemberPath="Title"
+                  SelectedItem="">
 
         </ListView>
 
 
         <!-- List Textbox -->
-        <TextBox Grid.Column="0"
+        <DockPanel LastChildFill="True"
+                   Grid.Column="0"
                  Grid.Row="3"
                  x:Name="ListTextBox"
                  Margin="15 5"
                  Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
+                   Margin="15 5">
+            <!-- Add New List Button-->
+            <Button DockPanel.Dock="Right"
+                    Command="{Binding TodoCollectionViewModel.CreateListCMD}"
+                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}"
+                    VerticalAlignment="Center"
+                    Margin="0 6 "
+                    Padding="0"
+                    Height="30"
+                    Width="30"
+                    BorderBrush="Transparent"
+                    Background="Transparent">
+                <Button.Content>
+
+                    <fa:IconBlock Icon="SquareCheck"
+                                  FontSize="30"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+
+                </Button.Content>
+            </Button>
+            <TextBox Grid.Column="0"
+                     Grid.Row="3"
+                     x:Name="NewListTextBox"
+                     VerticalAlignment="Center"
+                     Padding="5"
                  Text=""/>
         
-        <!-- List Button -->
+        </DockPanel>
+        <!-- Show TextBox Button -->
         <Button Grid.Column="0"
                 Grid.Row="3"
                 Margin="15 5"
                 Command="{Binding TodoCollectionViewModel.ShowListTextCMD}"
                 Visibility="{Binding TodoCollectionViewModel.IsListButtonVisible}"
-                FocusManager.FocusedElement="{Binding ElementName=ListTextBox}">
+                FocusManager.FocusedElement="{Binding ElementName=NewListTextBox}">
 
             
             <Button.Content>
