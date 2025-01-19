@@ -23,6 +23,9 @@
                    LastChildFill="true"
                    MouseDown="MoveMainWindow_MouseDown"
                    Cursor="Hand">
+            <Separator DockPanel.Dock="Bottom"
+                       Margin="10 0"
+                       Background="LightGray"/>
             <Button DockPanel.Dock="Right"
                     Background="Transparent"
                     BorderBrush="Transparent"
