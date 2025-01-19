@@ -81,6 +81,7 @@ namespace ITHS_DB_Labb03.ViewModel
             UserDetails.UserCreated = DateTime.Now;
             UserDetails.TodoCollections = new ObservableCollection<TodoCollection>();
 
+            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId() ,Title = "Default Title", Users = new List<User>(), Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
             using var db = new TodoDbContext();
 
             Users.Add(UserDetails);
