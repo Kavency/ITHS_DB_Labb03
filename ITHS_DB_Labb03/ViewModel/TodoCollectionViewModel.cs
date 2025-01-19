@@ -15,7 +15,8 @@ internal class TodoCollectionViewModel : VMBase
     private MainViewModel _mainViewModel;
     private Visibility _isListTextVisible;
     private Visibility _isListButtonVisible;
-    private string _newListName;
+    private Visibility _isTaskTextVisible;
+    private Visibility _isTaskButtonVisible;
 
     public ObservableCollection<Todo> Todos { get; set; }
     public ObservableCollection<TodoCollection> TodoCollection { get; set; }
@@ -25,7 +26,8 @@ internal class TodoCollectionViewModel : VMBase
 
     public Visibility IsListTextVisible { get => _isListTextVisible; set { _isListTextVisible = value; OnPropertyChanged(); } }
     public Visibility IsListButtonVisible { get => _isListButtonVisible; set { _isListButtonVisible = value; OnPropertyChanged(); } }
-    public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+    public Visibility IsTaskTextVisible { get => _isTaskTextVisible; set { _isTaskTextVisible = value; OnPropertyChanged(); } }
+    public Visibility IsTaskButtonVisible { get => _isTaskButtonVisible; set { _isTaskButtonVisible = value; OnPropertyChanged(); } }
 
 
     public RelayCommand ShowListTextCMD { get; set; }
@@ -69,15 +71,10 @@ internal class TodoCollectionViewModel : VMBase
         IsListButtonVisible = Visibility.Collapsed;
     }
 
-    private void AddNewList(object obj)
+    private void ShowTaskText(object obj)
     {
-        if (!string.IsNullOrWhiteSpace(NewListName))
-        {
-            TodoCollection.Add(new TodoCollection { Title = NewListName });
-            NewListName = string.Empty;
-            IsListTextVisible = Visibility.Collapsed;
-            IsListButtonVisible = Visibility.Visible;
-        }
+        IsTaskTextVisible = Visibility.Visible;
+        IsTaskButtonVisible = Visibility.Collapsed;
     }
 
     private void AddNewTask(object obj)
