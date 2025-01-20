@@ -203,7 +203,7 @@
         <!--Task Button-->
         <Button Grid.Column="1"
                 Grid.Row="3"
-                Margin="15 5"
+                Margin="10 5"
                 Command="{Binding TodoCollectionViewModel.ShowTaskTextCMD}"
                 Visibility="{Binding TodoCollectionViewModel.IsTaskButtonVisible}"
                 FocusManager.FocusedElement="{Binding ElementName=TaskTextBox}">
