@@ -1,7 +1,9 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel
@@ -18,7 +20,7 @@ namespace ITHS_DB_Labb03.ViewModel
 
         public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
         public User UserDetails { get => _userDetails; set { _userDetails = value; OnPropertyChanged(); } }
-        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } } 
+        public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
         public ObservableCollection<User> Users { get; set; }
         public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
         public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
@@ -46,7 +48,6 @@ namespace ITHS_DB_Labb03.ViewModel
             EditUserCMD = new RelayCommand(EditUser);
             CloseUserDetailsCMD = new RelayCommand(CloseUserDetails);
             SetCurrentUserCMD = new RelayCommand(SetCurrentUser);
-
         }
 
 
@@ -73,69 +74,80 @@ namespace ITHS_DB_Labb03.ViewModel
                 UpdateButtonVisibility = Visibility.Collapsed;
                 SaveButtonVisibility = Visibility.Visible;
             }
-
         }
 
-        private void AddUser(object obj)
+
+        private async void AddUser(object obj)
+        {
+            await AddUserAsync(obj);
+        }
+
+
+        private async Task AddUserAsync(object obj)
         {
             UserDetails.Id = ObjectId.GenerateNewId();
             UserDetails.UserCreated = DateTime.Now;
             UserDetails.TodoCollections = new List<TodoCollection>();
 
-            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId() ,Title = "Default Title", Users = new List<User>(), Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
-            using var db = new TodoDbContext();
+            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "Default Title", Users = new List<User>(), Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
+
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            await userCollection.InsertOneAsync(UserDetails);
 
             Users.Add(UserDetails);
-            db.Users.Add(UserDetails);
-            db.SaveChanges();
 
             CloseUserDetails(obj);
         }
 
-
-        private void EditUser(object obj)
+        private async void EditUser(object obj)
         {
-            using var db = new TodoDbContext();
+            await EditUserAsync(obj);
+        }
 
-            var userToUpdate = db.Users.FirstOrDefault(u => u.Id == CurrentUser.Id);
+        private async Task EditUserAsync(object obj)
+        {
+            using var db = new MongoClient();
 
-            if (userToUpdate != null)
-            {
-                userToUpdate.FirstName = CurrentUser.FirstName;
-                userToUpdate.LastName = CurrentUser.LastName;
-                userToUpdate.UserName = CurrentUser.UserName;
-                userToUpdate.Email = CurrentUser.Email;
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            //var userToUpdate = userCollection.AsQueryable().FirstOrDefault(u => u.Id == CurrentUser.Id);
+            var filter = Builders<User>.Filter.Eq(u => u.Id, CurrentUser.Id);
+            var update = Builders<User>.Update
+                .Set(u => u.FirstName, CurrentUser.FirstName)
+                .Set(u => u.LastName, CurrentUser.LastName)
+                .Set(u => u.UserName, CurrentUser.UserName)
+                .Set(u => u.Email, CurrentUser.Email);
 
-                db.Users.Update(userToUpdate);
-                db.SaveChanges();
-
-                var user = Users.FirstOrDefault(x => x.Id == userToUpdate.Id);
-                user = CurrentUser;
-                CloseUserDetails(obj);
-            }
+            userCollection.UpdateOneAsync(filter, update);
+            CloseUserDetails(obj);
         }
 
 
-        private void DeleteUser(object obj)
+        private async void DeleteUser(object obj)
+        {
+            await DeleteUserAsync(obj);
+        }
+
+        private async Task DeleteUserAsync(object obj)
         {
             // Refactor.... maybe use a TryCatch instead of nested ifs.
 
             User selectedUser = obj as User;
-            
-            if(selectedUser is not null)
+
+            if (selectedUser is not null)
             {
                 var confirmDeletion = MessageBox.Show($"Do you want to delete {selectedUser.UserName}?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                if(confirmDeletion == MessageBoxResult.Yes)
+                if (confirmDeletion == MessageBoxResult.Yes)
                 {
-                    using var db = new TodoDbContext();
-                    var userToDelete = db.Users.FirstOrDefault(u => u.Id == selectedUser.Id);
+                    using var db = new MongoClient();
+                    var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-                    if (userToDelete != null)
+                    var filter = Builders<User>.Filter.Eq(u => u.Id, selectedUser.Id);
+
+                    if (filter != null)
                     {
-                        Users.Remove(selectedUser);
-                        db.Users.Remove(userToDelete);
-                        db.SaveChanges();
+                        userCollection.DeleteOneAsync(filter);
                     }
                 }
             }
