@@ -3,12 +3,15 @@ using ITHS_DB_Labb03.Model;
 using System.Collections.ObjectModel;
 using MongoDB.Bson;
 using System.Windows;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+
 
 namespace ITHS_DB_Labb03.ViewModel
 {
     internal class MainViewModel : VMBase
     {
+        public static string connectionString = "mongodb://localhost:27017/";
+
         private UserViewModel _userViewModel;
         private Visibility _listViewVisibility;
         private TodoCollectionViewModel _todoCollectionViewModel;
@@ -28,7 +31,8 @@ namespace ITHS_DB_Labb03.ViewModel
             AppState = new AppState();
             //TodoCollectionViewModel = new TodoCollectionViewModel(this);
 
-            GetUsersFromDb();
+            //GetUsersFromDb();
+            GetUsersAsync();
             CheckUserCollection();
             LoadAppState();
 
@@ -37,17 +41,23 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
-        private async void GetUsersFromDb()
-        {
-            UserViewModel.Users = await GetUsersAsync();
-        }
+        //private async void GetUsersFromDb()
+        //{
+        //    UserViewModel.Users = await GetUsersAsync();
+        //}
 
 
-        private async Task<ObservableCollection<User>> GetUsersAsync()
+        private async Task GetUsersAsync()
         {
-            using var db = new TodoDbContext();
-            var result = await db.Users.ToListAsync();
-            return new ObservableCollection<User>(result);
+            using var db = new MongoClient(connectionString);
+
+
+
+            //using var db = new TodoDbContext();
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("User");
+            var result = await (await userCollection.FindAsync(_ => true)).ToListAsync();
+            UserViewModel.Users = new ObservableCollection<User>(result);
+
         }
 
 
