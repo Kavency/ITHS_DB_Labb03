@@ -62,7 +62,7 @@ internal class TodoCollectionViewModel : VMBase
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
-        CreateListCMD = new RelayCommand(CreateListAsync);
+        CreateListCMD = new RelayCommand(CreateList);
         ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
@@ -101,15 +101,15 @@ internal class TodoCollectionViewModel : VMBase
     }
 
     // List CRUD:
-    private async void CreateListAsync(object obj)
+    private async void CreateList(object obj)
     {
-        await CreateList(obj);
+        await CreateListAsync(obj);
     }
-    private async Task CreateList(object obj)
+    private async Task CreateListAsync(object obj)
     {
         string? newListName = obj.ToString();
 
-        var newList = new TodoCollection 
+        var newTodoList = new TodoCollection 
         { 
             CollectionCreated = DateTime.Now,
             Id = ObjectId.GenerateNewId(),
@@ -122,7 +122,10 @@ internal class TodoCollectionViewModel : VMBase
         {
             using var db = new MongoClient(MainViewModel.connectionString);
             var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
-            await todoCollection.InsertOneAsync(newList);
+            await todoCollection.InsertOneAsync(newTodoList);
+
+            
+            TodoCollections.Add(newTodoList);
 
             newListName = string.Empty;
             IsListTextVisible = Visibility.Collapsed;
@@ -133,12 +136,37 @@ internal class TodoCollectionViewModel : VMBase
     {
         throw new NotImplementedException();
     }
-    private void UpdateList(object obj)
+
+    private async void UpdateList(object obj)
     {
-        throw new NotImplementedException();
+        await UpdateListAsync(obj);
     }
-    private void DeleteList(object obj)
+    private async Task UpdateListAsync(object obj)
     {
-        throw new NotImplementedException();
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+
+        var filter = Builders<TodoCollection>.Filter.Eq(u => u.Id, CurrentTodoCollection.Id);
+        var update = Builders<TodoCollection>.Update
+            .Set(x => x.Title, CurrentTodoCollection.Title);
+
+        await todoCollection.UpdateOneAsync(filter, update);
+        
+    }
+
+    private async void DeleteList(object obj)
+    {
+        await DeleteListAsync(obj);
+    }
+    private async Task DeleteListAsync(object obj)
+    {
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+
+        var filter = Builders<TodoCollection>.Filter.Eq(x => x.Id, CurrentTodoCollection.Id);
+
+        await todoCollection.DeleteOneAsync(filter);
+
+        TodoCollections.Remove(CurrentTodoCollection);
     }
 }
