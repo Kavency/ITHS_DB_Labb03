@@ -32,7 +32,11 @@ internal class TodoCollectionViewModel : VMBase
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
     public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
-    
+
+    private string _newListName;
+
+    public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
     public RelayCommand ShowListTextCMD { get; }
@@ -107,18 +111,18 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task CreateListAsync(object obj)
     {
-        string? newListName = obj.ToString();
+        NewListName = obj.ToString();
 
         var newTodoList = new TodoCollection 
         { 
             CollectionCreated = DateTime.Now,
             Id = ObjectId.GenerateNewId(),
-            Title = newListName,
+            Title = NewListName,
             Todos = new List<Todo>(),
             Users = new List<User>()
         };
 
-        if (!string.IsNullOrWhiteSpace(newListName))
+        if (!string.IsNullOrWhiteSpace(NewListName))
         {
             using var db = new MongoClient(MainViewModel.connectionString);
             var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
@@ -127,7 +131,8 @@ internal class TodoCollectionViewModel : VMBase
             
             TodoCollections.Add(newTodoList);
 
-            newListName = string.Empty;
+            NewListName = string.Empty;
+            
             IsListTextVisible = Visibility.Collapsed;
             IsListButtonVisible = Visibility.Visible;
         }
