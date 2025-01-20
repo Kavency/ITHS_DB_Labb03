@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using ITHS_DB_Labb03.Model;
+using ITHS_DB_Labb03.ViewModel;
+using MongoDB.Driver;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -14,10 +17,12 @@ namespace ITHS_DB_Labb03.Core
             if(value is not null)
             {
                 string valueString = value.ToString();
-                using var db = new TodoDbContext();
 
-                var user = db.Users.FirstOrDefault(x => x.Email == valueString);
+                using var db = new MongoClient(MainViewModel.connectionString);
+                var users = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
+                var user = users.AsQueryable().FirstOrDefault(x => x.Email == valueString);
+                
                 if (value is null || !regex.IsMatch(value.ToString()))
                 {
                     Debug.WriteLine("Not a vaild email address.");

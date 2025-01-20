@@ -1,6 +1,7 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,7 +32,11 @@ internal class TodoCollectionViewModel : VMBase
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
     public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
-    
+
+    private string _newListName;
+
+    public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
     public RelayCommand ShowListTextCMD { get; }
@@ -100,27 +105,34 @@ internal class TodoCollectionViewModel : VMBase
     }
 
     // List CRUD:
-
-    private void CreateList(object obj)
+    private async void CreateList(object obj)
     {
-        string? newListName = obj.ToString();
-        if (!string.IsNullOrWhiteSpace(newListName))
+        await CreateListAsync(obj);
+    }
+    private async Task CreateListAsync(object obj)
+    {
+        NewListName = obj.ToString();
+
+        var newTodoList = new TodoCollection 
+        { 
+            CollectionCreated = DateTime.Now,
+            Id = ObjectId.GenerateNewId(),
+            Title = NewListName,
+            Todos = new List<Todo>(),
+            Users = new List<User>()
+        };
+
+        if (!string.IsNullOrWhiteSpace(NewListName))
         {
-            using var db = new TodoDbContext();
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+            await todoCollection.InsertOneAsync(newTodoList);
 
-            var newCollection = new TodoCollection { Id = ObjectId.GenerateNewId(), Title = newListName, Users = new List<User>(), Todos = new List<Todo>() };
-            db.TodoCollections.Add(newCollection);
-            db.SaveChanges();
-            newCollection.Users.Add(MainViewModel.UserViewModel.CurrentUser);
-            TodoCollections.Add(newCollection);
-            db.TodoCollections.Update(newCollection);
-            db.SaveChanges();
+            
+            TodoCollections.Add(newTodoList);
 
-            CurrentTodoCollection = newCollection;
-
-            OnPropertyChanged(nameof(CurrentTodoCollection));
-
-            newListName = string.Empty;
+            NewListName = string.Empty;
+            
             IsListTextVisible = Visibility.Collapsed;
             IsListButtonVisible = Visibility.Visible;
         }
@@ -129,12 +141,37 @@ internal class TodoCollectionViewModel : VMBase
     {
         throw new NotImplementedException();
     }
-    private void UpdateList(object obj)
+
+    private async void UpdateList(object obj)
     {
-        throw new NotImplementedException();
+        await UpdateListAsync(obj);
     }
-    private void DeleteList(object obj)
+    private async Task UpdateListAsync(object obj)
     {
-        throw new NotImplementedException();
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+
+        var filter = Builders<TodoCollection>.Filter.Eq(u => u.Id, CurrentTodoCollection.Id);
+        var update = Builders<TodoCollection>.Update
+            .Set(x => x.Title, CurrentTodoCollection.Title);
+
+        await todoCollection.UpdateOneAsync(filter, update);
+        
+    }
+
+    private async void DeleteList(object obj)
+    {
+        await DeleteListAsync(obj);
+    }
+    private async Task DeleteListAsync(object obj)
+    {
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+
+        var filter = Builders<TodoCollection>.Filter.Eq(x => x.Id, CurrentTodoCollection.Id);
+
+        await todoCollection.DeleteOneAsync(filter);
+
+        TodoCollections.Remove(CurrentTodoCollection);
     }
 }

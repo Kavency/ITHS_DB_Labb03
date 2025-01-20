@@ -3,12 +3,15 @@ using ITHS_DB_Labb03.Model;
 using System.Collections.ObjectModel;
 using MongoDB.Bson;
 using System.Windows;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+
 
 namespace ITHS_DB_Labb03.ViewModel
 {
     internal class MainViewModel : VMBase
     {
+        public static string connectionString = "mongodb://localhost:27017/";
+
         private UserViewModel _userViewModel;
         private Visibility _listViewVisibility;
         private TodoCollectionViewModel _todoCollectionViewModel;
@@ -26,28 +29,22 @@ namespace ITHS_DB_Labb03.ViewModel
             TodoCollectionViewModel = new TodoCollectionViewModel(this);
             AppWindow = Application.Current.MainWindow;
             AppState = new AppState();
-            //TodoCollectionViewModel = new TodoCollectionViewModel(this);
+            TodoCollectionViewModel = new TodoCollectionViewModel(this);
 
-            GetUsersFromDb();
+            GetUsersAsync();
             CheckUserCollection();
             LoadAppState();
 
             WindowControlCMD = new RelayCommand(WindowControl);
-
         }
 
 
-        private async void GetUsersFromDb()
+        private async Task GetUsersAsync()
         {
-            UserViewModel.Users = await GetUsersAsync();
-        }
-
-
-        private async Task<ObservableCollection<User>> GetUsersAsync()
-        {
-            using var db = new TodoDbContext();
-            var result = await db.Users.ToListAsync();
-            return new ObservableCollection<User>(result);
+            using var db = new MongoClient(connectionString);
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var result = userCollection.AsQueryable().ToList();
+            UserViewModel.Users = new ObservableCollection<User>(result);
         }
 
 
@@ -62,8 +59,9 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void LoadAppState()
         {
-            using var db = new TodoDbContext();
-            var state = db.AppState.FirstOrDefault();
+            using var db = new MongoClient(connectionString);
+            var stateCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            var state = stateCollection.AsQueryable().FirstOrDefault();
 
             if (state is not null)
             {
@@ -82,24 +80,18 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
             AppState.WindowState = AppWindow.WindowState;
-            AppState.WindowTop = AppWindow.Top;
-            AppState.WindowLeft = AppWindow.Left;
-            AppState.WindowWidth = AppWindow.Width;
-            AppState.WindowHeight = AppWindow.Height;
 
-            using var db = new TodoDbContext();
+            using var db = new MongoClient(connectionString);
+            var documentCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            var documentCount = documentCollection.AsQueryable().Count();
 
-            var documentCount = await db.AppState.CountAsync();
 
             if (documentCount > 0)
             {
-                var allDocuments = await db.AppState.ToListAsync();
-                db.AppState.RemoveRange(allDocuments);
-                await db.SaveChangesAsync();
+                await documentCollection.DeleteManyAsync(_ => true);
             }
 
-            await db.AppState.AddAsync(AppState);
-            await db.SaveChangesAsync();
+            documentCollection.InsertOneAsync(AppState);
         }
 
 
@@ -119,7 +111,13 @@ namespace ITHS_DB_Labb03.ViewModel
             else if (param == "maximize")
             {
                 if (AppWindow.WindowState == WindowState.Normal)
+                {
+                    AppState.WindowTop = AppWindow.Top;
+                    AppState.WindowLeft = AppWindow.Left;
+                    AppState.WindowWidth = AppWindow.Width;
+                    AppState.WindowHeight = AppWindow.Height;
                     AppWindow.WindowState = WindowState.Maximized;
+                }
                 else
                     AppWindow.WindowState = WindowState.Normal;
             }
