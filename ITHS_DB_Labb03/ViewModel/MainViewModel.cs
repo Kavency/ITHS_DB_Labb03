@@ -29,35 +29,22 @@ namespace ITHS_DB_Labb03.ViewModel
             TodoCollectionViewModel = new TodoCollectionViewModel(this);
             AppWindow = Application.Current.MainWindow;
             AppState = new AppState();
-            //TodoCollectionViewModel = new TodoCollectionViewModel(this);
+            TodoCollectionViewModel = new TodoCollectionViewModel(this);
 
-            //GetUsersFromDb();
             GetUsersAsync();
             CheckUserCollection();
             LoadAppState();
 
             WindowControlCMD = new RelayCommand(WindowControl);
-
         }
-
-
-        //private async void GetUsersFromDb()
-        //{
-        //    UserViewModel.Users = await GetUsersAsync();
-        //}
 
 
         private async Task GetUsersAsync()
         {
             using var db = new MongoClient(connectionString);
-
-
-
-            //using var db = new TodoDbContext();
             var userCollection = db.GetDatabase("todoapp").GetCollection<User>("User");
             var result = await (await userCollection.FindAsync(_ => true)).ToListAsync();
             UserViewModel.Users = new ObservableCollection<User>(result);
-
         }
 
 
@@ -72,8 +59,9 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void LoadAppState()
         {
-            using var db = new TodoDbContext();
-            var state = db.AppState.FirstOrDefault();
+            using var db = new MongoClient(connectionString);
+            var stateCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            var state = stateCollection.AsQueryable().FirstOrDefault();
 
             if (state is not null)
             {
@@ -97,19 +85,22 @@ namespace ITHS_DB_Labb03.ViewModel
             AppState.WindowWidth = AppWindow.Width;
             AppState.WindowHeight = AppWindow.Height;
 
-            using var db = new TodoDbContext();
+            using var db = new MongoClient(connectionString);
+            var documentCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            var documentCount = documentCollection.AsQueryable().Count();
 
-            var documentCount = await db.AppState.CountAsync();
 
             if (documentCount > 0)
             {
-                var allDocuments = await db.AppState.ToListAsync();
-                db.AppState.RemoveRange(allDocuments);
-                await db.SaveChangesAsync();
+                await documentCollection.DeleteManyAsync(_ => true);
+                
+                //var allDocuments = await db.AppState.ToListAsync();
+                //db.AppState.RemoveRange(allDocuments);
+                //await db.SaveChangesAsync();
             }
 
-            await db.AppState.AddAsync(AppState);
-            await db.SaveChangesAsync();
+            //await db.AppState.AddAsync(AppState);
+            //await db.SaveChangesAsync();
         }
 
 
