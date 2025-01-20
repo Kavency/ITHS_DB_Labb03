@@ -2,6 +2,7 @@
 using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -124,12 +125,25 @@ internal class TodoCollectionViewModel : VMBase
 
         if (!string.IsNullOrWhiteSpace(NewListName))
         {
+            // Skriv TodoCollection till DB
             using var db = new MongoClient(MainViewModel.connectionString);
             var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+            newTodoList.Users.Add(MainViewModel.UserViewModel.CurrentUser);
             await todoCollection.InsertOneAsync(newTodoList);
 
-            
+            // Add to props
             TodoCollections.Add(newTodoList);
+            MainViewModel.UserViewModel.CurrentUser.TodoCollections.Add(newTodoList);
+            CurrentTodoCollection = newTodoList;
+
+            // Skriv User collection till DB
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var userToUpdate = await userCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id);
+            userToUpdate.TodoCollections.Add(newTodoList);
+            var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
+            var update = Builders<User>.Update
+                .AddToSet(u => u.TodoCollections, newTodoList);
+            userCollection.UpdateOneAsync(filter, update);
 
             NewListName = string.Empty;
             
