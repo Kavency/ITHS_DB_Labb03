@@ -42,8 +42,8 @@ namespace ITHS_DB_Labb03.ViewModel
         private async Task GetUsersAsync()
         {
             using var db = new MongoClient(connectionString);
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("User");
-            var result = await (await userCollection.FindAsync(_ => true)).ToListAsync();
+            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var result = userCollection.AsQueryable().ToList();
             UserViewModel.Users = new ObservableCollection<User>(result);
         }
 
@@ -80,10 +80,10 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
             AppState.WindowState = AppWindow.WindowState;
-            AppState.WindowTop = AppWindow.Top;
-            AppState.WindowLeft = AppWindow.Left;
-            AppState.WindowWidth = AppWindow.Width;
-            AppState.WindowHeight = AppWindow.Height;
+            //AppState.WindowTop = AppWindow.Top;
+            //AppState.WindowLeft = AppWindow.Left;
+            //AppState.WindowWidth = AppWindow.Width;
+            //AppState.WindowHeight = AppWindow.Height;
 
             using var db = new MongoClient(connectionString);
             var documentCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
@@ -99,6 +99,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 //await db.SaveChangesAsync();
             }
 
+            documentCollection.InsertOneAsync(AppState);
             //await db.AppState.AddAsync(AppState);
             //await db.SaveChangesAsync();
         }
@@ -120,7 +121,13 @@ namespace ITHS_DB_Labb03.ViewModel
             else if (param == "maximize")
             {
                 if (AppWindow.WindowState == WindowState.Normal)
+                {
+                    AppState.WindowTop = AppWindow.Top;
+                    AppState.WindowLeft = AppWindow.Left;
+                    AppState.WindowWidth = AppWindow.Width;
+                    AppState.WindowHeight = AppWindow.Height;
                     AppWindow.WindowState = WindowState.Maximized;
+                }
                 else
                     AppWindow.WindowState = WindowState.Normal;
             }
