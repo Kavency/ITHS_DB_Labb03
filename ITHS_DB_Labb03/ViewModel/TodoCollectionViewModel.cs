@@ -1,6 +1,7 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -61,7 +62,7 @@ internal class TodoCollectionViewModel : VMBase
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
-        CreateListCMD = new RelayCommand(CreateList);
+        CreateListCMD = new RelayCommand(CreateListAsync);
         ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
@@ -100,25 +101,28 @@ internal class TodoCollectionViewModel : VMBase
     }
 
     // List CRUD:
-
-    private void CreateList(object obj)
+    private async void CreateListAsync(object obj)
+    {
+        await CreateList(obj);
+    }
+    private async Task CreateList(object obj)
     {
         string? newListName = obj.ToString();
+
+        var newList = new TodoCollection 
+        { 
+            CollectionCreated = DateTime.Now,
+            Id = ObjectId.GenerateNewId(),
+            Title = newListName,
+            Todos = new List<Todo>(),
+            Users = new List<User>()
+        };
+
         if (!string.IsNullOrWhiteSpace(newListName))
         {
-            using var db = new TodoDbContext();
-
-            var newCollection = new TodoCollection { Id = ObjectId.GenerateNewId(), Title = newListName, Users = new List<User>(), Todos = new List<Todo>() };
-            db.TodoCollections.Add(newCollection);
-            db.SaveChanges();
-            newCollection.Users.Add(MainViewModel.UserViewModel.CurrentUser);
-            TodoCollections.Add(newCollection);
-            db.TodoCollections.Update(newCollection);
-            db.SaveChanges();
-
-            CurrentTodoCollection = newCollection;
-
-            OnPropertyChanged(nameof(CurrentTodoCollection));
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+            await todoCollection.InsertOneAsync(newList);
 
             newListName = string.Empty;
             IsListTextVisible = Visibility.Collapsed;
