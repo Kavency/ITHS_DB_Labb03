@@ -80,10 +80,6 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
             AppState.WindowState = AppWindow.WindowState;
-            //AppState.WindowTop = AppWindow.Top;
-            //AppState.WindowLeft = AppWindow.Left;
-            //AppState.WindowWidth = AppWindow.Width;
-            //AppState.WindowHeight = AppWindow.Height;
 
             using var db = new MongoClient(connectionString);
             var documentCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
@@ -93,15 +89,9 @@ namespace ITHS_DB_Labb03.ViewModel
             if (documentCount > 0)
             {
                 await documentCollection.DeleteManyAsync(_ => true);
-                
-                //var allDocuments = await db.AppState.ToListAsync();
-                //db.AppState.RemoveRange(allDocuments);
-                //await db.SaveChangesAsync();
             }
 
             documentCollection.InsertOneAsync(AppState);
-            //await db.AppState.AddAsync(AppState);
-            //await db.SaveChangesAsync();
         }
 
 
