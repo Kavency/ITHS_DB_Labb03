@@ -165,7 +165,13 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 CurrentUser = new User();
                 CurrentUser = obj as User;
-                MainViewModel.TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(CurrentUser.TodoCollections);
+
+                MainViewModel.TodoCollectionViewModel.TodoCollections.Clear();
+                foreach(var item in CurrentUser.TodoCollections)
+                {
+                    MainViewModel.TodoCollectionViewModel.TodoCollections.Add(item);
+                }
+                //MainViewModel.TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(CurrentUser.TodoCollections);
                 MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
 
                 MainViewModel.ChangeView("listview");
