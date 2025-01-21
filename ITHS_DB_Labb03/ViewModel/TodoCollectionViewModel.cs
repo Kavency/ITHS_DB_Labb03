@@ -3,12 +3,7 @@ using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel;
@@ -46,7 +41,7 @@ internal class TodoCollectionViewModel : VMBase
         MainViewModel = mainViewModel;
         Todos = new ObservableCollection<Todo>();
         TodoCollections = new ObservableCollection<TodoCollection>();
-        
+
         CreateTaskCMD = new RelayCommand(CreateTask);
         ReadTodoCMD = new RelayCommand(ReadTodo); //ta bort?
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
@@ -56,6 +51,7 @@ internal class TodoCollectionViewModel : VMBase
         ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
+    }
     
     // Task CRUD:
     private void CreateTask(object obj)
