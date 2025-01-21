@@ -56,19 +56,6 @@ internal class TodoCollectionViewModel : VMBase
         ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
-
-    }
-
-    private void ShowTaskText(object obj)
-    {
-        IsTaskTextVisible = Visibility.Visible;
-        IsTaskButtonVisible = Visibility.Collapsed;
-    }
-
-    private void ShowListText(object obj)
-    {
-        IsListTextVisible = Visibility.Visible;
-        IsListButtonVisible = Visibility.Collapsed;
     }
 
     
