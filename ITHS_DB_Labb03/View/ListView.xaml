@@ -79,9 +79,42 @@
                   Grid.Row="2"
                   Margin="15 0"
                   ItemsSource="{Binding TodoCollectionViewModel.TodoCollections}"
-                  DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodoCollection}">
-
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Title}"
+                                   HorizontalAlignment="Left"
+                                   Grid.Column="0" />
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                Grid.Column="1"
+                                Command="{Binding DataContext.TodoCollectionViewModel.UpdateListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <fa:IconBlock Icon="Edit"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                Grid.Column="2"
+                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <fa:IconBlock Icon="XmarkCircle"
+                                          Foreground="Red"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
         <!-- List Textbox -->
