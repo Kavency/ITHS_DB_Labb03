@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel;
 
@@ -13,7 +14,9 @@ internal class TodoCollectionViewModel : VMBase
     private TodoCollection _currentTodoCollection;
     private Todo _currentTodo;
     private string _newListName;
-    
+    private Visibility _editListViewVisibility;
+
+    public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
     public ObservableCollection<Todo> Todos { get; set; }
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
@@ -29,6 +32,7 @@ internal class TodoCollectionViewModel : VMBase
     public RelayCommand ReadListCMD { get; }
     public RelayCommand UpdateListCMD { get; }
     public RelayCommand DeleteListCMD { get; }
+    public RelayCommand ShowEditListViewCMD { get; }
 
     public TodoCollectionViewModel(MainViewModel mainViewModel)
     {
@@ -45,8 +49,14 @@ internal class TodoCollectionViewModel : VMBase
         CreateListCMD = new RelayCommand(CreateList);
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
+        ShowEditListViewCMD = new RelayCommand(ShowEditListView);
     }
-    
+
+    private void ShowEditListView(object obj)
+    {
+        MainViewModel.ChangeView("editlistview");
+    }
+
     // Task CRUD:
     private async void CreateTask(object obj)
     {
@@ -136,6 +146,7 @@ internal class TodoCollectionViewModel : VMBase
 
         await todoCollection.UpdateOneAsync(filter, update);
 
+        MainViewModel.ChangeView("listview");
     }
 
     private async void DeleteList(object obj)
