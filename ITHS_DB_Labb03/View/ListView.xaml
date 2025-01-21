@@ -40,7 +40,7 @@
 
             <fa:IconBlock Icon="UserCircle"
                           FontSize="50"
-                          DockPanel.Dock="Left"/>
+                          DockPanel.Dock="Left" />
 
             <Button Padding="0"
                     Background="Transparent"
@@ -50,13 +50,14 @@
                     Height="20"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
                 <fa:IconBlock Icon="Exchange"
-                              FontSize="20" />
+                              FontSize="20"
+                              ToolTip="Change user" />
             </Button>
             <TextBlock Text="{Binding UserViewModel.CurrentUser.UserName}"
                        VerticalAlignment="Center"
                        Margin="5 0"
                        FontSize="15"
-                       d:Text="John Doe"/>
+                       d:Text="John Doe" />
         </DockPanel>
 
         <DockPanel Grid.Column="0"
@@ -83,13 +84,10 @@
 
         </ListView>
 
-
         <!-- List Textbox -->
         <DockPanel LastChildFill="True"
                    Grid.Column="0"
                  Grid.Row="3"
-                 x:Name="ListTextBox"
-                 Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
                    Margin="15 5">
             <!-- Add New List Button-->
             <Button DockPanel.Dock="Right"
