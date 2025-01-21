@@ -12,6 +12,10 @@
              d:DesignWidth="800"
              d:Background="White">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"
@@ -36,7 +40,7 @@
 
             <fa:IconBlock Icon="UserCircle"
                           FontSize="50"
-                          DockPanel.Dock="Left"/>
+                          DockPanel.Dock="Left" />
 
             <Button Padding="0"
                     Background="Transparent"
@@ -46,13 +50,14 @@
                     Height="20"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
                 <fa:IconBlock Icon="Exchange"
-                              FontSize="20" />
+                              FontSize="20"
+                              ToolTip="Change user" />
             </Button>
             <TextBlock Text="{Binding UserViewModel.CurrentUser.UserName}"
                        VerticalAlignment="Center"
                        Margin="5 0"
                        FontSize="15"
-                       d:Text="John Doe"/>
+                       d:Text="John Doe" />
         </DockPanel>
 
         <DockPanel Grid.Column="0"
@@ -79,64 +84,52 @@
 
         </ListView>
 
-
         <!-- List Textbox -->
         <DockPanel LastChildFill="True"
                    Grid.Column="0"
-                 Grid.Row="3"
-                 x:Name="ListTextBox"
-                 Visibility="{Binding TodoCollectionViewModel.IsListTextVisible}"
+                   Grid.Row="3"
                    Margin="15 5">
             <!-- Add New List Button-->
             <Button DockPanel.Dock="Right"
                     Command="{Binding TodoCollectionViewModel.CreateListCMD}"
                     CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}"
                     VerticalAlignment="Center"
-                    Margin="0 6 "
+                    Margin="-30 6 0 6"
                     Padding="0"
-                    Height="30"
-                    Width="30"
+                    Height="25"
+                    Width="25"
+                    Panel.ZIndex="1"
                     BorderBrush="Transparent"
                     Background="Transparent">
                 <Button.Content>
-
-                    <fa:IconBlock Icon="SquareCheck"
-                                  FontSize="30"
+                    <fa:IconBlock Icon="Plus"
+                                  FontSize="20"
                                   VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"/>
-
+                                  HorizontalAlignment="Center" />
                 </Button.Content>
             </Button>
-            <TextBox Grid.Column="0"
-                     Grid.Row="3"
-                     x:Name="NewListTextBox"
-                     VerticalAlignment="Center"
-                     Padding="5"
-                     Text="{Binding TodoCollectionViewModel.NewListName}"/>
+            <Grid>
+                <TextBlock Panel.ZIndex="1"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           Padding="10"
+                           Visibility="{Binding ElementName=NewListTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                           Foreground="SlateGray"
+                           Text="Add new list..." />
+
+                <TextBox x:Name="NewListTextBox"
+                         VerticalAlignment="Center"
+                         Padding="5"
+                         Text="{Binding TodoCollectionViewModel.NewListName}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return"
+                                    Command="{Binding TodoCollectionViewModel.CreateListCMD}"
+                                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </Grid>
 
         </DockPanel>
-        <!-- Show TextBox Button -->
-        <Button Grid.Column="0"
-                Grid.Row="3"
-                Margin="15 5"
-                Command="{Binding TodoCollectionViewModel.ShowListTextCMD}"
-                Visibility="{Binding TodoCollectionViewModel.IsListButtonVisible}"
-                FocusManager.FocusedElement="{Binding ElementName=NewListTextBox}">
-
-
-            <Button.Content>
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-                    <fa:IconBlock Icon="Plus"
-                                  FontSize="25"
-                                  Margin="10" />
-                    <TextBlock Text="Add new list"
-                               FontSize="15"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button.Content>
-        </Button>
 
         <!-- Right side -->
         <StackPanel Grid.Column="1"
@@ -144,10 +137,12 @@
                     VerticalAlignment="Center"
                     Margin="10">
 
-            <TextBlock Text="Listheader"
-                       FontSize="30" />
-            <TextBlock Text="2025-01-13"
-                       FontSize="16" />
+            <TextBlock d:Text="Current List Title"
+                       Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.Title}"
+                       FontSize="25" />
+            <TextBlock d:Text="2025-01-13"
+                       Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.CollectionCreated}"
+                       FontSize="12" />
 
         </StackPanel>
 
@@ -172,53 +167,46 @@
         <DockPanel LastChildFill="True"
                    Grid.Column="1"
                    Grid.Row="3"
-                   Visibility="{Binding TodoCollectionViewModel.IsTaskTextVisible}"
                    Margin="15 5">
+            <!-- Add New List Button-->
             <Button DockPanel.Dock="Right"
                     Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
+                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}"
                     VerticalAlignment="Center"
-                    Margin="0 6 "
+                    Margin="-30 6 0 6"
                     Padding="0"
-                    Height="30"
-                    Width="30"
+                    Height="25"
+                    Width="25"
+                    Panel.ZIndex="1"
                     BorderBrush="Transparent"
                     Background="Transparent">
                 <Button.Content>
-
-                    <fa:IconBlock Icon="SquareCheck"
-                          FontSize="30"
-                          VerticalAlignment="Center"
-                          HorizontalAlignment="Center"/>
-
+                    <fa:IconBlock Icon="Plus"
+                                  FontSize="20"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center" />
                 </Button.Content>
             </Button>
-            <TextBox Grid.Column="0"
-                     Grid.Row="3"
-                     x:Name="TaskTextBox"
-                     VerticalAlignment="Center"
-                     Padding="5"
-                     Text=""/>
+            <Grid>
+                <TextBlock Panel.ZIndex="1"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           Padding="10"
+                           Visibility="{Binding ElementName=NewTaskTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                           Foreground="SlateGray"
+                           Text="Add new task..." />
 
+                <TextBox x:Name="NewTaskTextBox"
+                         VerticalAlignment="Center"
+                         Padding="5"
+                         Text="{Binding TodoCollectionViewModel.NewListName}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return"
+                                    Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
+                                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </Grid>
         </DockPanel>
-        <!--Task Button-->
-        <Button Grid.Column="1"
-                Grid.Row="3"
-                Margin="15 5"
-                Command="{Binding TodoCollectionViewModel.ShowTaskTextCMD}"
-                Visibility="{Binding TodoCollectionViewModel.IsTaskButtonVisible}"
-                FocusManager.FocusedElement="{Binding ElementName=TaskTextBox}">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-                    <fa:IconBlock Icon="Plus"
-                                  FontSize="25"
-                                  Margin="10" />
-                    <TextBlock Text="Add new task"
-                               FontSize="15"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-            </Button.Content>
-        </Button>
     </Grid>
 </UserControl>

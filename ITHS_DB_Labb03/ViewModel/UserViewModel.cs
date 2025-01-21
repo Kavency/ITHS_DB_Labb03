@@ -166,8 +166,8 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 CurrentUser = new User();
                 CurrentUser = obj as User;
-                //MainViewModel.TodoCollectionViewModel.TodoCollections = CurrentUser.TodoCollections;
-                //MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
+                MainViewModel.TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(CurrentUser.TodoCollections);
+                MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
 
                 MainViewModel.ChangeView("listview");
             }
