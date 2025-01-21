@@ -24,7 +24,6 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="85" />
-            <RowDefinition Height="55" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -37,52 +36,39 @@
                    HorizontalAlignment="Center"
                    LastChildFill="True"
                    MinWidth="285">
-
             <fa:IconBlock Icon="UserCircle"
                           FontSize="50"
                           DockPanel.Dock="Left" />
-
             <Button Padding="0"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    DockPanel.Dock="Right"
-                    Width="20"
-                    Height="20"
+                    Background="White"
+                    BorderBrush="black"
+                    DockPanel.Dock="Left"
+                    Width="19"
+                    Height="19"
+                    Panel.ZIndex="1"
+                    Margin="-13 0 0 -32"
+                    VerticalAlignment="Center"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
-                <fa:IconBlock Icon="Exchange"
-                              FontSize="20"
+                <fa:IconBlock Icon="ArrowsRotate"                              FontSize="15"
+                              Foreground="red"
                               ToolTip="Change user" />
             </Button>
             <TextBlock Text="{Binding UserViewModel.CurrentUser.UserName}"
                        VerticalAlignment="Center"
-                       Margin="5 0"
+                       Margin="10 0"
                        FontSize="15"
                        d:Text="John Doe" />
         </DockPanel>
-
-        <DockPanel Grid.Column="0"
-                   Grid.Row="1"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center">
-            <fa:IconBlock Icon="MagnifyingGlass"
-                          FontSize="20"
-                          Margin="-25 5 5 5"
-                          DockPanel.Dock="Right"
-                          Panel.ZIndex="1" />
-            <TextBox MinWidth="285"
-                     VerticalAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     MinHeight="25" />
-        </DockPanel>
-
         <ListView Grid.Column="0"
-                  Grid.Row="2"
+                  Grid.Row="1"
                   Margin="15 0"
                   ItemsSource="{Binding TodoCollectionViewModel.TodoCollections}"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodoCollection}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
+                    <Border HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch"
+                          Width="270">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
@@ -95,7 +81,8 @@
                                 BorderBrush="Transparent"
                                 Grid.Column="1"
                                 Command="{Binding DataContext.TodoCollectionViewModel.UpdateListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="Edit list">
                             <fa:IconBlock Icon="Edit"
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
@@ -105,7 +92,20 @@
                                 BorderBrush="Transparent"
                                 Grid.Column="2"
                                 Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="Delete list"
+                                Visibility="Visible">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
+                                                     Value="True">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
                             <fa:IconBlock Icon="XmarkCircle"
                                           Foreground="Red"
                                           VerticalAlignment="Center"
@@ -113,6 +113,7 @@
                                           FontSize="15" />
                         </Button>
                     </Grid>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -149,7 +150,6 @@
                            Visibility="{Binding ElementName=NewListTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
                            Foreground="SlateGray"
                            Text="Add new list..." />
-
                 <TextBox x:Name="NewListTextBox"
                          VerticalAlignment="Center"
                          Padding="5"
@@ -161,7 +161,6 @@
                     </TextBox.InputBindings>
                 </TextBox>
             </Grid>
-
         </DockPanel>
 
         <!-- Right side -->
@@ -169,38 +168,34 @@
                     Grid.Row="0"
                     VerticalAlignment="Center"
                     Margin="10">
-
             <TextBlock d:Text="Current List Title"
                        Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.Title}"
                        FontSize="25" />
             <TextBlock d:Text="2025-01-13"
                        Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.CollectionCreated}"
                        FontSize="12" />
-
         </StackPanel>
 
         <!-- Listview for todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
-                  Grid.RowSpan="2"
                   Margin="10 0">
         </ListView>
+        
         <!-- Below is a second listview, for completed todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
-                  Grid.RowSpan="2"
                   Margin="10 0"
                   ItemsSource="{Binding TodoCollectionViewModel}"
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
-
         </ListView>
 
         <!--Task List-->
         <DockPanel LastChildFill="True"
                    Grid.Column="1"
                    Grid.Row="3"
-                   Margin="15 5">
+                   Margin="10 5">
             <!-- Add New List Button-->
             <Button DockPanel.Dock="Right"
                     Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
@@ -228,7 +223,6 @@
                            Visibility="{Binding ElementName=NewTaskTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
                            Foreground="SlateGray"
                            Text="Add new task..." />
-
                 <TextBox x:Name="NewTaskTextBox"
                          VerticalAlignment="Center"
                          Padding="5"
