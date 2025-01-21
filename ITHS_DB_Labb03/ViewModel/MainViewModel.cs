@@ -67,6 +67,7 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 AppState = state;
                 UserViewModel.CurrentUser = state.CurrentUser;
+                TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(UserViewModel.CurrentUser.TodoCollections);
                 AppWindow.WindowState = state.WindowState;
                 AppWindow.Top = state.WindowTop;
                 AppWindow.Left = state.WindowLeft;
