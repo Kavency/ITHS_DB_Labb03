@@ -89,7 +89,7 @@ namespace ITHS_DB_Labb03.ViewModel
             UserDetails.UserCreated = DateTime.Now;
             UserDetails.TodoCollections = new List<TodoCollection>();
 
-            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "Default Title", Users = new List<User>(), Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
+            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "To Do's", Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
 
             using var db = new MongoClient(MainViewModel.connectionString);
             var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
@@ -110,7 +110,6 @@ namespace ITHS_DB_Labb03.ViewModel
             using var db = new MongoClient();
 
             var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-            //var userToUpdate = userCollection.AsQueryable().FirstOrDefault(u => u.Id == CurrentUser.Id);
             var filter = Builders<User>.Filter.Eq(u => u.Id, CurrentUser.Id);
             var update = Builders<User>.Update
                 .Set(u => u.FirstName, CurrentUser.FirstName)
