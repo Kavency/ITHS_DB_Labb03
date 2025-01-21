@@ -49,7 +49,8 @@
                     Margin="-13 0 0 -32"
                     VerticalAlignment="Center"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
-                <fa:IconBlock Icon="ArrowsRotate"                              FontSize="15"
+                <fa:IconBlock Icon="ArrowsRotate"
+                              FontSize="15"
                               Foreground="red"
                               ToolTip="Change user" />
             </Button>
@@ -67,52 +68,52 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border HorizontalAlignment="Stretch">
-                    <Grid HorizontalAlignment="Stretch"
-                          Width="270">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Title}"
-                                   HorizontalAlignment="Left"
-                                   Grid.Column="0" />
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                Grid.Column="1"
-                                Command="{Binding DataContext.TodoCollectionViewModel.UpdateListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                ToolTip="Edit list">
-                            <fa:IconBlock Icon="Edit"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          FontSize="15" />
-                        </Button>
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                Grid.Column="2"
-                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                ToolTip="Delete list"
-                                Visibility="Visible">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
-                                                     Value="True">
-                                            <Setter Property="Visibility"
-                                                    Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <fa:IconBlock Icon="XmarkCircle"
-                                          Foreground="Red"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          FontSize="15" />
-                        </Button>
-                    </Grid>
+                        <Grid HorizontalAlignment="Stretch"
+                              Width="270">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Title}"
+                                       HorizontalAlignment="Left"
+                                       Grid.Column="0" />
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Grid.Column="1"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.ShowEditListViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Edit list">
+                                <fa:IconBlock Icon="Edit"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Grid.Column="2"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Delete list"
+                                    Visibility="Visible">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
+                                                         Value="True">
+                                                <Setter Property="Visibility"
+                                                        Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <fa:IconBlock Icon="XmarkCircle"
+                                              Foreground="Red"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -181,7 +182,7 @@
                   Grid.Row="1"
                   Margin="10 0">
         </ListView>
-        
+
         <!-- Below is a second listview, for completed todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
