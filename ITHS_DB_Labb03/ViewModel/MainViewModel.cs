@@ -20,6 +20,7 @@ namespace ITHS_DB_Labb03.ViewModel
         private double _oldWindowLeft;
         private double _oldWindowWidth;
         private double _oldWindowHeight;
+
         public TodoCollectionViewModel TodoCollectionViewModel { get => _todoCollectionViewModel; set { _todoCollectionViewModel = value; OnPropertyChanged(); } }
         public UserViewModel UserViewModel { get => _userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
         public AppState AppState { get; set; }
@@ -173,7 +174,7 @@ namespace ITHS_DB_Labb03.ViewModel
         /// Sets the current view. UserView show all users. UserDetails shows
         /// details on a choosen user and ListView show the lists and tasks for choosen user.
         /// </summary>
-        /// <param name="view">Valid params: userview, userdetails, listview</param>
+        /// <param name="view">Valid params: userview, userdetails, listview, editlistview</param>
         internal void ChangeView(string view)
         {
             if (view.ToLower() == "userview")
@@ -181,18 +182,29 @@ namespace ITHS_DB_Labb03.ViewModel
                 UserViewModel.UserViewVisibility = Visibility.Visible;
                 UserViewModel.UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Hidden;
+                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
             }
             else if (view.ToLower() == "userdetails")
             {
                 UserViewModel.UserViewVisibility = Visibility.Hidden;
                 UserViewModel.UserDetailsVisibility = Visibility.Visible;
                 ListViewVisibility = Visibility.Hidden;
+                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
+
             }
             else if (view.ToLower() == "listview")
             {
                 UserViewModel.UserViewVisibility = Visibility.Hidden;
                 UserViewModel.UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Visible;
+                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
+            }
+            else if(view.ToLower() == "editlistview")
+            {
+                TodoCollectionViewModel.EditListViewVisibility = Visibility.Visible;
+                UserViewModel.UserViewVisibility = Visibility.Hidden;
+                UserViewModel.UserDetailsVisibility = Visibility.Hidden;
+                ListViewVisibility = Visibility.Hidden;
             }
         }
     }

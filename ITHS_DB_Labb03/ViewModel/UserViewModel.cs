@@ -148,6 +148,8 @@ namespace ITHS_DB_Labb03.ViewModel
                     {
                         userCollection.DeleteOneAsync(filter);
                     }
+
+                    Users.Remove(selectedUser);
                 }
             }
         }
