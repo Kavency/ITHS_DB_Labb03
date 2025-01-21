@@ -140,14 +140,25 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task DeleteListAsync(object obj)
     {
-        
+        var listToDelete = obj as TodoCollection;
+        // Confirm deletion
+        // IF(messagebox == yes)
         using var db = new MongoClient(MainViewModel.connectionString);
         var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-        var filter = Builders<User>.Filter.Eq(x => x.Id, MainViewModel.UserViewModel.CurrentUser.Id);
+        // If checks for null
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id; 
+        var filter = Builders<User>.Filter.Eq(x => x.Id, userId); 
+        
+        var update = Builders<User>
+            .Update.PullFilter(x => x.TodoCollections, Builders<TodoCollection>
+            .Filter.Eq(tc => tc.Id, listToDelete.Id)); 
 
-        await todoCollection.DeleteOneAsync(filter);
+        await todoCollection.UpdateOneAsync(filter, update); 
 
-        TodoCollections.Remove(CurrentTodoCollection);
+        TodoCollections.Remove(listToDelete);
+
+        var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId); 
+        user.TodoCollections.Remove(listToDelete);
     }
 }
