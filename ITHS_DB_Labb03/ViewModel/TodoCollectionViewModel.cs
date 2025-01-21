@@ -4,17 +4,12 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel;
 
 internal class TodoCollectionViewModel : VMBase
 {
     private MainViewModel _mainViewModel;
-    private Visibility _isListTextVisible;
-    private Visibility _isListButtonVisible;
-    private Visibility _isTaskTextVisible;
-    private Visibility _isTaskButtonVisible;
     private TodoCollection _currentTodoCollection;
     private Todo _currentTodo;
     private string _newListName;
@@ -41,26 +36,38 @@ internal class TodoCollectionViewModel : VMBase
         MainViewModel = mainViewModel;
         Todos = new ObservableCollection<Todo>();
         TodoCollections = new ObservableCollection<TodoCollection>();
+        CurrentTodo = new Todo();
 
         CreateTaskCMD = new RelayCommand(CreateTask);
-        ReadTodoCMD = new RelayCommand(ReadTodo); //ta bort?
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
         CreateListCMD = new RelayCommand(CreateList);
-        ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
     }
     
     // Task CRUD:
-    private void CreateTask(object obj)
+    private async void CreateTask(object obj)
     {
-        throw new NotImplementedException();
+        await CreateTaskAsync(obj);
     }
-    private void ReadTodo(object obj)
+    private async Task CreateTaskAsync(object obj)
     {
-        throw new NotImplementedException();
+        var newTask = new Todo();
+        newTask.Id = ObjectId.GenerateNewId();
+        newTask.Title = obj.ToString();
+        newTask.TodoCreated = DateTime.Now;
+        newTask.Discription = string.Empty;
+        newTask.IsCompleted = false;
+        newTask.IsStarred = false;
+        newTask.TodoCompleted = DateTime.MinValue;
+        newTask.Tags = new List<Model.Tag>();
+
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var usersCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+
+
     }
     private void UpdateTodo(object obj)
     {
@@ -111,10 +118,7 @@ internal class TodoCollectionViewModel : VMBase
             NewListName = string.Empty;
         }
     }
-    private void ReadList(object obj)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     private async void UpdateList(object obj)
     {
