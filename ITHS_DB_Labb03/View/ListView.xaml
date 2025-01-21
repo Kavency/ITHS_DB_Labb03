@@ -196,10 +196,10 @@
                    Grid.Column="1"
                    Grid.Row="3"
                    Margin="10 5">
-            <!-- Add New List Button-->
+            <!-- Add New Task Button-->
             <Button DockPanel.Dock="Right"
                     Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
-                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}"
+                    CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}"
                     VerticalAlignment="Center"
                     Margin="-30 6 0 6"
                     Padding="0"
@@ -226,11 +226,11 @@
                 <TextBox x:Name="NewTaskTextBox"
                          VerticalAlignment="Center"
                          Padding="5"
-                         Text="{Binding TodoCollectionViewModel.NewListName}">
+                         Text="{Binding TodoCollectionViewModel.CurrentTodo.Title}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return"
                                     Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
-                                    CommandParameter="{Binding ElementName=NewListTextBox, Path=Text}" />
+                                    CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}" />
                     </TextBox.InputBindings>
                 </TextBox>
             </Grid>
