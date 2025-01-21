@@ -80,7 +80,12 @@ namespace ITHS_DB_Labb03.ViewModel
                 if (state.CurrentUser is not null)
                 {
                     UserViewModel.CurrentUser = state.CurrentUser;
-                    TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(UserViewModel.CurrentUser.TodoCollections);
+                    OnPropertyChanged(nameof(UserViewModel.CurrentUser));
+                }
+                if(state.CurrentCollection is not null)
+                {
+                    TodoCollectionViewModel.CurrentTodoCollection = state.CurrentCollection;
+                    OnPropertyChanged(nameof(TodoCollectionViewModel.CurrentTodoCollection));
                 }
             }
         }
@@ -89,6 +94,7 @@ namespace ITHS_DB_Labb03.ViewModel
         private async Task SaveAppState()
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
+            AppState.CurrentCollection = TodoCollectionViewModel.CurrentTodoCollection;
 
             if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
             {
