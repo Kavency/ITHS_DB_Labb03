@@ -56,8 +56,6 @@ internal class TodoCollectionViewModel : VMBase
         ReadListCMD = new RelayCommand(ReadList); //ta bort?
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
-    }
-
     
     // Task CRUD:
     private void CreateTask(object obj)
@@ -92,30 +90,27 @@ internal class TodoCollectionViewModel : VMBase
             Id = ObjectId.GenerateNewId(),
             Title = NewListName,
             Todos = new List<Todo>(),
-            Users = new List<User>()
+            //Users = new List<User>()
         };
 
         if (!string.IsNullOrWhiteSpace(NewListName))
         {
-            // Skriv TodoCollection till DB
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
-            newTodoList.Users.Add(MainViewModel.UserViewModel.CurrentUser);
-            await todoCollection.InsertOneAsync(newTodoList);
+            
 
-            // Add to props
+            // Add to properties
             TodoCollections.Add(newTodoList);
             MainViewModel.UserViewModel.CurrentUser.TodoCollections.Add(newTodoList);
             CurrentTodoCollection = newTodoList;
 
             // Skriv User collection till DB
+            using var db = new MongoClient();
             var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-            var userToUpdate = await userCollection.AsQueryable().FirstOrDefaultAsync(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id);
+            var userToUpdate = await userCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
             userToUpdate.TodoCollections.Add(newTodoList);
             var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
             var update = Builders<User>.Update
                 .AddToSet(u => u.TodoCollections, newTodoList);
-            userCollection.UpdateOneAsync(filter, update);
+            await userCollection.UpdateOneAsync(filter, update);
 
             NewListName = string.Empty;
         }
@@ -131,15 +126,16 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task UpdateListAsync(object obj)
     {
+        
         using var db = new MongoClient(MainViewModel.connectionString);
-        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-        var filter = Builders<TodoCollection>.Filter.Eq(u => u.Id, CurrentTodoCollection.Id);
-        var update = Builders<TodoCollection>.Update
-            .Set(x => x.Title, CurrentTodoCollection.Title);
+        var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
+        var update = Builders<User>.Update
+            .Set(x => x.TodoCollections, MainViewModel.UserViewModel.CurrentUser.TodoCollections);
 
         await todoCollection.UpdateOneAsync(filter, update);
-        
+
     }
 
     private async void DeleteList(object obj)
@@ -148,10 +144,11 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task DeleteListAsync(object obj)
     {
+        
         using var db = new MongoClient(MainViewModel.connectionString);
-        var todoCollection = db.GetDatabase("todoapp").GetCollection<TodoCollection>("TodoCollection");
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-        var filter = Builders<TodoCollection>.Filter.Eq(x => x.Id, CurrentTodoCollection.Id);
+        var filter = Builders<User>.Filter.Eq(x => x.Id, MainViewModel.UserViewModel.CurrentUser.Id);
 
         await todoCollection.DeleteOneAsync(filter);
 
