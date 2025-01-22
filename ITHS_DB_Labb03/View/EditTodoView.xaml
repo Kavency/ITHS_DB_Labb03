@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="ITHS_DB_Labb03.View.EditTodoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ITHS_DB_Labb03.View"
+             xmlns:vm="clr-namespace:ITHS_DB_Labb03.ViewModel"
+             xmlns:core="clr-namespace:ITHS_DB_Labb03.Core"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=True}"
+             
+             MinWidth="200"
+             MinHeight="100"
+             Background="White"
+             BorderBrush="Black"
+             BorderThickness="2">
+
+    <StackPanel Orientation="Vertical"
+                VerticalAlignment="Center"
+                Margin="15 10">
+
+        <TextBox x:Name="TodoUpdateTextBox">
+
+            <TextBox.Text>
+                <Binding Path="TodoCollectionViewModel.CurrentTodo.Title"
+                         UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <core:NotEmptyStringValidation ValidatesOnTargetUpdated="True" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+
+            <TextBox.InputBindings>
+                <KeyBinding Key="Return"
+                            Command="{Binding TodoCollectionViewModel.UpdateTodoCMD}"
+                            CommandParameter="{Binding ElementName=TodoUpdateTextBox, Path=Text}" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <ComboBox Margin="0 10 0 10">
+            <d:ComboBoxItem Content="Urgent" IsSelected="True" />
+        </ComboBox>
+
+        <Button Content="Add tag"
+                Margin="0 0 0 10"/>
+
+        <ListView>
+            <d:ListViewItem Content="Urgent" />
+            <d:ListViewItem Content="Work" />
+            <d:ListViewItem Content="Not important" />
+        </ListView>
+
+        <Button Content="Save"
+                Margin="0 10 "
+                Command="{Binding DataContext.TodoCollectionViewModel.UpdateTodoCMD , RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                ToolTip="Save Todo"
+                Visibility="Visible">
+
+            <Button.IsEnabled>
+                <MultiBinding>
+                    <MultiBinding.Converter>
+                        <core:ValidationToBoolConverter />
+                    </MultiBinding.Converter>
+                    <Binding ElementName="TodoUpdateTextBox"
+                             Path="(Validation.HasError)" />
+                </MultiBinding>
+            </Button.IsEnabled>
+        </Button>
+    </StackPanel>
+</UserControl>
