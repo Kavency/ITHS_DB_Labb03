@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel;
@@ -64,20 +65,36 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task CreateTodoAsync(object obj)
     {
-        var newTask = new Todo();
-        newTask.Id = ObjectId.GenerateNewId();
-        newTask.Title = obj.ToString();
-        newTask.TodoCreated = DateTime.Now;
-        newTask.Discription = string.Empty;
-        newTask.IsCompleted = false;
-        newTask.IsStarred = false;
-        newTask.TodoCompleted = DateTime.MinValue;
-        newTask.Tags = new List<Model.Tag>();
+        var newTodo = new Todo();
+        newTodo.Id = ObjectId.GenerateNewId();
+        newTodo.Title = obj.ToString();
+        newTodo.TodoCreated = DateTime.Now;
+        newTodo.Discription = string.Empty;
+        newTodo.IsCompleted = false;
+        newTodo.IsStarred = false;
+        newTodo.TodoCompleted = DateTime.MinValue;
+        newTodo.Tags = new List<Model.Tag>();
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var usersCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+        var listId = CurrentTodoCollection.Id;
 
+        var filter = Builders<User>
+            .Filter.And(Builders<User>
+            .Filter.Eq(u => u.Id, userId), Builders<User>
+            .Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == listId));
+        
+        var update = Builders<User>.Update.Push("TodoCollections.$.Todos", newTodo);
+        var result = await usersCollection.UpdateOneAsync(filter, update);
+
+        if (result.ModifiedCount > 0) 
+            Debug.WriteLine("Todo added successfully.");
+        else
+            Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
+
+        CurrentTodoCollection.Todos.Add(newTodo);
     }
     private void UpdateTodo(object obj)
     {
