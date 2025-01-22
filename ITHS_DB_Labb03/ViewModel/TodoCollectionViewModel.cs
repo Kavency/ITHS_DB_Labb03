@@ -57,6 +57,7 @@ internal class TodoCollectionViewModel : VMBase
 
     private void ShowEditListView(object obj)
     {
+        CurrentTodoCollection = obj as TodoCollection;
         MainViewModel.ChangeView("editlistview");
     }
 
@@ -70,12 +71,8 @@ internal class TodoCollectionViewModel : VMBase
         var newTodo = new Todo();
         newTodo.Id = ObjectId.GenerateNewId();
         newTodo.Title = obj.ToString();
-        newTodo.TodoCreated = DateTime.Now;
-        newTodo.Discription = string.Empty;
         newTodo.IsCompleted = false;
-        newTodo.IsStarred = false;
-        newTodo.TodoCompleted = DateTime.MinValue;
-        newTodo.Tags = new List<Model.Tag>();
+        newTodo.Tags = new ObservableCollection<Model.Tag>();
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var usersCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
@@ -119,17 +116,13 @@ internal class TodoCollectionViewModel : VMBase
 
         var newTodoList = new TodoCollection 
         { 
-            CollectionCreated = DateTime.Now,
             Id = ObjectId.GenerateNewId(),
             Title = NewListName,
-            Todos = new List<Todo>(),
-            //Users = new List<User>()
+            Todos = new ObservableCollection<Todo>(),
         };
 
         if (!string.IsNullOrWhiteSpace(NewListName))
         {
-            
-
             // Add to properties
             TodoCollections.Add(newTodoList);
             MainViewModel.UserViewModel.CurrentUser.TodoCollections.Add(newTodoList);
