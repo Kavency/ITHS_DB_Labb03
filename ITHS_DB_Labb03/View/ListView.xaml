@@ -69,7 +69,7 @@
                 <DataTemplate>
                     <Border HorizontalAlignment="Stretch">
                         <Grid HorizontalAlignment="Stretch"
-                              Width="270">
+                              Width="265">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
@@ -172,7 +172,7 @@
             <TextBlock d:Text="Current List Title"
                        Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.Title}"
                        FontSize="25" />
-            
+
         </StackPanel>
 
         <!-- Listview for todos -->
@@ -180,10 +180,68 @@
                   Grid.Row="1"
                   Margin="10 0"
                   ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection.Todos}"
-                  DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border HorizontalAlignment="Stretch">
+                        <Grid HorizontalAlignment="Stretch"
+                              Width="270">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <ToggleButton HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Width="20"
+                                          Height="20">
+                            </ToggleButton>
+                            <TextBlock Text="{Binding Title}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Grid.Column="0"
+                                       Margin="25 0" />
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Grid.Column="1"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.ShowEditTodoViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Edit list">
+                                <fa:IconBlock Icon="Edit"
+                                              Foreground="Black"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Grid.Column="2"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Delete list"
+                                    Visibility="Visible">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
+                                                         Value="True">
+                                                <Setter Property="Visibility"
+                                                        Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <fa:IconBlock Icon="XmarkCircle"
+                                              Foreground="Red"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-
         <!-- Below is a second listview, for completed todos -->
         <!--<ListView Grid.Column="1"
                   Grid.Row="1"
