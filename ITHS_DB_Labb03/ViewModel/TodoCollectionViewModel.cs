@@ -15,10 +15,10 @@ internal class TodoCollectionViewModel : VMBase
     private TodoCollection _currentTodoCollection;
     private Todo _currentTodo;
     private string _newListName;
-    private Visibility _editListViewVisibility;
     private string _newTodoTitle;
 
-    public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
+    //private Visibility _editListViewVisibility;
+    //public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
     public ObservableCollection<Todo> Todos { get; set; }
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
@@ -31,6 +31,7 @@ internal class TodoCollectionViewModel : VMBase
     public RelayCommand ReadTodoCMD { get; }
     public RelayCommand UpdateTodoCMD { get; }
     public RelayCommand DeleteTodoCMD { get; }
+    public RelayCommand ShowEditTodoViewCMD { get; }
     public RelayCommand CreateListCMD { get; }
     public RelayCommand ReadListCMD { get; }
     public RelayCommand UpdateListCMD { get; }
@@ -48,11 +49,18 @@ internal class TodoCollectionViewModel : VMBase
         CreateTodoCMD = new RelayCommand(CreateTodo);
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
+        ShowEditTodoViewCMD = new RelayCommand(ShowEditTodoView);
 
         CreateListCMD = new RelayCommand(CreateList);
         UpdateListCMD = new RelayCommand(UpdateList);
         DeleteListCMD = new RelayCommand(DeleteList);
         ShowEditListViewCMD = new RelayCommand(ShowEditListView);
+    }
+
+    private void ShowEditTodoView(object obj)
+    {
+        CurrentTodo = obj as Todo;
+        MainViewModel.ChangeView("edittodoview");
     }
 
     private void ShowEditListView(object obj)

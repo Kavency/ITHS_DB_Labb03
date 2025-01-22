@@ -11,17 +11,25 @@ namespace ITHS_DB_Labb03.ViewModel
         public static string connectionString = "mongodb://localhost:27017/";
 
         private UserViewModel _userViewModel;
-        private Visibility _listViewVisibility;
         private TodoCollectionViewModel _todoCollectionViewModel;
         private double _oldWindowTop;
         private double _oldWindowLeft;
         private double _oldWindowWidth;
         private double _oldWindowHeight;
+        private Visibility _listViewVisibility;
+        private Visibility _userViewVisibility;
+        private Visibility _userDetailsVisibility;
+        private Visibility _editListViewVisibility;
+        private Visibility _editTodoViewVisibility;
 
+        public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
+        public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
+        public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
+        public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
+        public Visibility EditTodoViewVisibility { get => _editTodoViewVisibility; set { _editTodoViewVisibility = value; OnPropertyChanged(); } }
         public TodoCollectionViewModel TodoCollectionViewModel { get => _todoCollectionViewModel; set { _todoCollectionViewModel = value; OnPropertyChanged(); } }
         public UserViewModel UserViewModel { get => _userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
         public AppState AppState { get; set; }
-        public Visibility ListViewVisibility { get => _listViewVisibility; set { _listViewVisibility = value; OnPropertyChanged(); } }
 
         public RelayCommand WindowControlCMD { get; }
 
@@ -180,32 +188,44 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             if (view.ToLower() == "userview")
             {
-                UserViewModel.UserViewVisibility = Visibility.Visible;
-                UserViewModel.UserDetailsVisibility = Visibility.Hidden;
+                UserViewVisibility = Visibility.Visible;
+                UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Hidden;
-                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
+                EditTodoViewVisibility = Visibility.Hidden;
+                EditListViewVisibility = Visibility.Hidden;
             }
             else if (view.ToLower() == "userdetails")
             {
-                UserViewModel.UserViewVisibility = Visibility.Hidden;
-                UserViewModel.UserDetailsVisibility = Visibility.Visible;
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Visible;
                 ListViewVisibility = Visibility.Hidden;
-                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
+                EditTodoViewVisibility = Visibility.Hidden;
+                EditListViewVisibility = Visibility.Hidden;
 
             }
             else if (view.ToLower() == "listview")
             {
-                UserViewModel.UserViewVisibility = Visibility.Hidden;
-                UserViewModel.UserDetailsVisibility = Visibility.Hidden;
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Visible;
-                TodoCollectionViewModel.EditListViewVisibility = Visibility.Hidden;
+                EditTodoViewVisibility = Visibility.Hidden;
+                EditListViewVisibility = Visibility.Hidden;
             }
             else if(view.ToLower() == "editlistview")
             {
-                TodoCollectionViewModel.EditListViewVisibility = Visibility.Visible;
-                UserViewModel.UserViewVisibility = Visibility.Hidden;
-                UserViewModel.UserDetailsVisibility = Visibility.Hidden;
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Hidden;
                 ListViewVisibility = Visibility.Hidden;
+                EditListViewVisibility = Visibility.Visible;
+                EditTodoViewVisibility = Visibility.Hidden;
+            }
+            else if (view.ToLower() == "edittodoview")
+            {
+                EditListViewVisibility = Visibility.Hidden;
+                UserViewVisibility = Visibility.Hidden;
+                UserDetailsVisibility = Visibility.Hidden;
+                ListViewVisibility = Visibility.Hidden;
+                EditTodoViewVisibility = Visibility.Visible;
             }
         }
     }
