@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using System.Collections.ObjectModel;
 
 namespace ITHS_DB_Labb03.Model
 {
@@ -6,8 +7,6 @@ namespace ITHS_DB_Labb03.Model
     {
         public ObjectId Id { get; set; }
         public string Title { get; set; }
-        public List<Todo> Todos { get; set; }
-        public DateTime CollectionCreated { get; set; }
-
+        public ObservableCollection<Todo> Todos { get; set; }
     }
 }
