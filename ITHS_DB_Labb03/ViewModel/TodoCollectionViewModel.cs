@@ -16,6 +16,7 @@ internal class TodoCollectionViewModel : VMBase
     private Todo _currentTodo;
     private string _newListName;
     private Visibility _editListViewVisibility;
+    private string _newTodoTitle;
 
     public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
     public ObservableCollection<Todo> Todos { get; set; }
@@ -23,9 +24,10 @@ internal class TodoCollectionViewModel : VMBase
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
     public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
     public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+    public string NewTodoTitle { get => _newTodoTitle; set { _newTodoTitle = value; OnPropertyChanged(); } }
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
-    public RelayCommand CreateTaskCMD { get; }
+    public RelayCommand CreateTodoCMD { get; }
     public RelayCommand ReadTodoCMD { get; }
     public RelayCommand UpdateTodoCMD { get; }
     public RelayCommand DeleteTodoCMD { get; }
@@ -43,7 +45,7 @@ internal class TodoCollectionViewModel : VMBase
         TodoCollections = new ObservableCollection<TodoCollection>();
         CurrentTodo = new Todo();
 
-        CreateTaskCMD = new RelayCommand(CreateTask);
+        CreateTodoCMD = new RelayCommand(CreateTodo);
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
@@ -55,30 +57,44 @@ internal class TodoCollectionViewModel : VMBase
 
     private void ShowEditListView(object obj)
     {
+        CurrentTodoCollection = obj as TodoCollection;
         MainViewModel.ChangeView("editlistview");
     }
 
     // Task CRUD:
-    private async void CreateTask(object obj)
+    private async void CreateTodo(object obj)
     {
-        await CreateTaskAsync(obj);
+        await CreateTodoAsync(obj);
     }
-    private async Task CreateTaskAsync(object obj)
+    private async Task CreateTodoAsync(object obj)
     {
-        var newTask = new Todo();
-        newTask.Id = ObjectId.GenerateNewId();
-        newTask.Title = obj.ToString();
-        newTask.TodoCreated = DateTime.Now;
-        newTask.Discription = string.Empty;
-        newTask.IsCompleted = false;
-        newTask.IsStarred = false;
-        newTask.TodoCompleted = DateTime.MinValue;
-        newTask.Tags = new List<Model.Tag>();
+        var newTodo = new Todo();
+        newTodo.Id = ObjectId.GenerateNewId();
+        newTodo.Title = obj.ToString();
+        newTodo.IsCompleted = false;
+        newTodo.Tags = new ObservableCollection<Model.Tag>();
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var usersCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+        var listId = CurrentTodoCollection.Id;
 
+        var filter = Builders<User>
+            .Filter.And(Builders<User>
+            .Filter.Eq(u => u.Id, userId), Builders<User>
+            .Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == listId));
+        
+        var update = Builders<User>.Update.Push("TodoCollections.$.Todos", newTodo);
+        var result = await usersCollection.UpdateOneAsync(filter, update);
+
+        if (result.ModifiedCount > 0) 
+            Debug.WriteLine("Todo added successfully.");
+        else
+            Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
+
+        CurrentTodoCollection.Todos.Add(newTodo);
+        NewTodoTitle = string.Empty;
     }
     private void UpdateTodo(object obj)
     {
@@ -98,12 +114,12 @@ internal class TodoCollectionViewModel : VMBase
     {
         NewListName = obj.ToString().Trim();
 
-        var newTodoList = new TodoCollection
-        {
-            CollectionCreated = DateTime.Now,
+
+        var newTodoList = new TodoCollection 
+        { 
             Id = ObjectId.GenerateNewId(),
             Title = NewListName,
-            Todos = new List<Todo>()
+            Todos = new ObservableCollection<Todo>();
         };
 
         if (!string.IsNullOrWhiteSpace(NewListName))

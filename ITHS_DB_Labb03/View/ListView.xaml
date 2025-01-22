@@ -172,25 +172,26 @@
             <TextBlock d:Text="Current List Title"
                        Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.Title}"
                        FontSize="25" />
-            <TextBlock d:Text="2025-01-13"
-                       Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.CollectionCreated}"
-                       FontSize="12" />
+            
         </StackPanel>
 
         <!-- Listview for todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
-                  Margin="10 0">
-        </ListView>
-
-        <!-- Below is a second listview, for completed todos -->
-        <ListView Grid.Column="1"
-                  Grid.Row="1"
                   Margin="10 0"
-                  ItemsSource="{Binding TodoCollectionViewModel}"
+                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection.Todos}"
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
         </ListView>
+
+        <!-- Below is a second listview, for completed todos -->
+        <!--<ListView Grid.Column="1"
+                  Grid.Row="1"
+                  Margin="10 0"
+                  ItemsSource="{Binding TodoCollectionViewModel.Todos}"
+                  DisplayMemberPath="Title"
+                  SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
+        </ListView>-->
 
         <!--Task List-->
         <DockPanel LastChildFill="True"
@@ -199,8 +200,8 @@
                    Margin="10 5">
             <!-- Add New Task Button-->
             <Button DockPanel.Dock="Right"
-                    Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
-                    CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}"
+                    Command="{Binding TodoCollectionViewModel.CreateTodoCMD}"
+                    CommandParameter="{Binding ElementName=NewTodoTextBox, Path=Text}"
                     VerticalAlignment="Center"
                     Margin="-30 6 0 6"
                     Padding="0"
@@ -221,17 +222,17 @@
                            IsHitTestVisible="False"
                            VerticalAlignment="Center"
                            Padding="10"
-                           Visibility="{Binding ElementName=NewTaskTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
+                           Visibility="{Binding ElementName=NewTodoTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"
                            Foreground="SlateGray"
                            Text="Add new task..." />
-                <TextBox x:Name="NewTaskTextBox"
+                <TextBox x:Name="NewTodoTextBox"
                          VerticalAlignment="Center"
                          Padding="5"
-                         Text="{Binding TodoCollectionViewModel.CurrentTodo.Title}">
+                         Text="{Binding TodoCollectionViewModel.NewTodoTitle}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return"
-                                    Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
-                                    CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}" />
+                                    Command="{Binding TodoCollectionViewModel.CreateTodoCMD}"
+                                    CommandParameter="{Binding ElementName=NewTodoTextBox, Path=Text}" />
                     </TextBox.InputBindings>
                 </TextBox>
             </Grid>
