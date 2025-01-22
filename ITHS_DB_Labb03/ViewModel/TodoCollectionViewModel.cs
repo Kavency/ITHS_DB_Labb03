@@ -96,7 +96,7 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task CreateListAsync(object obj)
     {
-        NewListName = obj.ToString();
+        NewListName = obj.ToString().Trim();
 
         var newTodoList = new TodoCollection
         {
@@ -113,13 +113,13 @@ internal class TodoCollectionViewModel : VMBase
             CurrentTodoCollection = newTodoList;
 
             using var db = new MongoClient();
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-            var userToUpdate = await userCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var userToUpdate = await todoCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
             userToUpdate.TodoCollections.Add(newTodoList);
             var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
             var update = Builders<User>.Update
                 .AddToSet(u => u.TodoCollections, newTodoList);
-            await userCollection.UpdateOneAsync(filter, update);
+            await todoCollection.UpdateOneAsync(filter, update);
 
             NewListName = string.Empty;
         }
