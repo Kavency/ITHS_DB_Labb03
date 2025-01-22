@@ -96,11 +96,33 @@ internal class TodoCollectionViewModel : VMBase
         CurrentTodoCollection.Todos.Add(newTodo);
         NewTodoTitle = string.Empty;
     }
-    private void UpdateTodo(object obj)
+    private async void UpdateTodo(object obj)
     {
-        throw new NotImplementedException();
+        await UpdateTodoAsync(obj);
     }
-    private void DeleteTodo(object obj)
+
+    private async Task UpdateTodoAsync(object obj)
+    {
+        
+        var todoUpdate = CurrentTodo;
+        CurrentTodo.Title = todoUpdate.Title.Trim();
+
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+        var todoId = CurrentTodo.Id;
+
+        using var db = new MongoClient(MainViewModel.connectionString);
+        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+
+        var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
+        var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == todoId);
+
+        var filter = Builders<User>.Filter.And(userFilter, todoFilter);
+        var update = Builders<User>.Update.Set("TodoCollections.$.Todos", todoUpdate);
+
+        
+        await todoCollection.UpdateOneAsync(filter, update);
+
+    }
     {
         throw new NotImplementedException();
     }
