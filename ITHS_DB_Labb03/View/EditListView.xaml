@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ITHS_DB_Labb03.View"
              xmlns:vm="clr-namespace:ITHS_DB_Labb03.ViewModel"
+             xmlns:core="clr-namespace:ITHS_DB_Labb03.Core"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="100"
@@ -17,9 +18,33 @@
     <StackPanel Orientation="Vertical"
                 VerticalAlignment="Center"
                 Margin="15 10">
-        <TextBox Text="{Binding TodoCollectionViewModel.CurrentTodoCollection.Title}" />
+        <TextBox Name="Save">
+                 
+            <TextBox.Text>
+                <Binding Path="TodoCollectionViewModel.CurrentTodoCollection.Title"
+                         UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <core:NotEmptyStringValidation ValidatesOnTargetUpdated="True" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <Button Content="Save"
                 Margin="0 10 "
-                Command="{Binding TodoCollectionViewModel.UpdateListCMD}"/>
+                Command="{Binding DataContext.TodoCollectionViewModel.UpdateListCMD , RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                ToolTip="Save List"
+                Visibility="Visible">
+
+            <Button.IsEnabled>
+                <MultiBinding>
+                    <MultiBinding.Converter>
+                        <core:ValidationToBoolConverter />
+                    </MultiBinding.Converter>
+                    <Binding ElementName="Save"
+                             Path="(Validation.HasError)" />
+                </MultiBinding>
+            </Button.IsEnabled>
+        </Button>
     </StackPanel>
 </UserControl>
