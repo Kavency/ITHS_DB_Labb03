@@ -80,12 +80,19 @@ namespace ITHS_DB_Labb03.ViewModel
                 if (state.CurrentUser is not null)
                 {
                     UserViewModel.CurrentUser = state.CurrentUser;
-                    OnPropertyChanged(nameof(UserViewModel.CurrentUser));
+                    TodoCollectionViewModel.TodoCollections.Clear();
+                    foreach (var item in UserViewModel.CurrentUser.TodoCollections)
+                    {
+                        TodoCollectionViewModel.TodoCollections.Add(item);
+                    }
                 }
                 if(state.CurrentCollection is not null)
                 {
                     TodoCollectionViewModel.CurrentTodoCollection = state.CurrentCollection;
-                    OnPropertyChanged(nameof(TodoCollectionViewModel.CurrentTodoCollection));
+                    foreach(var item in state.CurrentCollection.Todos)
+                    {
+                        TodoCollectionViewModel.CurrentTodoCollection.Todos.Add(item);
+                    }
                 }
             }
         }
