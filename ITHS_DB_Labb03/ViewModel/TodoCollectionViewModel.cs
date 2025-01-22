@@ -16,6 +16,7 @@ internal class TodoCollectionViewModel : VMBase
     private Todo _currentTodo;
     private string _newListName;
     private Visibility _editListViewVisibility;
+    private string _newTodoTitle;
 
     public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
     public ObservableCollection<Todo> Todos { get; set; }
@@ -23,6 +24,7 @@ internal class TodoCollectionViewModel : VMBase
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
     public Todo CurrentTodo { get => _currentTodo; set { _currentTodo = value; OnPropertyChanged(); } }
     public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
+    public string NewTodoTitle { get => _newTodoTitle; set { _newTodoTitle = value; OnPropertyChanged(); } }
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
     public RelayCommand CreateTodoCMD { get; }
@@ -95,8 +97,7 @@ internal class TodoCollectionViewModel : VMBase
             Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
 
         CurrentTodoCollection.Todos.Add(newTodo);
-        OnPropertyChanged(nameof(CurrentTodoCollection.Todos));
-        CurrentTodo = new Todo();
+        NewTodoTitle = string.Empty;
     }
     private void UpdateTodo(object obj)
     {
