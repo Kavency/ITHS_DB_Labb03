@@ -12,19 +12,15 @@ namespace ITHS_DB_Labb03.ViewModel
         private MainViewModel _mainViewModel;
         private User _userDetails = new User();
         private User _currentUser;
-        private Visibility _userViewVisibility;
-        private Visibility _userDetailsVisibility;
         private Visibility _saveButtonVisibility;
         private Visibility _updateButtonVisibility;
 
         public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
         public User UserDetails { get => _userDetails; set { _userDetails = value; OnPropertyChanged(); } }
         public User CurrentUser { get => _currentUser; set { _currentUser = value; OnPropertyChanged(); } }
-        public ObservableCollection<User> Users { get; set; }
-        public Visibility UserViewVisibility { get => _userViewVisibility; set { _userViewVisibility = value; OnPropertyChanged(); } }
-        public Visibility UserDetailsVisibility { get => _userDetailsVisibility; set { _userDetailsVisibility = value; OnPropertyChanged(); } }
         public Visibility SaveButtonVisibility { get => _saveButtonVisibility; set { _saveButtonVisibility = value; OnPropertyChanged(); } }
         public Visibility UpdateButtonVisibility { get => _updateButtonVisibility; set { _updateButtonVisibility = value; OnPropertyChanged(); } }
+        public ObservableCollection<User> Users { get; set; }
 
 
         public RelayCommand ShowUsersCMD { get; }

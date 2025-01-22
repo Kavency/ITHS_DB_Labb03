@@ -66,15 +66,21 @@
         <views:ListView Grid.Row="1"
                         Visibility="{Binding ListViewVisibility}" />
         <views:UserView Grid.Row="1"
-                        Visibility="{Binding UserViewModel.UserViewVisibility}" />
+                        Visibility="{Binding UserViewVisibility}" />
         <views:UserDetailsView Grid.Row="1"
-                               Visibility="{Binding UserViewModel.UserDetailsVisibility}" />
+                               Visibility="{Binding UserDetailsVisibility}" />
         <views:EditListView Grid.Column="0"
                             Grid.Row="0"
                             Grid.RowSpan="2"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
-                            Visibility="{Binding TodoCollectionViewModel.EditListViewVisibility}"/>
+                            Visibility="{Binding EditListViewVisibility}"/>
+        <views:EditTodoView Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Visibility="{Binding EditTodoViewVisibility}" />
     </Grid>
 
 </Window>
