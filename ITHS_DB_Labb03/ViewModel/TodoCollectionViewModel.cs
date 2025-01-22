@@ -84,11 +84,11 @@ internal class TodoCollectionViewModel : VMBase
             .Filter.And(Builders<User>
             .Filter.Eq(u => u.Id, userId), Builders<User>
             .Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == listId));
-        
+
         var update = Builders<User>.Update.Push("TodoCollections.$.Todos", newTodo);
         var result = await usersCollection.UpdateOneAsync(filter, update);
 
-        if (result.ModifiedCount > 0) 
+        if (result.ModifiedCount > 0)
             Debug.WriteLine("Todo added successfully.");
         else
             Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
@@ -123,8 +123,54 @@ internal class TodoCollectionViewModel : VMBase
         await todoCollection.UpdateOneAsync(filter, update);
 
     }
+    private async void DeleteTodo(object obj)
     {
-        throw new NotImplementedException();
+        await DeleteTodoAsync(obj);
+    }
+
+    private async Task DeleteTodoAsync(object obj)
+    {
+
+        var todoDelete = obj as Todo;
+
+        var result = MessageBox.Show($"Are you sure you want to delete {todoDelete.Title}", "Attention!", MessageBoxButton.YesNo);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+
+            var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+            var todoId = CurrentTodo.Id;
+
+            var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == todoId);
+
+            var filter = Builders<User>.Filter.And(userFilter, todoFilter);
+
+            var update = Builders<User>.Update.Pull("TodoCollections.$.Todos", todoDelete);
+
+            var updateResult = await todoCollection.UpdateOneAsync(filter, update);
+
+            if (updateResult.ModifiedCount > 0)
+            {
+
+                Todos.Remove(todoDelete);
+                var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId);
+
+                //if (user != null)
+                //{
+                //}
+                //else
+                //    Debug.WriteLine("Error: User not found (DeleteTodoAsync).");
+
+
+            }
+            else
+                Debug.WriteLine("Error: Failed to delete from database.");
+        }
+
+
     }
 
     // List CRUD:
@@ -236,7 +282,7 @@ internal class TodoCollectionViewModel : VMBase
                 if (user != null)
                     user.TodoCollections.Remove(listToDelete);
                 else
-                    Debug.WriteLine("Error: User not found in local collection: TodoCollections.");
+                    Debug.WriteLine("Error: User not found (DeleteListAsync).");
 
             }
             else
