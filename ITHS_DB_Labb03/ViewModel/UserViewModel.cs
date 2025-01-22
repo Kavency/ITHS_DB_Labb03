@@ -173,11 +173,17 @@ namespace ITHS_DB_Labb03.ViewModel
                 {
                     MainViewModel.TodoCollectionViewModel.TodoCollections.Add(item);
                 }
-                //MainViewModel.TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(CurrentUser.TodoCollections);
                 MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
+                CurrentUserSaveAppStateAsync();
 
                 MainViewModel.ChangeView("listview");
             }
+        }
+
+        private async void CurrentUserSaveAppStateAsync()
+        {
+            await MainViewModel.SaveAppState();
+
         }
     }
 }
