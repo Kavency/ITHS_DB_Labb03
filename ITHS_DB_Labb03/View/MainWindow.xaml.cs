@@ -12,17 +12,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = new MainViewModel();
-        //EnsureCreated();
     }
-
-
-    //private static void EnsureCreated()
-    //{
-    //    using var db = new TodoDbContext();
-
-    //    db.Database.EnsureCreated();
-    //    Debug.WriteLine($"Database connection: {db.Database.CanConnect()}");
-    //}
 
     private void MoveMainWindow_MouseDown(object sender, MouseButtonEventArgs e)
     {
