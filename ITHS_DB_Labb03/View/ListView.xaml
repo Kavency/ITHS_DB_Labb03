@@ -190,7 +190,7 @@
         <ListView Grid.Column="1"
                   Grid.Row="1"
                   Margin="10 0"
-                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection}"
+                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection.Todos}"
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
         </ListView>
