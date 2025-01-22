@@ -134,11 +134,8 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task UpdateListAsync(object obj)
     {
-
-        NewListName = obj.ToString().Trim();
-
-        //var listToUpdate = obj as TodoCollection;
-        //listToUpdate.Title = listToUpdate.Title.Trim();
+        var temp = CurrentTodoCollection.Title;
+        CurrentTodoCollection.Title = temp.Trim();
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
@@ -146,19 +143,20 @@ internal class TodoCollectionViewModel : VMBase
         var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
         var update = Builders<User>.Update
             .Set(x => x.TodoCollections, MainViewModel.UserViewModel.CurrentUser.TodoCollections);
-            //.Set(x => x.TodoCollections.FirstMatchingElement().Title, listToUpdate.Title);
 
-        var updateResult = await todoCollection.UpdateOneAsync(filter, update);
+
+        await todoCollection.UpdateOneAsync(filter, update);
+
+        TodoCollections.Clear();
+
+        foreach (var item in MainViewModel.UserViewModel.CurrentUser.TodoCollections)
+        {
+            TodoCollections.Add(item);
+        }
 
         MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = MainViewModel.UserViewModel.CurrentUser.TodoCollections.FirstOrDefault();
 
-        
-        if (updateResult.ModifiedCount > 0)
-            MainViewModel.ChangeView("listview");
-        else
-            Debug.WriteLine("Error: Failed to update database.");
-
-        
+        MainViewModel.ChangeView("listview");
 
     }
 
