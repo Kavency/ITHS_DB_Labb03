@@ -3,7 +3,6 @@ using ITHS_DB_Labb03.Model;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace ITHS_DB_Labb03.ViewModel
@@ -86,10 +85,9 @@ namespace ITHS_DB_Labb03.ViewModel
         private async Task AddUserAsync(object obj)
         {
             UserDetails.Id = ObjectId.GenerateNewId();
-            UserDetails.UserCreated = DateTime.Now;
-            UserDetails.TodoCollections = new List<TodoCollection>();
+            UserDetails.TodoCollections = new ObservableCollection<TodoCollection>();
 
-            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "To Do's", Todos = new List<Todo>(), CollectionCreated = DateTime.Now });
+            UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "To Do's", Todos = new ObservableCollection<Todo>() });
 
             using var db = new MongoClient(MainViewModel.connectionString);
             var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
@@ -173,7 +171,6 @@ namespace ITHS_DB_Labb03.ViewModel
                 {
                     MainViewModel.TodoCollectionViewModel.TodoCollections.Add(item);
                 }
-                //MainViewModel.TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(CurrentUser.TodoCollections);
                 MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = CurrentUser.TodoCollections.FirstOrDefault();
 
                 MainViewModel.ChangeView("listview");

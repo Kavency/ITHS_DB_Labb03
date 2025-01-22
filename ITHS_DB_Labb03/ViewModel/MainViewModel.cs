@@ -1,11 +1,8 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
 using System.Collections.ObjectModel;
-using MongoDB.Bson;
 using System.Windows;
 using MongoDB.Driver;
-using System.Diagnostics.CodeAnalysis;
-
 
 namespace ITHS_DB_Labb03.ViewModel
 {
@@ -80,19 +77,11 @@ namespace ITHS_DB_Labb03.ViewModel
                 if (state.CurrentUser is not null)
                 {
                     UserViewModel.CurrentUser = state.CurrentUser;
-                    TodoCollectionViewModel.TodoCollections.Clear();
-                    foreach (var item in UserViewModel.CurrentUser.TodoCollections)
-                    {
-                        TodoCollectionViewModel.TodoCollections.Add(item);
-                    }
+                    TodoCollectionViewModel.TodoCollections = new ObservableCollection<TodoCollection>(UserViewModel.CurrentUser.TodoCollections);
                 }
                 if(state.CurrentCollection is not null)
                 {
                     TodoCollectionViewModel.CurrentTodoCollection = state.CurrentCollection;
-                    foreach(var item in state.CurrentCollection.Todos)
-                    {
-                        TodoCollectionViewModel.CurrentTodoCollection.Todos.Add(item);
-                    }
                 }
             }
         }
