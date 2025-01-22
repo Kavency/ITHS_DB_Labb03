@@ -180,14 +180,17 @@
         <!-- Listview for todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
-                  Margin="10 0">
+                  Margin="10 0"
+                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection}"
+                  DisplayMemberPath="Title"
+                  SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
         </ListView>
 
         <!-- Below is a second listview, for completed todos -->
         <ListView Grid.Column="1"
                   Grid.Row="1"
                   Margin="10 0"
-                  ItemsSource="{Binding TodoCollectionViewModel}"
+                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection}"
                   DisplayMemberPath="Title"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
         </ListView>
