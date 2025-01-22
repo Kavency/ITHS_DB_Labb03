@@ -202,7 +202,7 @@
                    Margin="10 5">
             <!-- Add New Task Button-->
             <Button DockPanel.Dock="Right"
-                    Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
+                    Command="{Binding TodoCollectionViewModel.CreateTodoCMD}"
                     CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}"
                     VerticalAlignment="Center"
                     Margin="-30 6 0 6"
@@ -233,7 +233,7 @@
                          Text="{Binding TodoCollectionViewModel.CurrentTodo.Title}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return"
-                                    Command="{Binding TodoCollectionViewModel.CreateTaskCMD}"
+                                    Command="{Binding TodoCollectionViewModel.CreateTodoCMD}"
                                     CommandParameter="{Binding ElementName=NewTaskTextBox, Path=Text}" />
                     </TextBox.InputBindings>
                 </TextBox>

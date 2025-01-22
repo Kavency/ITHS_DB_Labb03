@@ -24,7 +24,7 @@ internal class TodoCollectionViewModel : VMBase
     public string NewListName { get => _newListName; set { _newListName = value; OnPropertyChanged(); } }
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
-    public RelayCommand CreateTaskCMD { get; }
+    public RelayCommand CreateTodoCMD { get; }
     public RelayCommand ReadTodoCMD { get; }
     public RelayCommand UpdateTodoCMD { get; }
     public RelayCommand DeleteTodoCMD { get; }
@@ -42,7 +42,7 @@ internal class TodoCollectionViewModel : VMBase
         TodoCollections = new ObservableCollection<TodoCollection>();
         CurrentTodo = new Todo();
 
-        CreateTaskCMD = new RelayCommand(CreateTask);
+        CreateTodoCMD = new RelayCommand(CreateTodo);
         UpdateTodoCMD = new RelayCommand(UpdateTodo);
         DeleteTodoCMD = new RelayCommand(DeleteTodo);
 
@@ -58,11 +58,11 @@ internal class TodoCollectionViewModel : VMBase
     }
 
     // Task CRUD:
-    private async void CreateTask(object obj)
+    private async void CreateTodo(object obj)
     {
-        await CreateTaskAsync(obj);
+        await CreateTodoAsync(obj);
     }
-    private async Task CreateTaskAsync(object obj)
+    private async Task CreateTodoAsync(object obj)
     {
         var newTask = new Todo();
         newTask.Id = ObjectId.GenerateNewId();
