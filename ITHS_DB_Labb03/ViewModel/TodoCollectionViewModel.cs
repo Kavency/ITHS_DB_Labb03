@@ -17,8 +17,6 @@ internal class TodoCollectionViewModel : VMBase
     private string _newListName;
     private string _newTodoTitle;
 
-    //private Visibility _editListViewVisibility;
-    //public Visibility EditListViewVisibility { get => _editListViewVisibility; set { _editListViewVisibility = value; OnPropertyChanged(); } }
     public ObservableCollection<Todo> Todos { get; set; }
     public ObservableCollection<TodoCollection> TodoCollections { get; set; }
     public TodoCollection CurrentTodoCollection { get => _currentTodoCollection; set { _currentTodoCollection = value; OnPropertyChanged(); } }
@@ -183,8 +181,6 @@ internal class TodoCollectionViewModel : VMBase
         MainViewModel.ChangeView("listview");
 
     }
-
-
 
 
     private async void DeleteList(object obj)
