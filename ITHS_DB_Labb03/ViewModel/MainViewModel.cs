@@ -86,7 +86,7 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
-        private async Task SaveAppState()
+        public async Task SaveAppState()
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
 
