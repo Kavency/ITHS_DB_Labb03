@@ -115,11 +115,11 @@ internal class TodoCollectionViewModel : VMBase
         NewListName = obj.ToString().Trim();
 
 
-        var newTodoList = new TodoCollection 
-        { 
+        var newTodoList = new TodoCollection
+        {
             Id = ObjectId.GenerateNewId(),
             Title = NewListName,
-            Todos = new ObservableCollection<Todo>();
+            Todos = new ObservableCollection<Todo>()
         };
 
         if (!string.IsNullOrWhiteSpace(NewListName))
