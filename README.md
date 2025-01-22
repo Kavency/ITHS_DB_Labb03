@@ -1,4 +1,4 @@
-# Todo applikation (Databas Labb 03)
+# Just Do It 👍 (Todo Applikation: Databas Labb 03)
 
 En applikation för att hålla koll på olika uppgifter som behöver göras av användaren. För att lagra data i applikationen används MongoDb som också behöver vara installerat för det ska fungera. Mer information om installtionen hittas nedan.  
 
@@ -29,12 +29,17 @@ bash git clone https://github.com/Kavency/ITHS_DB_Labb03.git
 
 Github: 
 ```
-![githubclonesmall](https://github.com/user-attachments/assets/578a3ad0-484a-4010-b722-f52f25f102fd)
+![clone_repo_small](https://github.com/user-attachments/assets/502b1c2c-d06d-4953-b2f5-b901366bf939)
 
 
 
 ## Skärmbilder
-[more screenshots here]
+<div style="text-align: center;">
+  <p">Userview:</p>
+<img src="https://github.com/user-attachments/assets/1615bd4b-b05b-42c4-9c93-b2efa0a3f3ae">
+  <p>EditUserView:</p>
+<img src="https://github.com/user-attachments/assets/3eb8fb27-8881-4c0f-808e-48c421490ba4">
+</div>
 
 ## Kontakt 
 

@@ -112,36 +112,37 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task CreateListAsync(object obj)
     {
-        NewListName = obj.ToString();
+        NewListName = obj.ToString().Trim();
+
 
         var newTodoList = new TodoCollection 
         { 
             Id = ObjectId.GenerateNewId(),
             Title = NewListName,
-            Todos = new ObservableCollection<Todo>(),
+            Todos = new ObservableCollection<Todo>();
         };
 
         if (!string.IsNullOrWhiteSpace(NewListName))
         {
-            // Add to properties
             TodoCollections.Add(newTodoList);
             MainViewModel.UserViewModel.CurrentUser.TodoCollections.Add(newTodoList);
             CurrentTodoCollection = newTodoList;
 
-            // Skriv User collection till DB
             using var db = new MongoClient();
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-            var userToUpdate = await userCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var userToUpdate = await todoCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
             userToUpdate.TodoCollections.Add(newTodoList);
             var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
             var update = Builders<User>.Update
                 .AddToSet(u => u.TodoCollections, newTodoList);
-            await userCollection.UpdateOneAsync(filter, update);
+            await todoCollection.UpdateOneAsync(filter, update);
 
             NewListName = string.Empty;
         }
+        else
+            Debug.WriteLine("Error: NewListName null or whitespace.");
     }
-    
+
 
     private async void UpdateList(object obj)
     {
@@ -149,7 +150,9 @@ internal class TodoCollectionViewModel : VMBase
     }
     private async Task UpdateListAsync(object obj)
     {
-        
+        var temp = CurrentTodoCollection.Title;
+        CurrentTodoCollection.Title = temp.Trim();
+
         using var db = new MongoClient(MainViewModel.connectionString);
         var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
@@ -157,10 +160,24 @@ internal class TodoCollectionViewModel : VMBase
         var update = Builders<User>.Update
             .Set(x => x.TodoCollections, MainViewModel.UserViewModel.CurrentUser.TodoCollections);
 
+
         await todoCollection.UpdateOneAsync(filter, update);
 
+        TodoCollections.Clear();
+
+        foreach (var item in MainViewModel.UserViewModel.CurrentUser.TodoCollections)
+        {
+            TodoCollections.Add(item);
+        }
+
+        MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = MainViewModel.UserViewModel.CurrentUser.TodoCollections.FirstOrDefault();
+
         MainViewModel.ChangeView("listview");
+
     }
+
+
+
 
     private async void DeleteList(object obj)
     {
@@ -169,24 +186,41 @@ internal class TodoCollectionViewModel : VMBase
     private async Task DeleteListAsync(object obj)
     {
         var listToDelete = obj as TodoCollection;
-        // Confirm deletion
-        // IF(messagebox == yes)
-        using var db = new MongoClient(MainViewModel.connectionString);
-        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-        // If checks for null
-        var userId = MainViewModel.UserViewModel.CurrentUser.Id; 
-        var filter = Builders<User>.Filter.Eq(x => x.Id, userId); 
-        
-        var update = Builders<User>
-            .Update.PullFilter(x => x.TodoCollections, Builders<TodoCollection>
-            .Filter.Eq(tc => tc.Id, listToDelete.Id)); 
+        var result = MessageBox.Show($"Are you sure to delete \"{listToDelete.Title}\" ?", "Delete List", MessageBoxButton.YesNo);
 
-        await todoCollection.UpdateOneAsync(filter, update); 
+        if (result == MessageBoxResult.Yes)
+        {
 
-        TodoCollections.Remove(listToDelete);
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-        var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId); 
-        user.TodoCollections.Remove(listToDelete);
+            var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+
+            var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
+            var update = Builders<User>
+                .Update.PullFilter(x => x.TodoCollections, Builders<TodoCollection>
+                .Filter.Eq(tc => tc.Id, listToDelete.Id));
+
+            var updateResult = await todoCollection.UpdateOneAsync(filter, update);
+
+            if (updateResult.ModifiedCount > 0)
+            {
+
+                TodoCollections.Remove(listToDelete);
+
+                var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId);
+
+                if (user != null)
+                    user.TodoCollections.Remove(listToDelete);
+                else
+                    Debug.WriteLine("Error: User not found in local collection: TodoCollections.");
+
+            }
+            else
+                Debug.WriteLine("Error: Failed to delete from database.");
+
+        }
+
     }
 }

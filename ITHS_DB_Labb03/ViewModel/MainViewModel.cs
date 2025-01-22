@@ -30,7 +30,7 @@ namespace ITHS_DB_Labb03.ViewModel
             UserViewModel = new UserViewModel(this);
             TodoCollectionViewModel = new TodoCollectionViewModel(this);
             AppState = new AppState();
-            TodoCollectionViewModel = new TodoCollectionViewModel(this);
+            //TodoCollectionViewModel = new TodoCollectionViewModel(this);
 
             GetUsersAsync();
             CheckUserCollection();
@@ -38,7 +38,6 @@ namespace ITHS_DB_Labb03.ViewModel
 
             WindowControlCMD = new RelayCommand(WindowControl);
         }
-
 
         private async Task GetUsersAsync()
         {
@@ -87,7 +86,7 @@ namespace ITHS_DB_Labb03.ViewModel
         }
 
 
-        private async Task SaveAppState()
+        public async Task SaveAppState()
         {
             AppState.CurrentUser = UserViewModel.CurrentUser;
             AppState.CurrentCollection = TodoCollectionViewModel.CurrentTodoCollection;
