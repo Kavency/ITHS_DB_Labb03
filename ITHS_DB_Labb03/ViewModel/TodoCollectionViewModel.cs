@@ -95,6 +95,8 @@ internal class TodoCollectionViewModel : VMBase
             Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
 
         CurrentTodoCollection.Todos.Add(newTodo);
+        OnPropertyChanged(nameof(CurrentTodoCollection.Todos));
+        CurrentTodo = new Todo();
     }
     private void UpdateTodo(object obj)
     {
