@@ -124,7 +124,7 @@ internal class TodoCollectionViewModel : VMBase
             NewListName = string.Empty;
         }
         else
-            Debug.WriteLine("NewListName null or whitespace.");
+            Debug.WriteLine("Error: NewListName null or whitespace.");
     }
 
 
@@ -135,7 +135,10 @@ internal class TodoCollectionViewModel : VMBase
     private async Task UpdateListAsync(object obj)
     {
 
-        var listToUpdate = obj as TodoCollection;
+        NewListName = obj.ToString().Trim();
+
+        //var listToUpdate = obj as TodoCollection;
+        //listToUpdate.Title = listToUpdate.Title.Trim();
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
@@ -143,11 +146,24 @@ internal class TodoCollectionViewModel : VMBase
         var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
         var update = Builders<User>.Update
             .Set(x => x.TodoCollections, MainViewModel.UserViewModel.CurrentUser.TodoCollections);
+            //.Set(x => x.TodoCollections.FirstMatchingElement().Title, listToUpdate.Title);
 
-        await todoCollection.UpdateOneAsync(filter, update);
+        var updateResult = await todoCollection.UpdateOneAsync(filter, update);
 
-        MainViewModel.ChangeView("listview");
+        MainViewModel.TodoCollectionViewModel.CurrentTodoCollection = MainViewModel.UserViewModel.CurrentUser.TodoCollections.FirstOrDefault();
+
+        
+        if (updateResult.ModifiedCount > 0)
+            MainViewModel.ChangeView("listview");
+        else
+            Debug.WriteLine("Error: Failed to update database.");
+
+        
+
     }
+
+
+
 
     private async void DeleteList(object obj)
     {
@@ -166,32 +182,30 @@ internal class TodoCollectionViewModel : VMBase
             var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
             var userId = MainViewModel.UserViewModel.CurrentUser.Id;
-            if (userId != null)
+
+            var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
+            var update = Builders<User>
+                .Update.PullFilter(x => x.TodoCollections, Builders<TodoCollection>
+                .Filter.Eq(tc => tc.Id, listToDelete.Id));
+
+            var updateResult = await todoCollection.UpdateOneAsync(filter, update);
+
+            if (updateResult.ModifiedCount > 0)
             {
-                var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
-                var update = Builders<User>
-                    .Update.PullFilter(x => x.TodoCollections, Builders<TodoCollection>
-                    .Filter.Eq(tc => tc.Id, listToDelete.Id));
 
-                var updateResult = await todoCollection.UpdateOneAsync(filter, update);
-                if (updateResult.ModifiedCount > 0)
-                {
+                TodoCollections.Remove(listToDelete);
 
-                    TodoCollections.Remove(listToDelete);
+                var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId);
 
-                    var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId);
-
-                    if (user != null)
-                        user.TodoCollections.Remove(listToDelete);
-                    else
-                        Debug.WriteLine("User not found in local collection: TodoCollections.");
-
-                }
+                if (user != null)
+                    user.TodoCollections.Remove(listToDelete);
                 else
-                    Debug.WriteLine("Failed to update database.");
+                    Debug.WriteLine("Error: User not found in local collection: TodoCollections.");
+
             }
             else
-                Debug.WriteLine("User was not found.");
+                Debug.WriteLine("Error: Failed to delete from database.");
+
         }
 
     }
