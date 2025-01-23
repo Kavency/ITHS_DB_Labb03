@@ -63,35 +63,16 @@
         <ListView Grid.Column="0"
                   Grid.Row="1"
                   Margin="15 0"
+                  HorizontalContentAlignment="Stretch"
                   ItemsSource="{Binding TodoCollectionViewModel.TodoCollections}"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodoCollection}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border HorizontalAlignment="Stretch">
-                        <Grid HorizontalAlignment="Stretch"
-                              Width="265">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Title}"
-                                       HorizontalAlignment="Left"
-                                       Grid.Column="0" />
+                        <DockPanel>
+                            
                             <Button Background="Transparent"
                                     BorderBrush="Transparent"
-                                    Grid.Column="1"
-                                    Command="{Binding DataContext.TodoCollectionViewModel.ShowEditListViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    ToolTip="Edit list">
-                                <fa:IconBlock Icon="Edit"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              FontSize="15" />
-                            </Button>
-                            <Button Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Grid.Column="2"
+                                    DockPanel.Dock="Right"
                                     Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     ToolTip="Delete list"
@@ -99,12 +80,17 @@
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
                                                          Value="True">
                                                 <Setter Property="Visibility"
                                                         Value="Visible" />
                                             </DataTrigger>
-                                        </Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
+                                                     Value="False">
+                                            <Setter Property="Visibility"
+                                                    Value="Hidden" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
                                     </Style>
                                 </Button.Style>
                                 <fa:IconBlock Icon="XmarkCircle"
@@ -113,8 +99,21 @@
                                               HorizontalAlignment="Center"
                                               FontSize="15" />
                             </Button>
-                        </Grid>
-                    </Border>
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                DockPanel.Dock="Right"
+                                Command="{Binding DataContext.TodoCollectionViewModel.ShowEditListViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Edit list">
+                            <fa:IconBlock Icon="Edit"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
+                        <TextBlock Text="{Binding Title}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                    </DockPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -179,47 +178,28 @@
         <ListView Grid.Column="1"
                   Grid.Row="1"
                   Margin="10 0"
+                  HorizontalContentAlignment="Stretch"
                   ItemsSource="{Binding TodoCollectionViewModel.CurrentTodoCollection.Todos}"
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border HorizontalAlignment="Stretch">
-                        <Grid HorizontalAlignment="Stretch"
-                              Width="270">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
+                        <DockPanel>
                             <ToggleButton HorizontalAlignment="Left"
                                           VerticalAlignment="Center"
+                                          Grid.Column="0"
                                           Width="20"
-                                          Height="20">
+                                          Height="20"
+                                          DockPanel.Dock="Left">
                             </ToggleButton>
-                            <TextBlock Text="{Binding Title}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Grid.Column="0"
-                                       Margin="25 0" />
+                            
+                            
                             <Button Background="Transparent"
                                     BorderBrush="Transparent"
-                                    Grid.Column="1"
-                                    Command="{Binding DataContext.TodoCollectionViewModel.ShowEditTodoViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    ToolTip="Edit list">
-                                <fa:IconBlock Icon="Edit"
-                                              Foreground="Black"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              FontSize="15" />
-                            </Button>
-                            <Button Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Grid.Column="2"
                                     Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     ToolTip="Delete list"
-                                    Visibility="Visible">
+                                    Visibility="Visible"
+                                    DockPanel.Dock="Right">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Style.Triggers>
@@ -237,8 +217,23 @@
                                               HorizontalAlignment="Center"
                                               FontSize="15" />
                             </Button>
-                        </Grid>
-                    </Border>
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                DockPanel.Dock="Right"
+                                Command="{Binding DataContext.TodoCollectionViewModel.ShowEditTodoViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Edit list">
+                            <fa:IconBlock Icon="Edit"
+                                          Foreground="Black"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
+                        <TextBlock Text="{Binding Title}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="5 0" />
+                    </DockPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
