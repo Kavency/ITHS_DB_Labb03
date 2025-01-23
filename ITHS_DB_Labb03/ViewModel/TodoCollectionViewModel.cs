@@ -110,7 +110,6 @@ internal class TodoCollectionViewModel : VMBase
 
     private async Task UpdateTodoAsync(object obj)
     {
-
         var todoUpdate = CurrentTodo;
         CurrentTodo.Title = todoUpdate.Title.Trim();
 
@@ -133,6 +132,11 @@ internal class TodoCollectionViewModel : VMBase
             {
                 todo.Title = CurrentTodo.Title;
 
+                // Update CurrentCollection
+                var temp = CurrentTodoCollection.Todos.FirstOrDefault(x => x.Id == todoId);
+                temp.Title = CurrentTodo.Title;
+
+                // Update database
                 var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
                 await collection.ReplaceOneAsync(updateFilter, userToUpdate);
             }
@@ -145,6 +149,8 @@ internal class TodoCollectionViewModel : VMBase
         {
             Debug.WriteLine("User not found");
         }
+
+        MainViewModel.ChangeView("listview");
     }
     private async void DeleteTodo(object obj)
     {
