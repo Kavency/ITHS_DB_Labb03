@@ -27,12 +27,10 @@ internal class TodoCollectionViewModel : VMBase
 
     public MainViewModel MainViewModel { get => _mainViewModel; set { _mainViewModel = value; OnPropertyChanged(); } }
     public RelayCommand CreateTodoCMD { get; }
-    public RelayCommand ReadTodoCMD { get; }
     public RelayCommand UpdateTodoCMD { get; }
     public RelayCommand DeleteTodoCMD { get; }
     public RelayCommand ShowEditTodoViewCMD { get; }
     public RelayCommand CreateListCMD { get; }
-    public RelayCommand ReadListCMD { get; }
     public RelayCommand UpdateListCMD { get; }
     public RelayCommand DeleteListCMD { get; }
     public RelayCommand ShowEditListViewCMD { get; }
