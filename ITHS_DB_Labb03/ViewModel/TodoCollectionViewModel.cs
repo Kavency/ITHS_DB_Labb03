@@ -118,17 +118,17 @@ internal class TodoCollectionViewModel : VMBase
 
         using var db = new MongoClient(MainViewModel.connectionString);
         var collection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-        
+
         var filter = Builders<User>.Filter.Eq("TodoCollections.Todos._id", todoId);
         var userToUpdate = await collection.Find(filter).FirstOrDefaultAsync();
 
-        if(userToUpdate != null)
+        if (userToUpdate != null)
         {
             var todo = userToUpdate.TodoCollections
                 .SelectMany(tc => tc.Todos)
                 .FirstOrDefault(x => x.Id == todoId);
 
-            if(todo != null)
+            if (todo != null)
             {
                 todo.Title = CurrentTodo.Title;
                 // Update CurrentCollection
@@ -158,57 +158,37 @@ internal class TodoCollectionViewModel : VMBase
 
     private async Task DeleteTodoAsync(object obj)
     {
-        CurrentTodo = obj as Todo;
-
-        var todoToDelete = CurrentTodo;
-
-        var todoId = CurrentTodo.Id;
-        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
-
-        var result = MessageBox.Show($"Are you sure you want to delete \"{todoToDelete.Title}\"", "Attention!", MessageBoxButton.YesNo);
-
-        if (result == MessageBoxResult.Yes)
-        {
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-
-            var filter = Builders<User>.Filter.Eq("TodoCollections.Todos._id", todoId);
-
-            var documentToUpdate = await todoCollection.Find(filter).FirstOrDefaultAsync();
-
-
-            if (documentToUpdate != null)
-            {
-                var todoList = documentToUpdate.TodoCollections.Select(tc => tc.Todos).FirstOrDefault(x => x.Any(y => y.Id == todoToDelete.Id));
-
-                
-
-                if (todoList != null)
-                {
-                    CurrentTodoCollection.Todos.Remove(todoToDelete);
-                    todoList = CurrentTodoCollection.Todos;
-
-                    var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
-
-                    var dbResult = await todoCollection.ReplaceOneAsync(updateFilter, documentToUpdate);
-
-
-                    if (dbResult.ModifiedCount > 0)
-                    {
-                        Debug.WriteLine("Modified");
-                    }
-                    else
-                        Debug.WriteLine("Error: Not modified");
-
-
-                }
-                else
-                    Debug.WriteLine("Error: Todo not found.");
-            }
-            else
-                Debug.WriteLine("Error: User not found.");
+        CurrentTodo = obj as Todo; 
+        
+        var todoToDelete = CurrentTodo; 
+        var todoId = CurrentTodo.Id; 
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id; 
+        var result = MessageBox.Show($"Are you sure you want to delete \"{todoToDelete.Title}\"", "Attention!", MessageBoxButton.YesNo); 
+        
+        if (result == MessageBoxResult.Yes) 
+        { 
+            using var db = new MongoClient(MainViewModel.connectionString); 
+            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users"); 
+            
+            var filter = Builders<User>.Filter.And(Builders<User>.Filter.Eq(u => u.Id, userId), 
+                Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == todoId))); 
+            
+            var update = Builders<User>.Update.PullFilter("TodoCollections.$[].Todos",Builders<Todo>.Filter.Eq(t => t.Id, todoId)); 
+            
+            var updateResult = await todoCollection.UpdateOneAsync(filter, update);
+            
+            CurrentTodoCollection.Todos.Remove(todoToDelete);
+            
+            if (updateResult.ModifiedCount > 0) 
+            { 
+                Debug.WriteLine("Modified"); 
+            } 
+            else 
+            { 
+                Debug.WriteLine("Error: Not modified"); 
+            } 
         }
-}
+    }
 
     // List CRUD:
     private async void CreateList(object obj)
