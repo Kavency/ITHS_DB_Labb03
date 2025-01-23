@@ -158,36 +158,57 @@ internal class TodoCollectionViewModel : VMBase
 
     private async Task DeleteTodoAsync(object obj)
     {
+        CurrentTodo = obj as Todo;
 
-        var todoDelete = obj as Todo;
+        var todoToDelete = CurrentTodo;
 
-        var result = MessageBox.Show($"Are you sure you want to delete \"{todoDelete.Title}\"", "Attention!", MessageBoxButton.YesNo);
+        var todoId = CurrentTodo.Id;
+        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+
+        var result = MessageBox.Show($"Are you sure you want to delete \"{todoToDelete.Title}\"", "Attention!", MessageBoxButton.YesNo);
 
         if (result == MessageBoxResult.Yes)
         {
             using var db = new MongoClient(MainViewModel.connectionString);
             var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
 
-            var userId = MainViewModel.UserViewModel.CurrentUser.Id;
-            var todoId = CurrentTodo.Id;
+            var filter = Builders<User>.Filter.Eq("TodoCollections.Todos._id", todoId);
 
-            var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
-            var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == todoId));
+            var documentToUpdate = await todoCollection.Find(filter).FirstOrDefaultAsync();
 
-            var filter = Builders<User>.Filter.And(userFilter, todoFilter);
 
-            var update = Builders<User>.Update.PullFilter("TodoCollections.$.Todos", Builders<Todo>.Filter.Eq(t => t.Id, todoId));
-
-            var updateResult = await todoCollection.UpdateOneAsync(filter, update);
-
-            if (updateResult.ModifiedCount > 0)
+            if (documentToUpdate != null)
             {
-                CurrentTodoCollection.Todos.Remove(todoDelete);
+                var todoList = documentToUpdate.TodoCollections.Select(tc => tc.Todos).FirstOrDefault(x => x.Any(y => y.Id == todoToDelete.Id));
+
+                
+
+                if (todoList != null)
+                {
+                    CurrentTodoCollection.Todos.Remove(todoToDelete);
+                    todoList = CurrentTodoCollection.Todos;
+
+                    var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
+
+                    var dbResult = await todoCollection.ReplaceOneAsync(updateFilter, documentToUpdate);
+
+
+                    if (dbResult.ModifiedCount > 0)
+                    {
+                        Debug.WriteLine("Modified");
+                    }
+                    else
+                        Debug.WriteLine("Error: Not modified");
+
+
+                }
+                else
+                    Debug.WriteLine("Error: Todo not found.");
             }
             else
-                Debug.WriteLine("Error: Failed to delete from database.");
+                Debug.WriteLine("Error: User not found.");
         }
-    }
+}
 
     // List CRUD:
     private async void CreateList(object obj)
