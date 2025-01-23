@@ -131,7 +131,6 @@ internal class TodoCollectionViewModel : VMBase
             if(todo != null)
             {
                 todo.Title = CurrentTodo.Title;
-
                 // Update CurrentCollection
                 var temp = CurrentTodoCollection.Todos.FirstOrDefault(x => x.Id == todoId);
                 temp.Title = CurrentTodo.Title;
@@ -162,7 +161,7 @@ internal class TodoCollectionViewModel : VMBase
 
         var todoDelete = obj as Todo;
 
-        var result = MessageBox.Show($"Are you sure you want to delete {todoDelete.Title}", "Attention!", MessageBoxButton.YesNo);
+        var result = MessageBox.Show($"Are you sure you want to delete \"{todoDelete.Title}\"", "Attention!", MessageBoxButton.YesNo);
 
         if (result == MessageBoxResult.Yes)
         {
@@ -173,33 +172,21 @@ internal class TodoCollectionViewModel : VMBase
             var todoId = CurrentTodo.Id;
 
             var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
-            var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == todoId);
+            var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == todoId));
 
             var filter = Builders<User>.Filter.And(userFilter, todoFilter);
 
-            var update = Builders<User>.Update.Pull("TodoCollections.$.Todos", todoDelete);
+            var update = Builders<User>.Update.PullFilter("TodoCollections.$.Todos", Builders<Todo>.Filter.Eq(t => t.Id, todoId));
 
             var updateResult = await todoCollection.UpdateOneAsync(filter, update);
 
             if (updateResult.ModifiedCount > 0)
             {
-
-                Todos.Remove(todoDelete);
-                var user = MainViewModel.UserViewModel.Users.FirstOrDefault(u => u.Id == userId);
-
-                //if (user != null)
-                //{
-                //}
-                //else
-                //    Debug.WriteLine("Error: User not found (DeleteTodoAsync).");
-
-
+                CurrentTodoCollection.Todos.Remove(todoDelete);
             }
             else
                 Debug.WriteLine("Error: Failed to delete from database.");
         }
-
-
     }
 
     // List CRUD:
