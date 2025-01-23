@@ -37,12 +37,19 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <ComboBox Margin="0 10 0 10">
-            <d:ComboBoxItem Content="Urgent" IsSelected="True" />
+        <ComboBox Margin="0 10 0 10"
+                  x:Name="TagComboBox"
+                  ItemsSource="{Binding TagViewModel.Tags}"
+                  DisplayMemberPath="TagName"
+                  SelectedItem="{Binding TagViewModel.CurrentTag}"
+                  IsEditable="True">
+            <d:ComboBoxItem Content="Urgent" IsSelected="True"/>
         </ComboBox>
 
         <Button Content="Add tag"
-                Margin="0 0 0 10"/>
+                Margin="0 0 0 10"
+                Command="{Binding TagViewModel.CreateTagCMD}"
+                CommandParameter="{Binding ElementName=TagComboBox, Path=SelectedItem}"/>
 
         <ListView>
             <d:ListViewItem Content="Urgent" />
