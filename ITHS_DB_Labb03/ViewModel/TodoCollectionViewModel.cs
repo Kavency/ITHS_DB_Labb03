@@ -128,6 +128,7 @@ internal class TodoCollectionViewModel : VMBase
         
         await todoCollection.UpdateOneAsync(filter, update);
 
+        MainViewModel.ChangeView("listview");
     }
     private async void DeleteTodo(object obj)
     {
