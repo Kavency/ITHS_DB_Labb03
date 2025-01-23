@@ -11,6 +11,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public static string connectionString = "mongodb://localhost:27017/";
 
         private UserViewModel _userViewModel;
+        private TagViewModel _tagViewModel;
         private TodoCollectionViewModel _todoCollectionViewModel;
         private double _oldWindowTop;
         private double _oldWindowLeft;
@@ -29,6 +30,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public Visibility EditTodoViewVisibility { get => _editTodoViewVisibility; set { _editTodoViewVisibility = value; OnPropertyChanged(); } }
         public TodoCollectionViewModel TodoCollectionViewModel { get => _todoCollectionViewModel; set { _todoCollectionViewModel = value; OnPropertyChanged(); } }
         public UserViewModel UserViewModel { get => _userViewModel; set { _userViewModel = value; OnPropertyChanged(); } }
+        public TagViewModel TagViewModel { get => _tagViewModel; set { _tagViewModel = value; OnPropertyChanged(); } }
         public AppState AppState { get; set; }
 
         public RelayCommand WindowControlCMD { get; }
@@ -36,6 +38,7 @@ namespace ITHS_DB_Labb03.ViewModel
         public MainViewModel()
         {
             UserViewModel = new UserViewModel(this);
+            TagViewModel = new TagViewModel(this);
             TodoCollectionViewModel = new TodoCollectionViewModel(this);
             AppState = new AppState();
             //TodoCollectionViewModel = new TodoCollectionViewModel(this);
