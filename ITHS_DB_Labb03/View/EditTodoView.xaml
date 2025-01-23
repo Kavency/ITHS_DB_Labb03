@@ -41,15 +41,16 @@
                   x:Name="TagComboBox"
                   ItemsSource="{Binding TagViewModel.Tags}"
                   DisplayMemberPath="TagName"
-                  SelectedItem="{Binding TagViewModel.CurrentTag}"
-                  IsEditable="True">
+                  SelectedItem="{Binding TagViewModel.CurrentTag, Mode=TwoWay}"
+                  IsEditable="True"
+                  Text="{Binding TagViewModel.NewTagName, Mode=TwoWay}">
             <d:ComboBoxItem Content="Urgent" IsSelected="True"/>
         </ComboBox>
 
         <Button Content="Add tag"
                 Margin="0 0 0 10"
                 Command="{Binding TagViewModel.CreateTagCMD}"
-                CommandParameter="{Binding ElementName=TagComboBox, Path=SelectedItem}"/>
+                />
 
         <ListView>
             <d:ListViewItem Content="Urgent" />
