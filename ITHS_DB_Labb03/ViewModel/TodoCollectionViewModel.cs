@@ -1,5 +1,6 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
+using Microsoft.VisualBasic;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -109,7 +110,7 @@ internal class TodoCollectionViewModel : VMBase
 
     private async Task UpdateTodoAsync(object obj)
     {
-        
+
         var todoUpdate = CurrentTodo;
         CurrentTodo.Title = todoUpdate.Title.Trim();
 
@@ -117,17 +118,33 @@ internal class TodoCollectionViewModel : VMBase
         var todoId = CurrentTodo.Id;
 
         using var db = new MongoClient(MainViewModel.connectionString);
-        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
-
-        var userFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
-        var todoFilter = Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == todoId);
-
-        var filter = Builders<User>.Filter.And(userFilter, todoFilter);
-        var update = Builders<User>.Update.Set("TodoCollections.$.Todos", todoUpdate);
-
+        var collection = db.GetDatabase("todoapp").GetCollection<User>("Users");
         
-        await todoCollection.UpdateOneAsync(filter, update);
+        var filter = Builders<User>.Filter.Eq("TodoCollections.Todos._id", todoId);
+        var userToUpdate = await collection.Find(filter).FirstOrDefaultAsync();
 
+        if(userToUpdate != null)
+        {
+            var todo = userToUpdate.TodoCollections
+                .SelectMany(tc => tc.Todos)
+                .FirstOrDefault(x => x.Id == todoId);
+
+            if(todo != null)
+            {
+                todo.Title = CurrentTodo.Title;
+
+                var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
+                await collection.ReplaceOneAsync(updateFilter, userToUpdate);
+            }
+            else
+            {
+                Debug.WriteLine("Todo not found");
+            }
+        }
+        else
+        {
+            Debug.WriteLine("User not found");
+        }
     }
     private async void DeleteTodo(object obj)
     {
