@@ -42,7 +42,8 @@
                     Margin="5 0"
                     Height="22"
                     Padding="5 0"
-                    DockPanel.Dock="Right" />
+                    DockPanel.Dock="Right"
+                    Command="{Binding TagViewModel.CreateTagCMD}"/>
 
             <ComboBox Margin="0 10 0 10"
                       x:Name="TagComboBox"

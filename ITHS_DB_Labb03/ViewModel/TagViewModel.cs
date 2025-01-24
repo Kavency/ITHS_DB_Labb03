@@ -88,29 +88,45 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private async Task CreateTagAsync(object obj)
         {
+            string tagName = string.Empty;
+            Model.Tag newTag;
 
-            //CurrentTag och NewTagName
-
-            var newTag = obj as Model.Tag;
-
-            newTag.TagName.Trim();
-
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var tagCollection = db.GetDatabase("todoapp").GetCollection<Model.Tag>("Tags");
-
-            var doesTagExist = await tagCollection.Find(t => t.TagName == newTag.TagName).AnyAsync();
-
-            if(doesTagExist)
+            // Använder CurrentTag(Från ComboBox) och NewTagName(Från Textfält)
+            if(CurrentTag != null)
             {
-                
-                //Update database
+                tagName = CurrentTag.TagName.Trim();
+                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
+            }
+            else if(NewTagName != null)
+            {
+                tagName = NewTagName.Trim();
+                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName }; 
+
             }
             else
             {
+                return;
+            }
+            
+            using var db = new MongoClient(MainViewModel.connectionString);
+            var tagCollection = db.GetDatabase("todoapp").GetCollection<Model.Tag>("Tags");
+
+            var doesTagExist = await tagCollection.Find(t => t.TagName == tagName).AnyAsync();
+
+            if(doesTagExist)
+            {
+                // Current Users Todo.Tag get updated.
+
+                
+                
+            }
+            else
+            {
+                // Insert the new tag
                 await tagCollection.InsertOneAsync(newTag);
                 Tags.Add(newTag);
-                //Update database
-                
+
+                // Current Users Todo.Tag get updated.
             }
 
             NewTagName = null;
