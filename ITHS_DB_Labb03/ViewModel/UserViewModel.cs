@@ -85,8 +85,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
             UserDetails.TodoCollections.Add(new TodoCollection() { Id = ObjectId.GenerateNewId(), Title = "To Do's", Todos = new ObservableCollection<Todo>() });
 
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
             await userCollection.InsertOneAsync(UserDetails);
 
             Users.Add(UserDetails);
@@ -103,7 +103,7 @@ namespace ITHS_DB_Labb03.ViewModel
         {
             using var db = new MongoClient();
 
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
             var filter = Builders<User>.Filter.Eq(u => u.Id, CurrentUser.Id);
             var update = Builders<User>.Update
                 .Set(u => u.FirstName, CurrentUser.FirstName)
@@ -134,7 +134,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 if (confirmDeletion == MessageBoxResult.Yes)
                 {
                     using var db = new MongoClient();
-                    var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+                    var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
                     var filter = Builders<User>.Filter.Eq(u => u.Id, selectedUser.Id);
 

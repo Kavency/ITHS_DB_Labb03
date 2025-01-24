@@ -18,8 +18,8 @@ namespace ITHS_DB_Labb03.Core
             {
                 string valueString = value.ToString();
 
-                using var db = new MongoClient(MainViewModel.connectionString);
-                var users = db.GetDatabase("todoapp").GetCollection<User>("Users");
+                using var db = new MongoClient(MainViewModel.ConnectionString);
+                var users = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
                 var user = users.AsQueryable().FirstOrDefault(x => x.Email == valueString);
                 

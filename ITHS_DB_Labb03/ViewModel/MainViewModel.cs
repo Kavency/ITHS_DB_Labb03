@@ -8,7 +8,8 @@ namespace ITHS_DB_Labb03.ViewModel
 {
     internal class MainViewModel : VMBase
     {
-        public static string connectionString = "mongodb://localhost:27017/";
+        public static string DbName { get; private set; } = "todoapp";
+        public static string ConnectionString { get; private set; } = "mongodb://localhost:27017/";
 
         private UserViewModel _userViewModel;
         private TagViewModel _tagViewModel;
@@ -52,8 +53,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private async Task GetUsersAsync()
         {
-            using var db = new MongoClient(connectionString);
-            var userCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            using var db = new MongoClient(ConnectionString);
+            var userCollection = db.GetDatabase(DbName).GetCollection<User>("Users");
             var result = userCollection.AsQueryable().ToList();
             UserViewModel.Users = new ObservableCollection<User>(result);
         }
@@ -70,8 +71,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private void LoadAppState()
         {
-            using var db = new MongoClient(connectionString);
-            var stateCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            using var db = new MongoClient(ConnectionString);
+            var stateCollection = db.GetDatabase(DbName).GetCollection<AppState>("AppState");
             var state = stateCollection.AsQueryable().FirstOrDefault();
 
             if (state is not null)
@@ -119,8 +120,8 @@ namespace ITHS_DB_Labb03.ViewModel
                 AppState.WindowHeight = Application.Current.MainWindow.Height;
             }
 
-            using var db = new MongoClient(connectionString);
-            var documentCollection = db.GetDatabase("todoapp").GetCollection<AppState>("AppState");
+            using var db = new MongoClient(ConnectionString);
+            var documentCollection = db.GetDatabase(DbName).GetCollection<AppState>("AppState");
             var documentCount = documentCollection.AsQueryable().Count();
 
             if (documentCount > 0)

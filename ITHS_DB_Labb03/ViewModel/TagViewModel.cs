@@ -40,8 +40,8 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private bool DoesCollectionExist(string collectionName)
         {
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var collectionNames = db.GetDatabase("todoapp").ListCollectionNames().ToList();
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var collectionNames = db.GetDatabase(MainViewModel.DbName).ListCollectionNames().ToList();
             return collectionNames.Contains(collectionName);
 
         }
@@ -55,8 +55,8 @@ namespace ITHS_DB_Labb03.ViewModel
             var work = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = "Work" };
             var shop = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = "Shop" };
 
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var tagCollection = db.GetDatabase("todoapp").GetCollection<Model.Tag>("Tags");
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
 
             if (!DoesCollectionExist("Tags"))
             {
@@ -101,15 +101,14 @@ namespace ITHS_DB_Labb03.ViewModel
             {
                 tagName = NewTagName.Trim();
                 newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName }; 
-
             }
             else
             {
                 return;
             }
             
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var tagCollection = db.GetDatabase("todoapp").GetCollection<Model.Tag>("Tags");
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
 
             var doesTagExist = await tagCollection.Find(t => t.TagName == tagName).AnyAsync();
 
