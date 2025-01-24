@@ -2,7 +2,7 @@
 
 En applikation för att hålla koll på olika uppgifter som behöver göras av användaren. För att lagra data i applikationen används MongoDb som också behöver vara installerat för det ska fungera. Mer information om installtionen hittas nedan.  
 
-Uppgiften är ett samarbete på [IT Högskolans](https://www.iths.se/) mellan [Magnus Hellman](https://github.com/Kavency) och [Marcus Renvall](https://github.com/llavner).
+Uppgiften är ett samarbete på [IT Högskolan](https://www.iths.se/) mellan [Magnus Hellman](https://github.com/Kavency) och [Marcus Renvall](https://github.com/llavner).
 
 ## Innehåll 
 - [Innehåll](#innehåll)
@@ -12,11 +12,11 @@ Uppgiften är ett samarbete på [IT Högskolans](https://www.iths.se/) mellan [M
 - [Kontakt](#kontakt)
 
 ## Funktioner
-- Skapa, editera och ta bort en "Todo".
-- Sätta prioritet på de olika "Todo" objekten.
-- Lägga till datum och ha påminnelser.
-- Organisera "Todo" objekt efter taggar/kategorier.
-- Kunna samarbeta med andra användare på listor av "Todo" objekt. 
+- Skapa en "Todo".
+- Skapa olika listor som man kan fylla med "Todos".
+- Skapa olika användare som har olika listor med olika "Todos".
+- Organisera "Todo" objekt efter taggar/kategorier. 
+- De olika objekten ska ha CRUD möjligheter.
 
 ## Installation
 1. Installera [MongoDB Community Server](https://www.mongodb.com/try/download/community) 
