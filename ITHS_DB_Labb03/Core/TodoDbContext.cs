@@ -13,10 +13,10 @@ internal class TodoDbContext //: DbContext
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
-    //    var connectionString = "mongodb://localhost:27017/";
+    //    var ConnectionString = "mongodb://localhost:27017/";
     //    var dbName = "todoapp";
 
-    //    optionsBuilder.UseMongoDB(connectionString, dbName);
+    //    optionsBuilder.UseMongoDB(ConnectionString, dbName);
     //    Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
     //}
 

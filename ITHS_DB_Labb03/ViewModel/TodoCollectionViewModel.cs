@@ -79,8 +79,8 @@ internal class TodoCollectionViewModel : VMBase
         newTodo.IsCompleted = false;
         newTodo.Tags = new ObservableCollection<Model.Tag>();
 
-        using var db = new MongoClient(MainViewModel.connectionString);
-        var usersCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+        using var db = new MongoClient(MainViewModel.ConnectionString);
+        var usersCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
         var userId = MainViewModel.UserViewModel.CurrentUser.Id;
         var listId = CurrentTodoCollection.Id;
@@ -114,8 +114,8 @@ internal class TodoCollectionViewModel : VMBase
         var userId = MainViewModel.UserViewModel.CurrentUser.Id;
         var todoId = CurrentTodo.Id;
 
-        using var db = new MongoClient(MainViewModel.connectionString);
-        var collection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+        using var db = new MongoClient(MainViewModel.ConnectionString);
+        var collection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
         var filter = Builders<User>.Filter.Eq("TodoCollections.Todos._id", todoId);
         var userToUpdate = await collection.Find(filter).FirstOrDefaultAsync();
@@ -165,8 +165,8 @@ internal class TodoCollectionViewModel : VMBase
         
         if (result == MessageBoxResult.Yes) 
         { 
-            using var db = new MongoClient(MainViewModel.connectionString); 
-            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users"); 
+            using var db = new MongoClient(MainViewModel.ConnectionString); 
+            var todoCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users"); 
             
             var filter = Builders<User>.Filter.And(Builders<User>.Filter.Eq(u => u.Id, userId), 
                 Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == todoId))); 
@@ -212,7 +212,7 @@ internal class TodoCollectionViewModel : VMBase
             CurrentTodoCollection = newTodoList;
 
             using var db = new MongoClient();
-            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            var todoCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
             var userToUpdate = await todoCollection.Find(u => u.Id == MainViewModel.UserViewModel.CurrentUser.Id).FirstOrDefaultAsync();
             userToUpdate.TodoCollections.Add(newTodoList);
             var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
@@ -236,8 +236,8 @@ internal class TodoCollectionViewModel : VMBase
         var temp = CurrentTodoCollection.Title;
         CurrentTodoCollection.Title = temp.Trim();
 
-        using var db = new MongoClient(MainViewModel.connectionString);
-        var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+        using var db = new MongoClient(MainViewModel.ConnectionString);
+        var todoCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
         var filter = Builders<User>.Filter.Eq(u => u.Id, MainViewModel.UserViewModel.CurrentUser.Id);
         var update = Builders<User>.Update
@@ -273,8 +273,8 @@ internal class TodoCollectionViewModel : VMBase
         if (result == MessageBoxResult.Yes)
         {
 
-            using var db = new MongoClient(MainViewModel.connectionString);
-            var todoCollection = db.GetDatabase("todoapp").GetCollection<User>("Users");
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var todoCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
             var userId = MainViewModel.UserViewModel.CurrentUser.Id;
 

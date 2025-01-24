@@ -14,8 +14,8 @@ namespace ITHS_DB_Labb03.Core
         {
             if (value is not null)
             {
-                var db = new MongoClient(MainViewModel.connectionString);
-                var users = db.GetDatabase("todoapp").GetCollection<User>("Users");
+                var db = new MongoClient(MainViewModel.ConnectionString);
+                var users = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
                 string valueString = value.ToString();
 
                 var user = users.AsQueryable().FirstOrDefault(x => x.UserName == valueString);
