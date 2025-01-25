@@ -61,7 +61,7 @@
         <ListView MinHeight="100"
                   MaxHeight="200"
                   HorizontalContentAlignment="Stretch"
-                  ItemsSource="{Binding}">
+                  ItemsSource="{Binding TodoCollectionViewModel.CurrentTodo.Tags}">
             <d:ListViewItem Content="Urgent" />
             <d:ListViewItem Content="Work" />
             <d:ListViewItem Content="Not important" />
@@ -73,7 +73,7 @@
                                 DockPanel.Dock="Right"
                                 Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
-                                ToolTip="Delete list"
+                                ToolTip="Remove tag"
                                 Visibility="Visible">
                             <Button.Style>
                                 <Style TargetType="Button">
