@@ -1,5 +1,6 @@
 ﻿using ITHS_DB_Labb03.Core;
 using ITHS_DB_Labb03.Model;
+using Microsoft.VisualBasic;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -79,7 +80,7 @@ namespace ITHS_DB_Labb03.ViewModel
             }
         }
 
-            
+
 
         private async void CreateTag(object obj)
         {
@@ -91,42 +92,47 @@ namespace ITHS_DB_Labb03.ViewModel
             string tagName = string.Empty;
             Model.Tag newTag;
 
-            // Använder CurrentTag(Från ComboBox) och NewTagName(Från Textfält)
-            if(CurrentTag != null)
+            var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+            var todo = MainViewModel.TodoCollectionViewModel.CurrentTodo;
+            var currentTodoTags = MainViewModel.TodoCollectionViewModel.CurrentTodo.Tags;
+
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
+            var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
+
+            if (CurrentTag != null)
             {
                 tagName = CurrentTag.TagName.Trim();
                 newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
             }
-            else if(NewTagName != null)
+            else if (NewTagName != null)
             {
                 tagName = NewTagName.Trim();
-                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName }; 
+                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
             }
-            else
-            {
-                return;
-            }
-            
-            using var db = new MongoClient(MainViewModel.ConnectionString);
-            var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
+            else return;
 
             var doesTagExist = await tagCollection.Find(t => t.TagName == tagName).AnyAsync();
+            var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
 
-            if(doesTagExist)
+            if (!doesTagExist)
             {
-                // Current Users Todo.Tag get updated.
-
-                
-                
-            }
-            else
-            {
-                // Insert the new tag
                 await tagCollection.InsertOneAsync(newTag);
                 Tags.Add(newTag);
-
-                // Current Users Todo.Tag get updated.
             }
+            var filter = Builders<User>.Filter.And(Builders<User>.Filter.Eq(u => u.Id, userId),
+                Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == todo.Id)));
+
+            var update = Builders<User>.Update.AddToSet("TodoCollections.$[].Todos.$[todo].Tags", newTag);
+            var arrayFilters = new List<ArrayFilterDefinition>
+            {
+                new JsonArrayFilterDefinition<BsonDocument>("{'todo._id': ObjectId('" + todo.Id + "')}")
+            };
+
+            var updateOptions = new UpdateOptions { ArrayFilters = arrayFilters };
+            var result = await userCollection.UpdateOneAsync(filter, update, updateOptions);
+
+            currentTodoTags.Add(newTag);
 
             NewTagName = null;
         }
