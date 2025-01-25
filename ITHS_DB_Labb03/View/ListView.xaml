@@ -68,37 +68,37 @@
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodoCollection}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                        <DockPanel>
-                            
-                            <Button Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    DockPanel.Dock="Right"
-                                    Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    ToolTip="Delete list"
-                                    Visibility="Visible">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
-                                                         Value="True">
-                                                <Setter Property="Visibility"
-                                                        Value="Visible" />
-                                            </DataTrigger>
+                    <DockPanel>
+
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                DockPanel.Dock="Right"
+                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Delete list"
+                                Visibility="Visible">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
+                                                     Value="True">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
                                                      Value="False">
                                             <Setter Property="Visibility"
                                                     Value="Hidden" />
                                         </DataTrigger>
                                     </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <fa:IconBlock Icon="XmarkCircle"
-                                              Foreground="Red"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              FontSize="15" />
-                            </Button>
+                                </Style>
+                            </Button.Style>
+                            <fa:IconBlock Icon="XmarkCircle"
+                                          Foreground="Red"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
                         <Button Background="Transparent"
                                 BorderBrush="Transparent"
                                 DockPanel.Dock="Right"
@@ -112,7 +112,7 @@
                         </Button>
                         <TextBlock Text="{Binding Title}"
                                    VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"/>
+                                   HorizontalAlignment="Left" />
                     </DockPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -183,40 +183,59 @@
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                        <DockPanel>
-                            <ToggleButton HorizontalAlignment="Left"
+                    <DockPanel>
+                        <ToggleButton HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Grid.Column="0"
+                                      Width="20"
+                                      Height="20"
+                                      DockPanel.Dock="Left">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <fa:IconBlock x:Name="tickbox"
+                                                              FontSize="16"/>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="tickbox"
+                                                                Property="Icon"
+                                                                Value="CheckCircle" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked"
+                                                             Value="False">
+                                                        <Setter TargetName="tickbox"
+                                                                Property="Icon"
+                                                                Value="Circle" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter Property="Cursor"
+                                                                Value="Hand" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+
+                                    </Setter>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+
+                        <Button Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"
+                                ToolTip="Delete list"
+                                Visibility="Visible"
+                                DockPanel.Dock="Right">
+                            <fa:IconBlock Icon="XmarkCircle"
+                                          Foreground="Red"
                                           VerticalAlignment="Center"
-                                          Grid.Column="0"
-                                          Width="20"
-                                          Height="20"
-                                          DockPanel.Dock="Left">
-                            </ToggleButton>
-                            
-                            
-                            <Button Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    ToolTip="Delete list"
-                                    Visibility="Visible"
-                                    DockPanel.Dock="Right">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=IsMouseOver}"
-                                                         Value="True">
-                                                <Setter Property="Visibility"
-                                                        Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <fa:IconBlock Icon="XmarkCircle"
-                                              Foreground="Red"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              FontSize="15" />
-                            </Button>
+                                          HorizontalAlignment="Center"
+                                          FontSize="15" />
+                        </Button>
                         <Button Background="Transparent"
                                 BorderBrush="Transparent"
                                 DockPanel.Dock="Right"
