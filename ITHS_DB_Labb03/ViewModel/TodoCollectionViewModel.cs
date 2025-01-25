@@ -79,27 +79,30 @@ internal class TodoCollectionViewModel : VMBase
         newTodo.IsCompleted = false;
         newTodo.Tags = new ObservableCollection<Model.Tag>();
 
-        using var db = new MongoClient(MainViewModel.ConnectionString);
-        var usersCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
+        if (!string.IsNullOrWhiteSpace(newTodo.Title))
+        {
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var usersCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
-        var userId = MainViewModel.UserViewModel.CurrentUser.Id;
-        var listId = CurrentTodoCollection.Id;
+            var userId = MainViewModel.UserViewModel.CurrentUser.Id;
+            var listId = CurrentTodoCollection.Id;
 
-        var filter = Builders<User>
-            .Filter.And(Builders<User>
-            .Filter.Eq(u => u.Id, userId), Builders<User>
-            .Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == listId));
+            var filter = Builders<User>
+                .Filter.And(Builders<User>
+                .Filter.Eq(u => u.Id, userId), Builders<User>
+                .Filter.ElemMatch(u => u.TodoCollections, tc => tc.Id == listId));
 
-        var update = Builders<User>.Update.Push("TodoCollections.$.Todos", newTodo);
-        var result = await usersCollection.UpdateOneAsync(filter, update);
+            var update = Builders<User>.Update.Push("TodoCollections.$.Todos", newTodo);
+            var result = await usersCollection.UpdateOneAsync(filter, update);
 
-        if (result.ModifiedCount > 0)
-            Debug.WriteLine("Todo added successfully.");
-        else
-            Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
+            if (result.ModifiedCount > 0)
+                Debug.WriteLine("Todo added successfully.");
+            else
+                Debug.WriteLine("No matching user or TodoCollection found, or update failed.");
 
-        CurrentTodoCollection.Todos.Add(newTodo);
-        NewTodoTitle = string.Empty;
+            CurrentTodoCollection.Todos.Add(newTodo);
+            NewTodoTitle = string.Empty;
+        }
     }
     private async void UpdateTodo(object obj)
     {
