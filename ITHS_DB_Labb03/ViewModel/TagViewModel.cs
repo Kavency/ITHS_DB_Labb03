@@ -100,18 +100,21 @@ namespace ITHS_DB_Labb03.ViewModel
             var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
             var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
 
-            if (CurrentTag != null)
+            if (!string.IsNullOrWhiteSpace(NewTagName))
             {
-                tagName = CurrentTag.TagName.Trim();
-                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
-            }
-            else if (NewTagName != null)
-            {
-                tagName = NewTagName.Trim();
-                newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
+                if (CurrentTag != null)
+                {
+                    tagName = CurrentTag.TagName.Trim();
+                    newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
+                }
+                else if (NewTagName != null)
+                {
+                    tagName = NewTagName.Trim();
+                    newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
+                }
+                else return;
             }
             else return;
-
             var doesTagExist = await tagCollection.Find(t => t.TagName == tagName).AnyAsync();
             var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
 
