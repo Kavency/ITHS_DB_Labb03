@@ -48,6 +48,8 @@
                     Panel.ZIndex="1"
                     Margin="-13 0 0 -32"
                     VerticalAlignment="Center"
+                    ToolTip="Change user"
+                    Cursor="Hand"
                     Command="{Binding UserViewModel.ShowUsersCMD}">
                 <fa:IconBlock Icon="ArrowsRotate"
                               FontSize="15"
@@ -76,6 +78,7 @@
                                 Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
                                 ToolTip="Delete list"
+                                Cursor="Hand"
                                 Visibility="Visible">
                             <Button.Style>
                                 <Style TargetType="Button">
@@ -104,7 +107,8 @@
                                 DockPanel.Dock="Right"
                                 Command="{Binding DataContext.TodoCollectionViewModel.ShowEditListViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
-                                ToolTip="Edit list">
+                                ToolTip="Edit list"
+                                Cursor="Hand">
                             <fa:IconBlock Icon="Edit"
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
@@ -134,7 +138,9 @@
                     Width="25"
                     Panel.ZIndex="1"
                     BorderBrush="Transparent"
-                    Background="Transparent">
+                    Background="Transparent"
+                    ToolTip="Add list"
+                    Cursor="Hand">
                 <Button.Content>
                     <fa:IconBlock Icon="Plus"
                                   FontSize="20"
@@ -183,79 +189,113 @@
                   SelectedItem="{Binding TodoCollectionViewModel.CurrentTodo}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        <ToggleButton HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Grid.Column="0"
-                                      Width="20"
-                                      Height="20"
-                                      DockPanel.Dock="Left">
-                            <ToggleButton.Style>
-                                <Style TargetType="ToggleButton">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ToggleButton">
-                                                <fa:IconBlock x:Name="tickbox"
-                                                              FontSize="16"/>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsChecked" Value="True">
-                                                        <Setter TargetName="tickbox"
-                                                                Property="Icon"
-                                                                Value="CheckCircle" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsChecked"
-                                                             Value="False">
-                                                        <Setter TargetName="tickbox"
-                                                                Property="Icon"
-                                                                Value="Circle" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver"
-                                                             Value="True">
-                                                        <Setter Property="Cursor"
-                                                                Value="Hand" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-
-                                    </Setter>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
-
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                ToolTip="Delete list"
-                                Visibility="Visible"
-                                DockPanel.Dock="Right">
-                            <fa:IconBlock Icon="XmarkCircle"
-                                          Foreground="Red"
+                    <StackPanel Orientation="Vertical">
+                        <DockPanel>
+                            <ToggleButton HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          FontSize="15" />
-                        </Button>
-                        <Button Background="Transparent"
-                                BorderBrush="Transparent"
-                                DockPanel.Dock="Right"
-                                Command="{Binding DataContext.TodoCollectionViewModel.ShowEditTodoViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"
-                                ToolTip="Edit list">
-                            <fa:IconBlock Icon="Edit"
-                                          Foreground="Black"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          FontSize="15" />
-                        </Button>
-                        <TextBlock Text="{Binding Title}"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5 0" />
-                    </DockPanel>
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          Width="20"
+                                          Height="20"
+                                          DockPanel.Dock="Left"
+                                          ToolTip="Check/Uncheck todo">
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <fa:IconBlock x:Name="tickbox"
+                                                                  FontSize="16" />
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked"
+                                                                 Value="True">
+                                                            <Setter TargetName="tickbox"
+                                                                    Property="Icon"
+                                                                    Value="CheckCircle" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsChecked"
+                                                                 Value="False">
+                                                            <Setter TargetName="tickbox"
+                                                                    Property="Icon"
+                                                                    Value="Circle" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                            <Setter Property="Cursor"
+                                                                    Value="Hand" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.DeleteTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Delete Todo"
+                                    Cursor="Hand"
+                                    Visibility="Visible"
+                                    DockPanel.Dock="Right">
+                                <fa:IconBlock Icon="XmarkCircle"
+                                              Foreground="Red"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Command="{Binding DataContext.TodoCollectionViewModel.ShowEditTodoViewCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="Edit Todo"
+                                    Cursor="Hand"
+                                    DockPanel.Dock="Right">
+                                <fa:IconBlock Icon="Edit"
+                                              Foreground="Black"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              FontSize="15" />
+                            </Button>
+                            <TextBlock Text="{Binding Title}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="5 0"
+                                       FontSize="16" />
+                        </DockPanel>
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <ListView ItemsSource="{Binding Tags}"
+                                      Margin="24 0 0 0"
+                                      Padding="0"
+                                      IsEnabled="False"
+                                      BorderBrush="Transparent"
+                                      BorderThickness="0">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Black"
+                                                BorderThickness="1"
+                                                Padding="3 1"
+                                                Margin="-4 0"
+                                                CornerRadius="3">
+                                            <TextBlock Text="{Binding TagName}"
+                                                       FontSize="8" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
         <!-- Below is a second listview, for completed todos -->
         <!--<ListView Grid.Column="1"
                   Grid.Row="1"
@@ -281,7 +321,9 @@
                     Width="25"
                     Panel.ZIndex="1"
                     BorderBrush="Transparent"
-                    Background="Transparent">
+                    Background="Transparent"
+                    ToolTip="Add todo"
+                    Cursor="Hand">
                 <Button.Content>
                     <fa:IconBlock Icon="Plus"
                                   FontSize="20"
