@@ -15,7 +15,7 @@ Uppgiften är ett samarbete på [IT Högskolan](https://www.iths.se/) mellan [Ma
 - Skapa en "Todo".
 - Skapa olika listor som man kan fylla med "Todos".
 - Skapa olika användare som har olika listor med olika "Todos".
-- Organisera "Todo" objekt efter taggar/kategorier. 
+- Lägga till taggar på varje "Todo". 
 - De olika objekten ska ha CRUD möjligheter.
 
 ## Installation
@@ -33,12 +33,18 @@ Github:
 
 
 
-## Skärmbilder
+## Skärmbilder  
+
 <div style="text-align: center;">
-  <p">Userview:</p>
-<img src="https://github.com/user-attachments/assets/1615bd4b-b05b-42c4-9c93-b2efa0a3f3ae">
-  <p>EditUserView:</p>
-<img src="https://github.com/user-attachments/assets/3eb8fb27-8881-4c0f-808e-48c421490ba4">
+  <p>User view:</p>  
+  <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">  
+  <p>Edit user view:</p>  
+  <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">  
+  <p>List view</p>  
+  <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">  
+  
+
+
 </div>
 
 ## Kontakt 

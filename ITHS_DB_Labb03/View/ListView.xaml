@@ -198,7 +198,10 @@
                                           Width="20"
                                           Height="20"
                                           DockPanel.Dock="Left"
-                                          ToolTip="Check/Uncheck todo">
+                                          ToolTip="Check/Uncheck todo"
+                                          IsChecked="{Binding IsCompleted}"
+                                          Command="{Binding DataContext.TodoCollectionViewModel.UpdateTodoCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          CommandParameter="{Binding}">
                                 <ToggleButton.Style>
                                     <Style TargetType="ToggleButton">
                                         <Setter Property="Template">
@@ -263,9 +266,24 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        Margin="5 0"
-                                       FontSize="16" />
+                                       FontSize="16">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsCompleted}"
+                                                         Value="True">
+                                                <Setter Property="TextDecorations"
+                                                        Value="Strikethrough" />
+                                                <Setter Property="Foreground"
+                                                        Value="Gray" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </DockPanel>
-                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <StackPanel Orientation="Horizontal"
+                                    Background="Transparent">
                             <ListView ItemsSource="{Binding Tags}"
                                       Margin="24 0 0 0"
                                       Padding="0"
@@ -274,7 +292,7 @@
                                       BorderThickness="0">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
+                                        <StackPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
                                 <ListView.ItemTemplate>
