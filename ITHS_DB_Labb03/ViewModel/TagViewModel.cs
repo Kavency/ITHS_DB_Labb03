@@ -23,8 +23,8 @@ namespace ITHS_DB_Labb03.ViewModel
         public Model.Tag CurrentTag { get => _currentTag; set { _currentTag = value; OnPropertyChanged(); } }
         public string NewTagName { get => _newTagName; set { _newTagName = value; OnPropertyChanged(); } }
         public RelayCommand CreateTagCMD { get; }
-        public RelayCommand UpdateTagCMD { get; }
         public RelayCommand DeleteTagCMD { get; }
+        public RelayCommand RemoveTagCMD { get; }
 
         public TagViewModel(MainViewModel mainViewModel)
         {
@@ -32,12 +32,14 @@ namespace ITHS_DB_Labb03.ViewModel
             Tags = new ObservableCollection<Model.Tag>();
 
             CreateTagCMD = new RelayCommand(CreateTag);
-            UpdateTagCMD = new RelayCommand(UpdateTag);
             DeleteTagCMD = new RelayCommand(DeleteTag);
+            RemoveTagCMD = new RelayCommand(RemoveTag);
 
             LoadTags();
 
         }
+
+
 
         private bool DoesCollectionExist(string collectionName)
         {
@@ -92,6 +94,7 @@ namespace ITHS_DB_Labb03.ViewModel
             string tagName = string.Empty;
             Model.Tag newTag;
 
+            var user = MainViewModel.UserViewModel.CurrentUser;
             var userId = MainViewModel.UserViewModel.CurrentUser.Id;
             var todo = MainViewModel.TodoCollectionViewModel.CurrentTodo;
             var currentTodoTags = MainViewModel.TodoCollectionViewModel.CurrentTodo.Tags;
@@ -105,7 +108,7 @@ namespace ITHS_DB_Labb03.ViewModel
                 if (CurrentTag != null)
                 {
                     tagName = CurrentTag.TagName.Trim();
-                    newTag = new Model.Tag { Id = ObjectId.GenerateNewId(), TagName = tagName };
+                    newTag = tagCollection.AsQueryable().FirstOrDefault(t => t.Id == CurrentTag.Id);
                 }
                 else if (NewTagName != null)
                 {
@@ -135,19 +138,11 @@ namespace ITHS_DB_Labb03.ViewModel
             var updateOptions = new UpdateOptions { ArrayFilters = arrayFilters };
             var result = await userCollection.UpdateOneAsync(filter, update, updateOptions);
 
+
+
             currentTodoTags.Add(newTag);
 
             NewTagName = null;
-        }
-
-        private async void UpdateTag(object obj)
-        {
-            await UpdateTagAsync(obj);
-        }
-
-        private async Task UpdateTagAsync(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         private async void DeleteTag(object obj)
@@ -157,7 +152,86 @@ namespace ITHS_DB_Labb03.ViewModel
 
         private async Task DeleteTagAsync(object obj)
         {
-            throw new NotImplementedException();
+            var tagToDelete = obj as Model.Tag;
+
+            var currentUser = MainViewModel.UserViewModel.CurrentUser;
+            var currentTodo = MainViewModel.TodoCollectionViewModel.CurrentTodo;
+            var currentTodoTags = MainViewModel.TodoCollectionViewModel.CurrentTodo.Tags;
+
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var tagCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<Model.Tag>("Tags");
+            var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
+
+            if (tagToDelete != null)
+            {
+
+                var update = Builders<User>.Update.PullFilter(
+                    "TodoCollections.$[].Todos.$[todo].Tags",
+                    Builders<Model.Tag>.Filter.Eq(t => t.Id, tagToDelete.Id));
+
+                var userFilter = Builders<User>.Filter.And
+                    (
+                    Builders<User>.Filter.Eq(u => u.Id, currentUser.Id),
+                    Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == currentTodo.Id))
+                    );
+
+                var arrayFilters = new List<ArrayFilterDefinition>
+                {
+                    new JsonArrayFilterDefinition<BsonDocument>("{'todo._id': ObjectId('" + currentTodo.Id + "')}")
+                };
+
+                var updateOptions = new UpdateOptions { ArrayFilters = arrayFilters };
+
+                currentTodoTags.Remove(tagToDelete);
+                Tags.Remove(tagToDelete);
+                await userCollection.UpdateOneAsync(userFilter, update, updateOptions);
+
+                var tagFilter = Builders<Model.Tag>.Filter.Eq(t => t.Id, tagToDelete.Id);
+                await tagCollection.DeleteOneAsync(tagFilter);
+            }
         }
+
+        private async void RemoveTag(object obj)
+        {
+            await RemoveTagAsync(obj);
+
+        }
+        private async Task RemoveTagAsync(object obj)
+        {
+            var tagToRemove = obj as Model.Tag;
+            var currentTagList = MainViewModel.TodoCollectionViewModel.CurrentTodo.Tags;
+
+            var currentUser = MainViewModel.UserViewModel.CurrentUser;
+            var currentTodo = MainViewModel.TodoCollectionViewModel.CurrentTodo;
+            var currentTodoTags = MainViewModel.TodoCollectionViewModel.CurrentTodo.Tags;
+
+            using var db = new MongoClient(MainViewModel.ConnectionString);
+            var userCollection = db.GetDatabase(MainViewModel.DbName).GetCollection<User>("Users");
+
+            if (tagToRemove != null)
+            {
+                var update = Builders<User>.Update.PullFilter(
+                    "TodoCollections.$[].Todos.$[todo].Tags",
+                    Builders<Model.Tag>.Filter.Eq(t => t.Id, tagToRemove.Id));
+
+                var userFilter = Builders<User>.Filter.And
+                    (
+                    Builders<User>.Filter.Eq(u => u.Id, currentUser.Id),
+                    Builders<User>.Filter.ElemMatch(u => u.TodoCollections, tc => tc.Todos.Any(t => t.Id == currentTodo.Id))
+                    );
+
+                var arrayFilters = new List<ArrayFilterDefinition>
+                {
+                    new JsonArrayFilterDefinition<BsonDocument>("{'todo._id': ObjectId('" + currentTodo.Id + "')}")
+                };
+
+                var updateOptions = new UpdateOptions { ArrayFilters = arrayFilters };
+
+                currentTodoTags.Remove(tagToRemove);
+                await userCollection.UpdateOneAsync(userFilter, update, updateOptions);
+            }
+        }
+
+
     }
 }

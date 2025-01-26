@@ -47,6 +47,7 @@
                     Padding="5 0"
                     DockPanel.Dock="Right"
                     ToolTip="Add tag"
+
                     Command="{Binding TagViewModel.CreateTagCMD}" />
             <Grid>
                 <TextBlock Panel.ZIndex="1"
@@ -72,7 +73,8 @@
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                         ToolTip="Delete tag"
-                                        Command="{Binding DataContext.TagViewModel.DeleteTagFromCollectionCMD}">
+                                        Command="{Binding DataContext.TagViewModel.DeleteTagCMD,RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}">
                                     <fa:IconBlock Icon="XmarkCircle"
                                                   Foreground="Red"
                                                   VerticalAlignment="Center"
@@ -102,7 +104,7 @@
                         <Button Background="Transparent"
                                 BorderBrush="Transparent"
                                 DockPanel.Dock="Right"
-                                Command="{Binding DataContext.TodoCollectionViewModel.DeleteListCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                Command="{Binding DataContext.TagViewModel.RemoveTagCMD, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}"
                                 ToolTip="Remove tag"
                                 Visibility="Visible">
