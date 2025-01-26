@@ -33,18 +33,19 @@ Github:
 
 
 
-## Skärmbilder
+## Skärmbilder  
+
 <div style="text-align: center;">
-  <br/>
-  <p>User view:</p>
+  <p>User view:</p>  
+  
   <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">
   
-  <br/>
-  <p>Edit user view:</p>
+  <p>Edit user view:</p>  
+  
   <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">
 
-  <br/>
-  <p>List view</p>
+  <p>List view</p>  
+  
   <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">
 
 
