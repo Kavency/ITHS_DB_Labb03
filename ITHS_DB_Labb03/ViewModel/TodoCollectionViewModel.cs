@@ -111,6 +111,9 @@ internal class TodoCollectionViewModel : VMBase
 
     private async Task UpdateTodoAsync(object obj)
     {
+        if (obj != null)
+            CurrentTodo = obj as Todo;
+
         var todoUpdate = CurrentTodo;
         CurrentTodo.Title = todoUpdate.Title.Trim();
 
@@ -132,9 +135,10 @@ internal class TodoCollectionViewModel : VMBase
             if (todo != null)
             {
                 todo.Title = CurrentTodo.Title;
+                todo.IsCompleted = CurrentTodo.IsCompleted;
                 // Update CurrentCollection
-                var temp = CurrentTodoCollection.Todos.FirstOrDefault(x => x.Id == todoId);
-                temp.Title = CurrentTodo.Title;
+                var currentCollection = CurrentTodoCollection.Todos.FirstOrDefault(x => x.Id == todoId);
+                currentCollection.Title = CurrentTodo.Title;
 
                 // Update database
                 var updateFilter = Builders<User>.Filter.Eq(u => u.Id, userId);
