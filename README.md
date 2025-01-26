@@ -35,13 +35,13 @@ Github:
 
 ## Skärmbilder
 <div style="text-align: center;">
-  <User view:
+  #User view:
   <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">
 
-  <p>Edit user view:</p>
+ #Edit user view:
   <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">
   
-  <p>List view</p>
+ #List view
   <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">
 
 
