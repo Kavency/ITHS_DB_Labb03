@@ -198,7 +198,10 @@
                                           Width="20"
                                           Height="20"
                                           DockPanel.Dock="Left"
-                                          ToolTip="Check/Uncheck todo">
+                                          ToolTip="Check/Uncheck todo"
+                                          Command="{Binding DataContext.TodoCollectionViewModel.ToggleButtonCMD, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          CommandParameter="{Binding}"
+                                          IsChecked="{Binding DataContext.TodoCollectionViewModel.CurrentTodo.IsCompleted, RelativeSource={RelativeSource AncestorType=Window}}">
                                 <ToggleButton.Style>
                                     <Style TargetType="ToggleButton">
                                         <Setter Property="Template">
