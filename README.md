@@ -35,7 +35,7 @@ Github:
 
 ## Skärmbilder
 <div style="text-align: center;">
-  <p">User view:</p>
+  <User view:
   <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">
 
   <p>Edit user view:</p>
