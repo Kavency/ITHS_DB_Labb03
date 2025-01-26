@@ -42,7 +42,8 @@ Github:
   <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">
   
   <p>List view</p>
-  <img src="https://github.com/user-attachments/assets/dfaedc63-e4e6-4c22-b34d-d6c98eb41dca">
+  <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">
+
 
 
 </div>
