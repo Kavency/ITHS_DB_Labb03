@@ -38,16 +38,16 @@ Github:
 <div style="text-align: center;">
   <p>User view:</p>  
   
-  <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">
-  
+  <img src="https://github.com/user-attachments/assets/90a588fa-a173-4f36-b9f7-1e5ffc16f075">  
+    
   <p>Edit user view:</p>  
   
-  <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">
-
+  <img src="https://github.com/user-attachments/assets/7e2fe694-e6d4-4082-80d0-851cb87db502">  
+  
   <p>List view</p>  
   
-  <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">
-
+  <img src="https://github.com/user-attachments/assets/40770529-1453-4884-b844-f52c01e17928">  
+  
 
 
 </div>
