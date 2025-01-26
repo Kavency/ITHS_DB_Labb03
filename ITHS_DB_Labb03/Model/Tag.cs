@@ -6,5 +6,11 @@ namespace ITHS_DB_Labb03.Model
     {
         public ObjectId Id { get; set; }
         public string TagName { get; set; }
+
+        public override string ToString()
+        {
+            return $"{TagName}";
+        }
+
     }
 }
