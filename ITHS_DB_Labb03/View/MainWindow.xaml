@@ -8,8 +8,8 @@
         xmlns:views="clr-namespace:ITHS_DB_Labb03.View"
         mc:Ignorable="d"
         Title="Just Do It"
-        Width="1024"
-        Height="800"
+        Width="900"
+        Height="600"
         MinWidth="700"
         MinHeight="400"
         WindowStyle="None">
