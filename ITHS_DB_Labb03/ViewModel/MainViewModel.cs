@@ -8,7 +8,7 @@ namespace ITHS_DB_Labb03.ViewModel
 {
     internal class MainViewModel : VMBase
     {
-        public static string DbName { get; private set; } = "todoapp";
+        public static string DbName { get; private set; } = "MarcusRenvallMagnusHellman";
         public static string ConnectionString { get; private set; } = "mongodb://localhost:27017/";
 
         private UserViewModel _userViewModel;
