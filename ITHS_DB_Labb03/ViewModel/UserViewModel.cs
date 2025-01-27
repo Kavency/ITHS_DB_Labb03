@@ -90,7 +90,7 @@ namespace ITHS_DB_Labb03.ViewModel
             await userCollection.InsertOneAsync(UserDetails);
 
             Users.Add(UserDetails);
-
+            MainViewModel.SaveAppState();
             CloseUserDetails(obj);
         }
 
