@@ -69,7 +69,10 @@ internal class TodoCollectionViewModel : VMBase
     // Task CRUD:
     private async void CreateTodo(object obj)
     {
-        await CreateTodoAsync(obj);
+        if(TodoCollections.Count > 0)
+            await CreateTodoAsync(obj);
+        else
+            MessageBox.Show($"Create a list first!", "Attention!", MessageBoxButton.OK);
     }
     private async Task CreateTodoAsync(object obj)
     {
